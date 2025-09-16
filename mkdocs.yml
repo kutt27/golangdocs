@@ -1,5 +1,5 @@
 site_name: GolangDocs
-site_url: https://sitename.example
+site_url: https://kutt27.github.io/golangdocs/
 theme:
   features:
     - navigation.footer
@@ -7,7 +7,7 @@ theme:
   favicon: assets/favicon.ico
   name: material
   font:
-    text: Merriweather
+    text: PT Serif
     code: Source Code Pro
   palette:
     # Dark Mode
