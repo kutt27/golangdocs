@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://kutt27.github.io/golangdocs/</loc>
+         <lastmod>2025-09-19</lastmod>
+    </url>
+    <url>
+         <loc>https://kutt27.github.io/golangdocs/1.%20Basics/1.%20Hello-World/</loc>
+         <lastmod>2025-09-19</lastmod>
+    </url>
+    <url>
+         <loc>https://kutt27.github.io/golangdocs/1.%20Basics/2.%20Go-Compiler/</loc>
+         <lastmod>2025-09-19</lastmod>
+    </url>
+</urlset>
