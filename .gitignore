@@ -52,6 +52,8 @@ Pipfile.lock
 # mkdocs build
 site/
 
+Code-Area/
+
 # VS Code
 .vscode/
 

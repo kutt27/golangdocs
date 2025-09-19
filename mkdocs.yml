@@ -3,6 +3,7 @@ site_url: https://kutt27.github.io/golangdocs/
 theme:
   features:
     - navigation.footer
+    - content.code.copy
   logo: assets/layers.png
   favicon: assets/favicon.ico
   name: material
