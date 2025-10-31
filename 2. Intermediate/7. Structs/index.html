@@ -1,0 +1,3323 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://kutt27.github.io/golangdocs/2.%20Intermediate/7.%20Structs/">
+      
+      
+        <link rel="prev" href="../6.%20FMT-Package/">
+      
+      
+        <link rel="next" href="../8.%20Methods/">
+      
+      
+      <link rel="icon" href="../../assets/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.22">
+    
+    
+      
+        <title>Structs - GolangDocs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.84d31ad4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:300,300i,400,400i,700,700i%7CSource+Code+Pro:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"PT Serif";--md-code-font:"Source Code Pro"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="light-blue" data-md-color-accent="deep-purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#go-structs-custom-data-types-and-composition" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="GolangDocs" class="md-header__button md-logo" aria-label="GolangDocs" data-md-component="logo">
+      
+  <img src="../../assets/layers.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            GolangDocs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Structs
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="light-blue" data-md-color-accent="deep-purple"  aria-label="Dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="deep-purple"  aria-label="Light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="GolangDocs" class="md-nav__button md-logo" aria-label="GolangDocs" data-md-component="logo">
+      
+  <img src="../../assets/layers.png" alt="logo">
+
+    </a>
+    GolangDocs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Basics
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Basics
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/1.%20Hello-World/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introduction
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/2.%20Go-Compiler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Go Compiler
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/3.%20Standard%20Library/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Standard Library
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/4.%20Data-Types/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Data Types
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/5.%20If-and%20While/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Control Structures
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/6.%20Conditionals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Conditionals
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/7.%20Arrays/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Arrays
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/8.%20Slices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Slices
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/9.%20Maps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Maps
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/10.%20Range/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Range
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/11.%20Functions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Functions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/12.%20Control-Flow-Mechanism/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Control Flow
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/13.%20Init/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Init
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Intermediate
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Intermediate
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1.%20Closures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Closures
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2.%20Recursion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Recursion
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3.%20Pointers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Pointers
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4.%20String-and-Runes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Strings and Runes
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5.%20Formatting-Verbs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Formatting-verbs
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6.%20FMT-Package/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    FMT Package
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Structs
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Structs
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#understanding-structs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Understanding Structs
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#defining-structs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Defining Structs
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Defining Structs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#struct-characteristics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Struct Characteristics:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#creating-and-initializing-structs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Creating and Initializing Structs
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Creating and Initializing Structs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-using-field-names" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Using Field Names
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-using-positional-values" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Using Positional Values
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-using-the-new-keyword" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Using the new Keyword
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-partial-initialization" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Partial Initialization
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#accessing-and-modifying-struct-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      Accessing and Modifying Struct Fields
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Accessing and Modifying Struct Fields">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-dot-notation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using Dot Notation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#working-with-pointers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Working with Pointers
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#structs-with-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      Structs with Methods
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Structs with Methods">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#value-receivers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Value Receivers
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pointer-receivers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pointer Receivers
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-to-use-pointer-receivers" class="md-nav__link">
+    <span class="md-ellipsis">
+      When to Use Pointer Receivers:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#struct-composition-embedding" class="md-nav__link">
+    <span class="md-ellipsis">
+      Struct Composition (Embedding)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Struct Composition (Embedding)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-embedding" class="md-nav__link">
+    <span class="md-ellipsis">
+      Basic Embedding
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#method-promotion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Method Promotion
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#overriding-embedded-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overriding Embedded Methods
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#struct-tags" class="md-nav__link">
+    <span class="md-ellipsis">
+      Struct Tags
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Struct Tags">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-syntax" class="md-nav__link">
+    <span class="md-ellipsis">
+      Basic Syntax
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-tag-formats" class="md-nav__link">
+    <span class="md-ellipsis">
+      Common Tag Formats
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#comparing-structs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Comparing Structs
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Comparing Structs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#limitations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Limitations:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#real-world-example-json-api-handler" class="md-nav__link">
+    <span class="md-ellipsis">
+      Real-World Example: JSON API Handler
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Real-World Example: JSON API Handler">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-this-example-demonstrates-struct-concepts" class="md-nav__link">
+    <span class="md-ellipsis">
+      How This Example Demonstrates Struct Concepts:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#real-world-applications-of-this-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      Real-World Applications of This Pattern:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#benefits-of-this-approach" class="md-nav__link">
+    <span class="md-ellipsis">
+      Benefits of This Approach:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#best-practices-for-structs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Best Practices for Structs
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conclusion
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8.%20Methods/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Methods
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../9.%20Interfaces/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Interfaces
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10.%20Struct-Embedding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Struct Embedding
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11.%20Generics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Generics
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../12.%20Errors-and-Custom-Error/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Errors and Custom Error
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../13.%20String-Functions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    String Functions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../14.%20String-Formatting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    String Formatting
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../15.%20Text-Templates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Text Templates
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../16.%20Regular-Expression/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Regular Expression
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../17.%20Time-and-Epoch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Time and Epoch
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../18.%20Random-Number/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Random Number
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../19.%20Number-Parsing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Number Parsing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../20.%20URL-Parsing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    URL Parsing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../21.%20Bufio-Package/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Bufio Package
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../22.%20Base64-Coding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Base64 Coding
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../23.%20Cryptographic-Hashing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Cryptographic Hashing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../24.%20Read-Write-Files/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Read Write Files
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../25.%20Line-Filters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Line Filters
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../26.%20File-Paths/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    File Paths
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../27.%20Directories/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Directories
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../28.%20Directories-Addon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Directories Addon
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../29.%20Command-Line/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Command Line
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../30.%20Environment-Variables/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Environment Variables
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../31.%20Logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Logging
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../32.%20JSON/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    JSON
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../33.%20Struct-Tags/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Struct Tags
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../34.%20XML/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    XML
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../35.%20Go-Extensions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Go Extensions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../36.%20Type-Conversions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Type Conversions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../37.%20IO-Package/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    IO Package
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../38.%20Math-Package/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Math Package
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#understanding-structs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Understanding Structs
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#defining-structs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Defining Structs
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Defining Structs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#struct-characteristics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Struct Characteristics:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#creating-and-initializing-structs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Creating and Initializing Structs
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Creating and Initializing Structs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-using-field-names" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Using Field Names
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-using-positional-values" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Using Positional Values
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-using-the-new-keyword" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Using the new Keyword
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-partial-initialization" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Partial Initialization
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#accessing-and-modifying-struct-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      Accessing and Modifying Struct Fields
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Accessing and Modifying Struct Fields">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-dot-notation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using Dot Notation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#working-with-pointers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Working with Pointers
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#structs-with-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      Structs with Methods
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Structs with Methods">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#value-receivers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Value Receivers
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pointer-receivers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pointer Receivers
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-to-use-pointer-receivers" class="md-nav__link">
+    <span class="md-ellipsis">
+      When to Use Pointer Receivers:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#struct-composition-embedding" class="md-nav__link">
+    <span class="md-ellipsis">
+      Struct Composition (Embedding)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Struct Composition (Embedding)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-embedding" class="md-nav__link">
+    <span class="md-ellipsis">
+      Basic Embedding
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#method-promotion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Method Promotion
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#overriding-embedded-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overriding Embedded Methods
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#struct-tags" class="md-nav__link">
+    <span class="md-ellipsis">
+      Struct Tags
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Struct Tags">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-syntax" class="md-nav__link">
+    <span class="md-ellipsis">
+      Basic Syntax
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-tag-formats" class="md-nav__link">
+    <span class="md-ellipsis">
+      Common Tag Formats
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#comparing-structs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Comparing Structs
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Comparing Structs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#limitations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Limitations:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#real-world-example-json-api-handler" class="md-nav__link">
+    <span class="md-ellipsis">
+      Real-World Example: JSON API Handler
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Real-World Example: JSON API Handler">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-this-example-demonstrates-struct-concepts" class="md-nav__link">
+    <span class="md-ellipsis">
+      How This Example Demonstrates Struct Concepts:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#real-world-applications-of-this-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      Real-World Applications of This Pattern:
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#benefits-of-this-approach" class="md-nav__link">
+    <span class="md-ellipsis">
+      Benefits of This Approach:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#best-practices-for-structs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Best Practices for Structs
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conclusion
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="go-structs-custom-data-types-and-composition">Go Structs: Custom Data Types and Composition</h1>
+<div class="admonition abstract">
+<p class="admonition-title">Overview</p>
+<p>Master Go structs - collections of fields that form custom data types. Learn struct definition, initialization, methods, embedding, and composition patterns for building robust, maintainable applications.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Key Points</p>
+<ul>
+<li>Structs group related data into single entities</li>
+<li>Support both value and pointer semantics</li>
+<li>Enable composition over inheritance</li>
+<li>Fields can be exported (public) or unexported (private)</li>
+<li>Zero values provide safe defaults</li>
+</ul>
+</div>
+<h2 id="understanding-structs">Understanding Structs</h2>
+<p>Structs are Go's primary mechanism for creating custom data types by grouping related fields together.</p>
+<h2 id="defining-structs">Defining Structs</h2>
+<p>A struct is defined using the <code>type</code> and <code>struct</code> keywords:</p>
+<div class="language-go highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
+<span class="normal"><a href="#__codelineno-0-2">2</a></span>
+<span class="normal"><a href="#__codelineno-0-3">3</a></span>
+<span class="normal"><a href="#__codelineno-0-4">4</a></span>
+<span class="normal"><a href="#__codelineno-0-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="kd">type</span><span class="w"> </span><span class="nx">Person</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">    </span><span class="nx">Name</span><span class="w"> </span><span class="kt">string</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">    </span><span class="nx">Age</span><span class="w">  </span><span class="kt">int</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">    </span><span class="nx">Email</span><span class="w"> </span><span class="kt">string</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+<h3 id="struct-characteristics">Struct Characteristics:</h3>
+<ul>
+<li><strong>Fields</strong>: Each field has a name and a type</li>
+<li><strong>Order</strong>: Field order matters for memory layout</li>
+<li><strong>Exportability</strong>: Capitalized fields are exported (public)</li>
+<li><strong>Zero Values</strong>: Each field has a zero value when uninitialized</li>
+</ul>
+<h2 id="creating-and-initializing-structs">Creating and Initializing Structs</h2>
+<h3 id="1-using-field-names">1. Using Field Names</h3>
+<div class="language-go highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
+<span class="normal"><a href="#__codelineno-1-2">2</a></span>
+<span class="normal"><a href="#__codelineno-1-3">3</a></span>
+<span class="normal"><a href="#__codelineno-1-4">4</a></span>
+<span class="normal"><a href="#__codelineno-1-5">5</a></span>
+<span class="normal"><a href="#__codelineno-1-6">6</a></span>
+<span class="normal"><a href="#__codelineno-1-7">7</a></span>
+<span class="normal"><a href="#__codelineno-1-8">8</a></span>
+<span class="normal"><a href="#__codelineno-1-9">9</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">    </span><span class="c1">// Named initialization</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="w">    </span><span class="nx">p1</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">Person</span><span class="p">{</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="w">        </span><span class="nx">Name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Alice&quot;</span><span class="p">,</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="w">        </span><span class="nx">Age</span><span class="p">:</span><span class="w">  </span><span class="mi">30</span><span class="p">,</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="w">        </span><span class="nx">Email</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;alice@example.com&quot;</span><span class="p">,</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%+v\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">p1</span><span class="p">)</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9"></a><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+<h3 id="2-using-positional-values">2. Using Positional Values</h3>
+<div class="language-go highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
+<span class="normal"><a href="#__codelineno-2-2">2</a></span>
+<span class="normal"><a href="#__codelineno-2-3">3</a></span>
+<span class="normal"><a href="#__codelineno-2-4">4</a></span>
+<span class="normal"><a href="#__codelineno-2-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w">    </span><span class="c1">// Positional initialization (must match field order)</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w">    </span><span class="nx">p2</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">Person</span><span class="p">{</span><span class="s">&quot;Bob&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">25</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;bob@example.com&quot;</span><span class="p">}</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%+v\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">p2</span><span class="p">)</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+<h3 id="3-using-the-new-keyword">3. Using the <code>new</code> Keyword</h3>
+<div class="language-go highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span>
+<span class="normal"><a href="#__codelineno-3-2">2</a></span>
+<span class="normal"><a href="#__codelineno-3-3">3</a></span>
+<span class="normal"><a href="#__codelineno-3-4">4</a></span>
+<span class="normal"><a href="#__codelineno-3-5">5</a></span>
+<span class="normal"><a href="#__codelineno-3-6">6</a></span>
+<span class="normal"><a href="#__codelineno-3-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="w">    </span><span class="c1">// new() returns a pointer to a zero-value struct</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="w">    </span><span class="nx">p3</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">new</span><span class="p">(</span><span class="nx">Person</span><span class="p">)</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="w">    </span><span class="nx">p3</span><span class="p">.</span><span class="nx">Name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;Charlie&quot;</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="w">    </span><span class="nx">p3</span><span class="p">.</span><span class="nx">Age</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">35</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%+v\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">p3</span><span class="p">)</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+<h3 id="4-partial-initialization">4. Partial Initialization</h3>
+<div class="language-go highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span>
+<span class="normal"><a href="#__codelineno-4-2">2</a></span>
+<span class="normal"><a href="#__codelineno-4-3">3</a></span>
+<span class="normal"><a href="#__codelineno-4-4">4</a></span>
+<span class="normal"><a href="#__codelineno-4-5">5</a></span>
+<span class="normal"><a href="#__codelineno-4-6">6</a></span>
+<span class="normal"><a href="#__codelineno-4-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="w">    </span><span class="c1">// Unspecified fields get zero values</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="w">    </span><span class="nx">p4</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">Person</span><span class="p">{</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="w">        </span><span class="nx">Name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Diana&quot;</span><span class="p">,</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%+v\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">p4</span><span class="p">)</span><span class="w"> </span><span class="c1">// Email is empty string, Age is 0</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+<h2 id="accessing-and-modifying-struct-fields">Accessing and Modifying Struct Fields</h2>
+<h3 id="using-dot-notation">Using Dot Notation</h3>
+<div class="language-go highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-5-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-5-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-5-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-5-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-5-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-5-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-5-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-5-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-5-10">10</a></span>
+<span class="normal"><a href="#__codelineno-5-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="w">    </span><span class="nx">p</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">Person</span><span class="p">{</span><span class="nx">Name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Alice&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">Age</span><span class="p">:</span><span class="w"> </span><span class="mi">30</span><span class="p">}</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3"></a>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="w">    </span><span class="c1">// Access fields</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Name:&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">p</span><span class="p">.</span><span class="nx">Name</span><span class="p">)</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6"></a><span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Age:&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">p</span><span class="p">.</span><span class="nx">Age</span><span class="p">)</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7"></a>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8"></a><span class="w">    </span><span class="c1">// Modify fields</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9"></a><span class="w">    </span><span class="nx">p</span><span class="p">.</span><span class="nx">Age</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">31</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10"></a><span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;New Age:&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">p</span><span class="p">.</span><span class="nx">Age</span><span class="p">)</span>
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11"></a><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+<h3 id="working-with-pointers">Working with Pointers</h3>
+<div class="language-go highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span>
+<span class="normal"><a href="#__codelineno-6-2">2</a></span>
+<span class="normal"><a href="#__codelineno-6-3">3</a></span>
+<span class="normal"><a href="#__codelineno-6-4">4</a></span>
+<span class="normal"><a href="#__codelineno-6-5">5</a></span>
+<span class="normal"><a href="#__codelineno-6-6">6</a></span>
+<span class="normal"><a href="#__codelineno-6-7">7</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="w">    </span><span class="nx">p</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">Person</span><span class="p">{</span><span class="nx">Name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Bob&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">Age</span><span class="p">:</span><span class="w"> </span><span class="mi">25</span><span class="p">}</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3"></a>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4"></a><span class="w">    </span><span class="c1">// Go automatically dereferences pointers</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5"></a><span class="w">    </span><span class="nx">p</span><span class="p">.</span><span class="nx">Age</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">26</span><span class="w">        </span><span class="c1">// Same as (*p).Age = 26</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6"></a><span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">p</span><span class="p">.</span><span class="nx">Age</span><span class="p">)</span><span class="w"> </span><span class="c1">// 26</span>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7"></a><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+<h2 id="structs-with-methods">Structs with Methods</h2>
+<p>Methods are functions with a special receiver argument. They can be defined on any named type.</p>
+<h3 id="value-receivers">Value Receivers</h3>
+<div class="language-go highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-7-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-7-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-7-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-7-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-7-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-7-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-7-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-7-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-7-10">10</a></span>
+<span class="normal"><a href="#__codelineno-7-11">11</a></span>
+<span class="normal"><a href="#__codelineno-7-12">12</a></span>
+<span class="normal"><a href="#__codelineno-7-13">13</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="kd">type</span><span class="w"> </span><span class="nx">Rectangle</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2"></a><span class="w">    </span><span class="nx">Width</span><span class="p">,</span><span class="w"> </span><span class="nx">Height</span><span class="w"> </span><span class="kt">float64</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3"></a><span class="p">}</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4"></a>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5"></a><span class="c1">// Method with value receiver</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6"></a><span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">r</span><span class="w"> </span><span class="nx">Rectangle</span><span class="p">)</span><span class="w"> </span><span class="nx">Area</span><span class="p">()</span><span class="w"> </span><span class="kt">float64</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">r</span><span class="p">.</span><span class="nx">Width</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nx">r</span><span class="p">.</span><span class="nx">Height</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8"></a><span class="p">}</span>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9"></a>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10"></a><span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11"></a><span class="w">    </span><span class="nx">rect</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">Rectangle</span><span class="p">{</span><span class="nx">Width</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="nx">Height</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">}</span>
+</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12"></a><span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Area:&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">rect</span><span class="p">.</span><span class="nx">Area</span><span class="p">())</span><span class="w"> </span><span class="c1">// 50</span>
+</span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13"></a><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+<h3 id="pointer-receivers">Pointer Receivers</h3>
+<div class="language-go highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-8-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-8-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-8-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-8-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-8-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-8-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-8-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-8-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-8-10">10</a></span>
+<span class="normal"><a href="#__codelineno-8-11">11</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="c1">// Method with pointer receiver (can modify struct)</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">r</span><span class="w"> </span><span class="o">*</span><span class="nx">Rectangle</span><span class="p">)</span><span class="w"> </span><span class="nx">Scale</span><span class="p">(</span><span class="nx">factor</span><span class="w"> </span><span class="kt">float64</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3"></a><span class="w">    </span><span class="nx">r</span><span class="p">.</span><span class="nx">Width</span><span class="w"> </span><span class="o">*=</span><span class="w"> </span><span class="nx">factor</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4"></a><span class="w">    </span><span class="nx">r</span><span class="p">.</span><span class="nx">Height</span><span class="w"> </span><span class="o">*=</span><span class="w"> </span><span class="nx">factor</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5"></a><span class="p">}</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6"></a>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7"></a><span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8"></a><span class="w">    </span><span class="nx">rect</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">Rectangle</span><span class="p">{</span><span class="nx">Width</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="nx">Height</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">}</span>
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9"></a><span class="w">    </span><span class="nx">rect</span><span class="p">.</span><span class="nx">Scale</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10"></a><span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;Scaled: %+v\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">rect</span><span class="p">)</span><span class="w"> </span><span class="c1">// {Width:20 Height:10}</span>
+</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11"></a><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+<h3 id="when-to-use-pointer-receivers">When to Use Pointer Receivers:</h3>
+<ol>
+<li>When you need to modify the receiver</li>
+<li>When the struct is large (to avoid copying)</li>
+<li>When consistency is needed (mixing value and pointer receivers can be confusing)</li>
+</ol>
+<h2 id="struct-composition-embedding">Struct Composition (Embedding)</h2>
+<p>Go supports composition through struct embedding, which allows one struct to include another, inheriting its fields and methods.</p>
+<h3 id="basic-embedding">Basic Embedding</h3>
+<div class="language-go highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-9-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-9-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-9-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-9-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-9-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-9-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-9-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-9-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-9-10">10</a></span>
+<span class="normal"><a href="#__codelineno-9-11">11</a></span>
+<span class="normal"><a href="#__codelineno-9-12">12</a></span>
+<span class="normal"><a href="#__codelineno-9-13">13</a></span>
+<span class="normal"><a href="#__codelineno-9-14">14</a></span>
+<span class="normal"><a href="#__codelineno-9-15">15</a></span>
+<span class="normal"><a href="#__codelineno-9-16">16</a></span>
+<span class="normal"><a href="#__codelineno-9-17">17</a></span>
+<span class="normal"><a href="#__codelineno-9-18">18</a></span>
+<span class="normal"><a href="#__codelineno-9-19">19</a></span>
+<span class="normal"><a href="#__codelineno-9-20">20</a></span>
+<span class="normal"><a href="#__codelineno-9-21">21</a></span>
+<span class="normal"><a href="#__codelineno-9-22">22</a></span>
+<span class="normal"><a href="#__codelineno-9-23">23</a></span>
+<span class="normal"><a href="#__codelineno-9-24">24</a></span>
+<span class="normal"><a href="#__codelineno-9-25">25</a></span>
+<span class="normal"><a href="#__codelineno-9-26">26</a></span>
+<span class="normal"><a href="#__codelineno-9-27">27</a></span>
+<span class="normal"><a href="#__codelineno-9-28">28</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="kd">type</span><span class="w"> </span><span class="nx">Address</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2"></a><span class="w">    </span><span class="nx">Street</span><span class="w"> </span><span class="kt">string</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3"></a><span class="w">    </span><span class="nx">City</span><span class="w">   </span><span class="kt">string</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4"></a><span class="p">}</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5"></a>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6"></a><span class="kd">type</span><span class="w"> </span><span class="nx">Person</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7"></a><span class="w">    </span><span class="nx">Name</span><span class="w">    </span><span class="kt">string</span>
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8"></a><span class="w">    </span><span class="nx">Age</span><span class="w">     </span><span class="kt">int</span>
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9"></a><span class="w">    </span><span class="nx">Address</span><span class="w"> </span><span class="c1">// Embedded struct</span>
+</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10"></a><span class="p">}</span>
+</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11"></a>
+</span><span id="__span-9-12"><a id="__codelineno-9-12" name="__codelineno-9-12"></a><span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-9-13"><a id="__codelineno-9-13" name="__codelineno-9-13"></a><span class="w">    </span><span class="nx">p</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">Person</span><span class="p">{</span>
+</span><span id="__span-9-14"><a id="__codelineno-9-14" name="__codelineno-9-14"></a><span class="w">        </span><span class="nx">Name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Alice&quot;</span><span class="p">,</span>
+</span><span id="__span-9-15"><a id="__codelineno-9-15" name="__codelineno-9-15"></a><span class="w">        </span><span class="nx">Age</span><span class="p">:</span><span class="w">  </span><span class="mi">30</span><span class="p">,</span>
+</span><span id="__span-9-16"><a id="__codelineno-9-16" name="__codelineno-9-16"></a><span class="w">        </span><span class="nx">Address</span><span class="p">:</span><span class="w"> </span><span class="nx">Address</span><span class="p">{</span>
+</span><span id="__span-9-17"><a id="__codelineno-9-17" name="__codelineno-9-17"></a><span class="w">            </span><span class="nx">Street</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;123 Main St&quot;</span><span class="p">,</span>
+</span><span id="__span-9-18"><a id="__codelineno-9-18" name="__codelineno-9-18"></a><span class="w">            </span><span class="nx">City</span><span class="p">:</span><span class="w">   </span><span class="s">&quot;New York&quot;</span><span class="p">,</span>
+</span><span id="__span-9-19"><a id="__codelineno-9-19" name="__codelineno-9-19"></a><span class="w">        </span><span class="p">},</span>
+</span><span id="__span-9-20"><a id="__codelineno-9-20" name="__codelineno-9-20"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-9-21"><a id="__codelineno-9-21" name="__codelineno-9-21"></a>
+</span><span id="__span-9-22"><a id="__codelineno-9-22" name="__codelineno-9-22"></a><span class="w">    </span><span class="c1">// Access embedded fields directly</span>
+</span><span id="__span-9-23"><a id="__codelineno-9-23" name="__codelineno-9-23"></a><span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;City:&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">p</span><span class="p">.</span><span class="nx">City</span><span class="p">)</span><span class="w">       </span><span class="c1">// New York</span>
+</span><span id="__span-9-24"><a id="__codelineno-9-24" name="__codelineno-9-24"></a><span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Street:&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">p</span><span class="p">.</span><span class="nx">Street</span><span class="p">)</span><span class="w">    </span><span class="c1">// 123 Main St</span>
+</span><span id="__span-9-25"><a id="__codelineno-9-25" name="__codelineno-9-25"></a>
+</span><span id="__span-9-26"><a id="__codelineno-9-26" name="__codelineno-9-26"></a><span class="w">    </span><span class="c1">// Access via embedded type name</span>
+</span><span id="__span-9-27"><a id="__codelineno-9-27" name="__codelineno-9-27"></a><span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;City:&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">p</span><span class="p">.</span><span class="nx">Address</span><span class="p">.</span><span class="nx">City</span><span class="p">)</span><span class="w"> </span><span class="c1">// New York</span>
+</span><span id="__span-9-28"><a id="__codelineno-9-28" name="__codelineno-9-28"></a><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+<h3 id="method-promotion">Method Promotion</h3>
+<p>Methods of embedded structs are promoted to the containing struct:</p>
+<div class="language-go highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-10-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-10-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-10-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-10-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-10-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-10-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-10-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-10-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-10-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-10-10">10</a></span>
+<span class="normal"><a href="#__codelineno-10-11">11</a></span>
+<span class="normal"><a href="#__codelineno-10-12">12</a></span>
+<span class="normal"><a href="#__codelineno-10-13">13</a></span>
+<span class="normal"><a href="#__codelineno-10-14">14</a></span>
+<span class="normal"><a href="#__codelineno-10-15">15</a></span>
+<span class="normal"><a href="#__codelineno-10-16">16</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">a</span><span class="w"> </span><span class="nx">Address</span><span class="p">)</span><span class="w"> </span><span class="nx">FullAddress</span><span class="p">()</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Sprintf</span><span class="p">(</span><span class="s">&quot;%s, %s&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">a</span><span class="p">.</span><span class="nx">Street</span><span class="p">,</span><span class="w"> </span><span class="nx">a</span><span class="p">.</span><span class="nx">City</span><span class="p">)</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3"></a><span class="p">}</span>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4"></a>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5"></a><span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6"></a><span class="w">    </span><span class="nx">p</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">Person</span><span class="p">{</span>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7"></a><span class="w">        </span><span class="nx">Name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Alice&quot;</span><span class="p">,</span>
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8"></a><span class="w">        </span><span class="nx">Address</span><span class="p">:</span><span class="w"> </span><span class="nx">Address</span><span class="p">{</span>
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9"></a><span class="w">            </span><span class="nx">Street</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;123 Main St&quot;</span><span class="p">,</span>
+</span><span id="__span-10-10"><a id="__codelineno-10-10" name="__codelineno-10-10"></a><span class="w">            </span><span class="nx">City</span><span class="p">:</span><span class="w">   </span><span class="s">&quot;New York&quot;</span><span class="p">,</span>
+</span><span id="__span-10-11"><a id="__codelineno-10-11" name="__codelineno-10-11"></a><span class="w">        </span><span class="p">},</span>
+</span><span id="__span-10-12"><a id="__codelineno-10-12" name="__codelineno-10-12"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-10-13"><a id="__codelineno-10-13" name="__codelineno-10-13"></a>
+</span><span id="__span-10-14"><a id="__codelineno-10-14" name="__codelineno-10-14"></a><span class="w">    </span><span class="c1">// Can call embedded method directly</span>
+</span><span id="__span-10-15"><a id="__codelineno-10-15" name="__codelineno-10-15"></a><span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">p</span><span class="p">.</span><span class="nx">FullAddress</span><span class="p">())</span><span class="w"> </span><span class="c1">// 123 Main St, New York</span>
+</span><span id="__span-10-16"><a id="__codelineno-10-16" name="__codelineno-10-16"></a><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+<h3 id="overriding-embedded-methods">Overriding Embedded Methods</h3>
+<div class="language-go highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-11-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-11-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-11-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-11-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-11-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-11-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-11-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-11-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-11-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-11-10">10</a></span>
+<span class="normal"><a href="#__codelineno-11-11">11</a></span>
+<span class="normal"><a href="#__codelineno-11-12">12</a></span>
+<span class="normal"><a href="#__codelineno-11-13">13</a></span>
+<span class="normal"><a href="#__codelineno-11-14">14</a></span>
+<span class="normal"><a href="#__codelineno-11-15">15</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1"></a><span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">p</span><span class="w"> </span><span class="nx">Person</span><span class="p">)</span><span class="w"> </span><span class="nx">FullAddress</span><span class="p">()</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Sprintf</span><span class="p">(</span><span class="s">&quot;%s: %s, %s&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">p</span><span class="p">.</span><span class="nx">Name</span><span class="p">,</span><span class="w"> </span><span class="nx">p</span><span class="p">.</span><span class="nx">Street</span><span class="p">,</span><span class="w"> </span><span class="nx">p</span><span class="p">.</span><span class="nx">City</span><span class="p">)</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3"></a><span class="p">}</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4"></a>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5"></a><span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6"></a><span class="w">    </span><span class="nx">p</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">Person</span><span class="p">{</span>
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7"></a><span class="w">        </span><span class="nx">Name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Alice&quot;</span><span class="p">,</span>
+</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8"></a><span class="w">        </span><span class="nx">Address</span><span class="p">:</span><span class="w"> </span><span class="nx">Address</span><span class="p">{</span>
+</span><span id="__span-11-9"><a id="__codelineno-11-9" name="__codelineno-11-9"></a><span class="w">            </span><span class="nx">Street</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;123 Main St&quot;</span><span class="p">,</span>
+</span><span id="__span-11-10"><a id="__codelineno-11-10" name="__codelineno-11-10"></a><span class="w">            </span><span class="nx">City</span><span class="p">:</span><span class="w">   </span><span class="s">&quot;New York&quot;</span><span class="p">,</span>
+</span><span id="__span-11-11"><a id="__codelineno-11-11" name="__codelineno-11-11"></a><span class="w">        </span><span class="p">},</span>
+</span><span id="__span-11-12"><a id="__codelineno-11-12" name="__codelineno-11-12"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-11-13"><a id="__codelineno-11-13" name="__codelineno-11-13"></a>
+</span><span id="__span-11-14"><a id="__codelineno-11-14" name="__codelineno-11-14"></a><span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">p</span><span class="p">.</span><span class="nx">FullAddress</span><span class="p">())</span><span class="w"> </span><span class="c1">// Alice: 123 Main St, New York</span>
+</span><span id="__span-11-15"><a id="__codelineno-11-15" name="__codelineno-11-15"></a><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+<h2 id="struct-tags">Struct Tags</h2>
+<p>Struct tags are metadata attached to struct fields that provide instructions to other packages, commonly used for serialization, validation, and ORM mapping.</p>
+<h3 id="basic-syntax">Basic Syntax</h3>
+<div class="language-go highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-12-1">1</a></span>
+<span class="normal"><a href="#__codelineno-12-2">2</a></span>
+<span class="normal"><a href="#__codelineno-12-3">3</a></span>
+<span class="normal"><a href="#__codelineno-12-4">4</a></span>
+<span class="normal"><a href="#__codelineno-12-5">5</a></span>
+<span class="normal"><a href="#__codelineno-12-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="kd">type</span><span class="w"> </span><span class="nx">User</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2"></a><span class="w">    </span><span class="nx">ID</span><span class="w">       </span><span class="kt">int</span><span class="w">    </span><span class="s">`json:&quot;id&quot;`</span>
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3"></a><span class="w">    </span><span class="nx">Username</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;username&quot;`</span>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4"></a><span class="w">    </span><span class="nx">Email</span><span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;email&quot; validate:&quot;required&quot;`</span>
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5"></a><span class="w">    </span><span class="nx">Password</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;-&quot;`</span><span class="w"> </span><span class="c1">// &quot;-&quot; means ignore this field</span>
+</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6"></a><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+<h3 id="common-tag-formats">Common Tag Formats</h3>
+<ol>
+<li>
+<p><strong>JSON Serialization</strong>:
+   <div class="language-go highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-13-1">1</a></span>
+<span class="normal"><a href="#__codelineno-13-2">2</a></span>
+<span class="normal"><a href="#__codelineno-13-3">3</a></span>
+<span class="normal"><a href="#__codelineno-13-4">4</a></span>
+<span class="normal"><a href="#__codelineno-13-5">5</a></span>
+<span class="normal"><a href="#__codelineno-13-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1"></a><span class="kd">type</span><span class="w"> </span><span class="nx">Product</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2"></a><span class="w">    </span><span class="nx">ID</span><span class="w">          </span><span class="kt">int</span><span class="w">     </span><span class="s">`json:&quot;id&quot;`</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3"></a><span class="w">    </span><span class="nx">Name</span><span class="w">        </span><span class="kt">string</span><span class="w">  </span><span class="s">`json:&quot;name&quot;`</span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4"></a><span class="w">    </span><span class="nx">Price</span><span class="w">       </span><span class="kt">float64</span><span class="w"> </span><span class="s">`json:&quot;price,omitempty&quot;`</span><span class="w"> </span><span class="c1">// Omit if zero value</span>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5"></a><span class="w">    </span><span class="nx">Description</span><span class="w"> </span><span class="kt">string</span><span class="w">  </span><span class="s">`json:&quot;description,omitempty&quot;`</span>
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6"></a><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div></p>
+</li>
+<li>
+<p><strong>Database Mapping</strong>:
+   <div class="language-go highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-14-1">1</a></span>
+<span class="normal"><a href="#__codelineno-14-2">2</a></span>
+<span class="normal"><a href="#__codelineno-14-3">3</a></span>
+<span class="normal"><a href="#__codelineno-14-4">4</a></span>
+<span class="normal"><a href="#__codelineno-14-5">5</a></span>
+<span class="normal"><a href="#__codelineno-14-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1"></a><span class="kd">type</span><span class="w"> </span><span class="nx">Customer</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2"></a><span class="w">    </span><span class="nx">ID</span><span class="w">        </span><span class="kt">int</span><span class="w">    </span><span class="s">`db:&quot;id&quot;`</span>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3"></a><span class="w">    </span><span class="nx">FirstName</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="s">`db:&quot;first_name&quot;`</span>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4"></a><span class="w">    </span><span class="nx">LastName</span><span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="s">`db:&quot;last_name&quot;`</span>
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5"></a><span class="w">    </span><span class="nx">CreatedAt</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Time</span><span class="w"> </span><span class="s">`db:&quot;created_at&quot;`</span>
+</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6"></a><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div></p>
+</li>
+<li>
+<p><strong>Validation</strong>:
+   <div class="language-go highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-15-1">1</a></span>
+<span class="normal"><a href="#__codelineno-15-2">2</a></span>
+<span class="normal"><a href="#__codelineno-15-3">3</a></span>
+<span class="normal"><a href="#__codelineno-15-4">4</a></span>
+<span class="normal"><a href="#__codelineno-15-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1"></a><span class="kd">type</span><span class="w"> </span><span class="nx">Registration</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2"></a><span class="w">    </span><span class="nx">Email</span><span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="s">`validate:&quot;required,email&quot;`</span>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3"></a><span class="w">    </span><span class="nx">Password</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="s">`validate:&quot;required,min=8&quot;`</span>
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4"></a><span class="w">    </span><span class="nx">Age</span><span class="w">      </span><span class="kt">int</span><span class="w">    </span><span class="s">`validate:&quot;gte=18&quot;`</span>
+</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5"></a><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div></p>
+</li>
+</ol>
+<h2 id="comparing-structs">Comparing Structs</h2>
+<p>Structs can be compared using <code>==</code> and <code>!=</code> operators if all their fields are comparable:</p>
+<div class="language-go highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-16-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-16-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-16-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-16-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-16-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-16-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-16-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-16-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-16-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-16-10">10</a></span>
+<span class="normal"><a href="#__codelineno-16-11">11</a></span>
+<span class="normal"><a href="#__codelineno-16-12">12</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1"></a><span class="kd">type</span><span class="w"> </span><span class="nx">Point</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2"></a><span class="w">    </span><span class="nx">X</span><span class="p">,</span><span class="w"> </span><span class="nx">Y</span><span class="w"> </span><span class="kt">int</span>
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3"></a><span class="p">}</span>
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4"></a>
+</span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5"></a><span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-16-6"><a id="__codelineno-16-6" name="__codelineno-16-6"></a><span class="w">    </span><span class="nx">p1</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">Point</span><span class="p">{</span><span class="nx">X</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nx">Y</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">}</span>
+</span><span id="__span-16-7"><a id="__codelineno-16-7" name="__codelineno-16-7"></a><span class="w">    </span><span class="nx">p2</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">Point</span><span class="p">{</span><span class="nx">X</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nx">Y</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">}</span>
+</span><span id="__span-16-8"><a id="__codelineno-16-8" name="__codelineno-16-8"></a><span class="w">    </span><span class="nx">p3</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">Point</span><span class="p">{</span><span class="nx">X</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nx">Y</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">}</span>
+</span><span id="__span-16-9"><a id="__codelineno-16-9" name="__codelineno-16-9"></a>
+</span><span id="__span-16-10"><a id="__codelineno-16-10" name="__codelineno-16-10"></a><span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">p1</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nx">p2</span><span class="p">)</span><span class="w"> </span><span class="c1">// true</span>
+</span><span id="__span-16-11"><a id="__codelineno-16-11" name="__codelineno-16-11"></a><span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">p1</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nx">p3</span><span class="p">)</span><span class="w"> </span><span class="c1">// false</span>
+</span><span id="__span-16-12"><a id="__codelineno-16-12" name="__codelineno-16-12"></a><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+<h3 id="limitations">Limitations:</h3>
+<ul>
+<li>Structs with slice or map fields cannot be compared directly</li>
+<li>Structs with function fields cannot be compared</li>
+<li>For complex comparisons, implement a custom method</li>
+</ul>
+<h2 id="real-world-example-json-api-handler">Real-World Example: JSON API Handler</h2>
+<p>Let's build a practical example that demonstrates struct usage in a web API context:</p>
+<div class="language-go highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-17-1">  1</a></span>
+<span class="normal"><a href="#__codelineno-17-2">  2</a></span>
+<span class="normal"><a href="#__codelineno-17-3">  3</a></span>
+<span class="normal"><a href="#__codelineno-17-4">  4</a></span>
+<span class="normal"><a href="#__codelineno-17-5">  5</a></span>
+<span class="normal"><a href="#__codelineno-17-6">  6</a></span>
+<span class="normal"><a href="#__codelineno-17-7">  7</a></span>
+<span class="normal"><a href="#__codelineno-17-8">  8</a></span>
+<span class="normal"><a href="#__codelineno-17-9">  9</a></span>
+<span class="normal"><a href="#__codelineno-17-10"> 10</a></span>
+<span class="normal"><a href="#__codelineno-17-11"> 11</a></span>
+<span class="normal"><a href="#__codelineno-17-12"> 12</a></span>
+<span class="normal"><a href="#__codelineno-17-13"> 13</a></span>
+<span class="normal"><a href="#__codelineno-17-14"> 14</a></span>
+<span class="normal"><a href="#__codelineno-17-15"> 15</a></span>
+<span class="normal"><a href="#__codelineno-17-16"> 16</a></span>
+<span class="normal"><a href="#__codelineno-17-17"> 17</a></span>
+<span class="normal"><a href="#__codelineno-17-18"> 18</a></span>
+<span class="normal"><a href="#__codelineno-17-19"> 19</a></span>
+<span class="normal"><a href="#__codelineno-17-20"> 20</a></span>
+<span class="normal"><a href="#__codelineno-17-21"> 21</a></span>
+<span class="normal"><a href="#__codelineno-17-22"> 22</a></span>
+<span class="normal"><a href="#__codelineno-17-23"> 23</a></span>
+<span class="normal"><a href="#__codelineno-17-24"> 24</a></span>
+<span class="normal"><a href="#__codelineno-17-25"> 25</a></span>
+<span class="normal"><a href="#__codelineno-17-26"> 26</a></span>
+<span class="normal"><a href="#__codelineno-17-27"> 27</a></span>
+<span class="normal"><a href="#__codelineno-17-28"> 28</a></span>
+<span class="normal"><a href="#__codelineno-17-29"> 29</a></span>
+<span class="normal"><a href="#__codelineno-17-30"> 30</a></span>
+<span class="normal"><a href="#__codelineno-17-31"> 31</a></span>
+<span class="normal"><a href="#__codelineno-17-32"> 32</a></span>
+<span class="normal"><a href="#__codelineno-17-33"> 33</a></span>
+<span class="normal"><a href="#__codelineno-17-34"> 34</a></span>
+<span class="normal"><a href="#__codelineno-17-35"> 35</a></span>
+<span class="normal"><a href="#__codelineno-17-36"> 36</a></span>
+<span class="normal"><a href="#__codelineno-17-37"> 37</a></span>
+<span class="normal"><a href="#__codelineno-17-38"> 38</a></span>
+<span class="normal"><a href="#__codelineno-17-39"> 39</a></span>
+<span class="normal"><a href="#__codelineno-17-40"> 40</a></span>
+<span class="normal"><a href="#__codelineno-17-41"> 41</a></span>
+<span class="normal"><a href="#__codelineno-17-42"> 42</a></span>
+<span class="normal"><a href="#__codelineno-17-43"> 43</a></span>
+<span class="normal"><a href="#__codelineno-17-44"> 44</a></span>
+<span class="normal"><a href="#__codelineno-17-45"> 45</a></span>
+<span class="normal"><a href="#__codelineno-17-46"> 46</a></span>
+<span class="normal"><a href="#__codelineno-17-47"> 47</a></span>
+<span class="normal"><a href="#__codelineno-17-48"> 48</a></span>
+<span class="normal"><a href="#__codelineno-17-49"> 49</a></span>
+<span class="normal"><a href="#__codelineno-17-50"> 50</a></span>
+<span class="normal"><a href="#__codelineno-17-51"> 51</a></span>
+<span class="normal"><a href="#__codelineno-17-52"> 52</a></span>
+<span class="normal"><a href="#__codelineno-17-53"> 53</a></span>
+<span class="normal"><a href="#__codelineno-17-54"> 54</a></span>
+<span class="normal"><a href="#__codelineno-17-55"> 55</a></span>
+<span class="normal"><a href="#__codelineno-17-56"> 56</a></span>
+<span class="normal"><a href="#__codelineno-17-57"> 57</a></span>
+<span class="normal"><a href="#__codelineno-17-58"> 58</a></span>
+<span class="normal"><a href="#__codelineno-17-59"> 59</a></span>
+<span class="normal"><a href="#__codelineno-17-60"> 60</a></span>
+<span class="normal"><a href="#__codelineno-17-61"> 61</a></span>
+<span class="normal"><a href="#__codelineno-17-62"> 62</a></span>
+<span class="normal"><a href="#__codelineno-17-63"> 63</a></span>
+<span class="normal"><a href="#__codelineno-17-64"> 64</a></span>
+<span class="normal"><a href="#__codelineno-17-65"> 65</a></span>
+<span class="normal"><a href="#__codelineno-17-66"> 66</a></span>
+<span class="normal"><a href="#__codelineno-17-67"> 67</a></span>
+<span class="normal"><a href="#__codelineno-17-68"> 68</a></span>
+<span class="normal"><a href="#__codelineno-17-69"> 69</a></span>
+<span class="normal"><a href="#__codelineno-17-70"> 70</a></span>
+<span class="normal"><a href="#__codelineno-17-71"> 71</a></span>
+<span class="normal"><a href="#__codelineno-17-72"> 72</a></span>
+<span class="normal"><a href="#__codelineno-17-73"> 73</a></span>
+<span class="normal"><a href="#__codelineno-17-74"> 74</a></span>
+<span class="normal"><a href="#__codelineno-17-75"> 75</a></span>
+<span class="normal"><a href="#__codelineno-17-76"> 76</a></span>
+<span class="normal"><a href="#__codelineno-17-77"> 77</a></span>
+<span class="normal"><a href="#__codelineno-17-78"> 78</a></span>
+<span class="normal"><a href="#__codelineno-17-79"> 79</a></span>
+<span class="normal"><a href="#__codelineno-17-80"> 80</a></span>
+<span class="normal"><a href="#__codelineno-17-81"> 81</a></span>
+<span class="normal"><a href="#__codelineno-17-82"> 82</a></span>
+<span class="normal"><a href="#__codelineno-17-83"> 83</a></span>
+<span class="normal"><a href="#__codelineno-17-84"> 84</a></span>
+<span class="normal"><a href="#__codelineno-17-85"> 85</a></span>
+<span class="normal"><a href="#__codelineno-17-86"> 86</a></span>
+<span class="normal"><a href="#__codelineno-17-87"> 87</a></span>
+<span class="normal"><a href="#__codelineno-17-88"> 88</a></span>
+<span class="normal"><a href="#__codelineno-17-89"> 89</a></span>
+<span class="normal"><a href="#__codelineno-17-90"> 90</a></span>
+<span class="normal"><a href="#__codelineno-17-91"> 91</a></span>
+<span class="normal"><a href="#__codelineno-17-92"> 92</a></span>
+<span class="normal"><a href="#__codelineno-17-93"> 93</a></span>
+<span class="normal"><a href="#__codelineno-17-94"> 94</a></span>
+<span class="normal"><a href="#__codelineno-17-95"> 95</a></span>
+<span class="normal"><a href="#__codelineno-17-96"> 96</a></span>
+<span class="normal"><a href="#__codelineno-17-97"> 97</a></span>
+<span class="normal"><a href="#__codelineno-17-98"> 98</a></span>
+<span class="normal"><a href="#__codelineno-17-99"> 99</a></span>
+<span class="normal"><a href="#__codelineno-17-100">100</a></span>
+<span class="normal"><a href="#__codelineno-17-101">101</a></span>
+<span class="normal"><a href="#__codelineno-17-102">102</a></span>
+<span class="normal"><a href="#__codelineno-17-103">103</a></span>
+<span class="normal"><a href="#__codelineno-17-104">104</a></span>
+<span class="normal"><a href="#__codelineno-17-105">105</a></span>
+<span class="normal"><a href="#__codelineno-17-106">106</a></span>
+<span class="normal"><a href="#__codelineno-17-107">107</a></span>
+<span class="normal"><a href="#__codelineno-17-108">108</a></span>
+<span class="normal"><a href="#__codelineno-17-109">109</a></span>
+<span class="normal"><a href="#__codelineno-17-110">110</a></span>
+<span class="normal"><a href="#__codelineno-17-111">111</a></span>
+<span class="normal"><a href="#__codelineno-17-112">112</a></span>
+<span class="normal"><a href="#__codelineno-17-113">113</a></span>
+<span class="normal"><a href="#__codelineno-17-114">114</a></span>
+<span class="normal"><a href="#__codelineno-17-115">115</a></span>
+<span class="normal"><a href="#__codelineno-17-116">116</a></span>
+<span class="normal"><a href="#__codelineno-17-117">117</a></span>
+<span class="normal"><a href="#__codelineno-17-118">118</a></span>
+<span class="normal"><a href="#__codelineno-17-119">119</a></span>
+<span class="normal"><a href="#__codelineno-17-120">120</a></span>
+<span class="normal"><a href="#__codelineno-17-121">121</a></span>
+<span class="normal"><a href="#__codelineno-17-122">122</a></span>
+<span class="normal"><a href="#__codelineno-17-123">123</a></span>
+<span class="normal"><a href="#__codelineno-17-124">124</a></span>
+<span class="normal"><a href="#__codelineno-17-125">125</a></span>
+<span class="normal"><a href="#__codelineno-17-126">126</a></span>
+<span class="normal"><a href="#__codelineno-17-127">127</a></span>
+<span class="normal"><a href="#__codelineno-17-128">128</a></span>
+<span class="normal"><a href="#__codelineno-17-129">129</a></span>
+<span class="normal"><a href="#__codelineno-17-130">130</a></span>
+<span class="normal"><a href="#__codelineno-17-131">131</a></span>
+<span class="normal"><a href="#__codelineno-17-132">132</a></span>
+<span class="normal"><a href="#__codelineno-17-133">133</a></span>
+<span class="normal"><a href="#__codelineno-17-134">134</a></span>
+<span class="normal"><a href="#__codelineno-17-135">135</a></span>
+<span class="normal"><a href="#__codelineno-17-136">136</a></span>
+<span class="normal"><a href="#__codelineno-17-137">137</a></span>
+<span class="normal"><a href="#__codelineno-17-138">138</a></span>
+<span class="normal"><a href="#__codelineno-17-139">139</a></span>
+<span class="normal"><a href="#__codelineno-17-140">140</a></span>
+<span class="normal"><a href="#__codelineno-17-141">141</a></span>
+<span class="normal"><a href="#__codelineno-17-142">142</a></span>
+<span class="normal"><a href="#__codelineno-17-143">143</a></span>
+<span class="normal"><a href="#__codelineno-17-144">144</a></span>
+<span class="normal"><a href="#__codelineno-17-145">145</a></span>
+<span class="normal"><a href="#__codelineno-17-146">146</a></span>
+<span class="normal"><a href="#__codelineno-17-147">147</a></span>
+<span class="normal"><a href="#__codelineno-17-148">148</a></span>
+<span class="normal"><a href="#__codelineno-17-149">149</a></span>
+<span class="normal"><a href="#__codelineno-17-150">150</a></span>
+<span class="normal"><a href="#__codelineno-17-151">151</a></span>
+<span class="normal"><a href="#__codelineno-17-152">152</a></span>
+<span class="normal"><a href="#__codelineno-17-153">153</a></span>
+<span class="normal"><a href="#__codelineno-17-154">154</a></span>
+<span class="normal"><a href="#__codelineno-17-155">155</a></span>
+<span class="normal"><a href="#__codelineno-17-156">156</a></span>
+<span class="normal"><a href="#__codelineno-17-157">157</a></span>
+<span class="normal"><a href="#__codelineno-17-158">158</a></span>
+<span class="normal"><a href="#__codelineno-17-159">159</a></span>
+<span class="normal"><a href="#__codelineno-17-160">160</a></span>
+<span class="normal"><a href="#__codelineno-17-161">161</a></span>
+<span class="normal"><a href="#__codelineno-17-162">162</a></span>
+<span class="normal"><a href="#__codelineno-17-163">163</a></span>
+<span class="normal"><a href="#__codelineno-17-164">164</a></span>
+<span class="normal"><a href="#__codelineno-17-165">165</a></span>
+<span class="normal"><a href="#__codelineno-17-166">166</a></span>
+<span class="normal"><a href="#__codelineno-17-167">167</a></span>
+<span class="normal"><a href="#__codelineno-17-168">168</a></span>
+<span class="normal"><a href="#__codelineno-17-169">169</a></span>
+<span class="normal"><a href="#__codelineno-17-170">170</a></span>
+<span class="normal"><a href="#__codelineno-17-171">171</a></span>
+<span class="normal"><a href="#__codelineno-17-172">172</a></span>
+<span class="normal"><a href="#__codelineno-17-173">173</a></span>
+<span class="normal"><a href="#__codelineno-17-174">174</a></span>
+<span class="normal"><a href="#__codelineno-17-175">175</a></span>
+<span class="normal"><a href="#__codelineno-17-176">176</a></span>
+<span class="normal"><a href="#__codelineno-17-177">177</a></span>
+<span class="normal"><a href="#__codelineno-17-178">178</a></span>
+<span class="normal"><a href="#__codelineno-17-179">179</a></span>
+<span class="normal"><a href="#__codelineno-17-180">180</a></span>
+<span class="normal"><a href="#__codelineno-17-181">181</a></span>
+<span class="normal"><a href="#__codelineno-17-182">182</a></span>
+<span class="normal"><a href="#__codelineno-17-183">183</a></span>
+<span class="normal"><a href="#__codelineno-17-184">184</a></span>
+<span class="normal"><a href="#__codelineno-17-185">185</a></span>
+<span class="normal"><a href="#__codelineno-17-186">186</a></span>
+<span class="normal"><a href="#__codelineno-17-187">187</a></span>
+<span class="normal"><a href="#__codelineno-17-188">188</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1"></a><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2"></a>
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3"></a><span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4"></a><span class="w">    </span><span class="s">&quot;encoding/json&quot;</span>
+</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5"></a><span class="w">    </span><span class="s">&quot;fmt&quot;</span>
+</span><span id="__span-17-6"><a id="__codelineno-17-6" name="__codelineno-17-6"></a><span class="w">    </span><span class="s">&quot;log&quot;</span>
+</span><span id="__span-17-7"><a id="__codelineno-17-7" name="__codelineno-17-7"></a><span class="w">    </span><span class="s">&quot;net/http&quot;</span>
+</span><span id="__span-17-8"><a id="__codelineno-17-8" name="__codelineno-17-8"></a><span class="w">    </span><span class="s">&quot;time&quot;</span>
+</span><span id="__span-17-9"><a id="__codelineno-17-9" name="__codelineno-17-9"></a><span class="p">)</span>
+</span><span id="__span-17-10"><a id="__codelineno-17-10" name="__codelineno-17-10"></a>
+</span><span id="__span-17-11"><a id="__codelineno-17-11" name="__codelineno-17-11"></a><span class="c1">// Product represents a product in our inventory</span>
+</span><span id="__span-17-12"><a id="__codelineno-17-12" name="__codelineno-17-12"></a><span class="kd">type</span><span class="w"> </span><span class="nx">Product</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-17-13"><a id="__codelineno-17-13" name="__codelineno-17-13"></a><span class="w">    </span><span class="nx">ID</span><span class="w">          </span><span class="kt">int</span><span class="w">       </span><span class="s">`json:&quot;id&quot;`</span>
+</span><span id="__span-17-14"><a id="__codelineno-17-14" name="__codelineno-17-14"></a><span class="w">    </span><span class="nx">Name</span><span class="w">        </span><span class="kt">string</span><span class="w">    </span><span class="s">`json:&quot;name&quot; validate:&quot;required&quot;`</span>
+</span><span id="__span-17-15"><a id="__codelineno-17-15" name="__codelineno-17-15"></a><span class="w">    </span><span class="nx">Description</span><span class="w"> </span><span class="kt">string</span><span class="w">    </span><span class="s">`json:&quot;description,omitempty&quot;`</span>
+</span><span id="__span-17-16"><a id="__codelineno-17-16" name="__codelineno-17-16"></a><span class="w">    </span><span class="nx">Price</span><span class="w">       </span><span class="kt">float64</span><span class="w">   </span><span class="s">`json:&quot;price&quot; validate:&quot;required,gte=0&quot;`</span>
+</span><span id="__span-17-17"><a id="__codelineno-17-17" name="__codelineno-17-17"></a><span class="w">    </span><span class="nx">Category</span><span class="w">    </span><span class="kt">string</span><span class="w">    </span><span class="s">`json:&quot;category&quot;`</span>
+</span><span id="__span-17-18"><a id="__codelineno-17-18" name="__codelineno-17-18"></a><span class="w">    </span><span class="nx">InStock</span><span class="w">     </span><span class="kt">bool</span><span class="w">      </span><span class="s">`json:&quot;in_stock&quot;`</span>
+</span><span id="__span-17-19"><a id="__codelineno-17-19" name="__codelineno-17-19"></a><span class="w">    </span><span class="nx">CreatedAt</span><span class="w">   </span><span class="nx">time</span><span class="p">.</span><span class="nx">Time</span><span class="w"> </span><span class="s">`json:&quot;created_at&quot;`</span>
+</span><span id="__span-17-20"><a id="__codelineno-17-20" name="__codelineno-17-20"></a><span class="w">    </span><span class="nx">UpdatedAt</span><span class="w">   </span><span class="nx">time</span><span class="p">.</span><span class="nx">Time</span><span class="w"> </span><span class="s">`json:&quot;updated_at&quot;`</span>
+</span><span id="__span-17-21"><a id="__codelineno-17-21" name="__codelineno-17-21"></a><span class="p">}</span>
+</span><span id="__span-17-22"><a id="__codelineno-17-22" name="__codelineno-17-22"></a>
+</span><span id="__span-17-23"><a id="__codelineno-17-23" name="__codelineno-17-23"></a><span class="c1">// ProductRequest represents the JSON request body for creating/updating products</span>
+</span><span id="__span-17-24"><a id="__codelineno-17-24" name="__codelineno-17-24"></a><span class="kd">type</span><span class="w"> </span><span class="nx">ProductRequest</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-17-25"><a id="__codelineno-17-25" name="__codelineno-17-25"></a><span class="w">    </span><span class="nx">Name</span><span class="w">        </span><span class="kt">string</span><span class="w">  </span><span class="s">`json:&quot;name&quot; validate:&quot;required&quot;`</span>
+</span><span id="__span-17-26"><a id="__codelineno-17-26" name="__codelineno-17-26"></a><span class="w">    </span><span class="nx">Description</span><span class="w"> </span><span class="kt">string</span><span class="w">  </span><span class="s">`json:&quot;description&quot;`</span>
+</span><span id="__span-17-27"><a id="__codelineno-17-27" name="__codelineno-17-27"></a><span class="w">    </span><span class="nx">Price</span><span class="w">       </span><span class="kt">float64</span><span class="w"> </span><span class="s">`json:&quot;price&quot; validate:&quot;required,gte=0&quot;`</span>
+</span><span id="__span-17-28"><a id="__codelineno-17-28" name="__codelineno-17-28"></a><span class="w">    </span><span class="nx">Category</span><span class="w">    </span><span class="kt">string</span><span class="w">  </span><span class="s">`json:&quot;category&quot;`</span>
+</span><span id="__span-17-29"><a id="__codelineno-17-29" name="__codelineno-17-29"></a><span class="w">    </span><span class="nx">InStock</span><span class="w">     </span><span class="kt">bool</span><span class="w">    </span><span class="s">`json:&quot;in_stock&quot;`</span>
+</span><span id="__span-17-30"><a id="__codelineno-17-30" name="__codelineno-17-30"></a><span class="p">}</span>
+</span><span id="__span-17-31"><a id="__codelineno-17-31" name="__codelineno-17-31"></a>
+</span><span id="__span-17-32"><a id="__codelineno-17-32" name="__codelineno-17-32"></a><span class="c1">// ProductResponse wraps the product with metadata</span>
+</span><span id="__span-17-33"><a id="__codelineno-17-33" name="__codelineno-17-33"></a><span class="kd">type</span><span class="w"> </span><span class="nx">ProductResponse</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-17-34"><a id="__codelineno-17-34" name="__codelineno-17-34"></a><span class="w">    </span><span class="nx">Success</span><span class="w"> </span><span class="kt">bool</span><span class="w">      </span><span class="s">`json:&quot;success&quot;`</span>
+</span><span id="__span-17-35"><a id="__codelineno-17-35" name="__codelineno-17-35"></a><span class="w">    </span><span class="nx">Message</span><span class="w"> </span><span class="kt">string</span><span class="w">    </span><span class="s">`json:&quot;message,omitempty&quot;`</span>
+</span><span id="__span-17-36"><a id="__codelineno-17-36" name="__codelineno-17-36"></a><span class="w">    </span><span class="nx">Data</span><span class="w">    </span><span class="o">*</span><span class="nx">Product</span><span class="w">  </span><span class="s">`json:&quot;data,omitempty&quot;`</span>
+</span><span id="__span-17-37"><a id="__codelineno-17-37" name="__codelineno-17-37"></a><span class="w">    </span><span class="nx">Errors</span><span class="w">  </span><span class="p">[]</span><span class="kt">string</span><span class="w">  </span><span class="s">`json:&quot;errors,omitempty&quot;`</span>
+</span><span id="__span-17-38"><a id="__codelineno-17-38" name="__codelineno-17-38"></a><span class="p">}</span>
+</span><span id="__span-17-39"><a id="__codelineno-17-39" name="__codelineno-17-39"></a>
+</span><span id="__span-17-40"><a id="__codelineno-17-40" name="__codelineno-17-40"></a><span class="c1">// ProductStore simulates a database</span>
+</span><span id="__span-17-41"><a id="__codelineno-17-41" name="__codelineno-17-41"></a><span class="kd">type</span><span class="w"> </span><span class="nx">ProductStore</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-17-42"><a id="__codelineno-17-42" name="__codelineno-17-42"></a><span class="w">    </span><span class="nx">products</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="kt">int</span><span class="p">]</span><span class="o">*</span><span class="nx">Product</span>
+</span><span id="__span-17-43"><a id="__codelineno-17-43" name="__codelineno-17-43"></a><span class="w">    </span><span class="nx">nextID</span><span class="w">   </span><span class="kt">int</span>
+</span><span id="__span-17-44"><a id="__codelineno-17-44" name="__codelineno-17-44"></a><span class="p">}</span>
+</span><span id="__span-17-45"><a id="__codelineno-17-45" name="__codelineno-17-45"></a>
+</span><span id="__span-17-46"><a id="__codelineno-17-46" name="__codelineno-17-46"></a><span class="kd">func</span><span class="w"> </span><span class="nx">NewProductStore</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="nx">ProductStore</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-17-47"><a id="__codelineno-17-47" name="__codelineno-17-47"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">ProductStore</span><span class="p">{</span>
+</span><span id="__span-17-48"><a id="__codelineno-17-48" name="__codelineno-17-48"></a><span class="w">        </span><span class="nx">products</span><span class="p">:</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kt">int</span><span class="p">]</span><span class="o">*</span><span class="nx">Product</span><span class="p">),</span>
+</span><span id="__span-17-49"><a id="__codelineno-17-49" name="__codelineno-17-49"></a><span class="w">        </span><span class="nx">nextID</span><span class="p">:</span><span class="w">   </span><span class="mi">1</span><span class="p">,</span>
+</span><span id="__span-17-50"><a id="__codelineno-17-50" name="__codelineno-17-50"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-17-51"><a id="__codelineno-17-51" name="__codelineno-17-51"></a><span class="p">}</span>
+</span><span id="__span-17-52"><a id="__codelineno-17-52" name="__codelineno-17-52"></a>
+</span><span id="__span-17-53"><a id="__codelineno-17-53" name="__codelineno-17-53"></a><span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="o">*</span><span class="nx">ProductStore</span><span class="p">)</span><span class="w"> </span><span class="nx">AddProduct</span><span class="p">(</span><span class="nx">p</span><span class="w"> </span><span class="o">*</span><span class="nx">Product</span><span class="p">)</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-17-54"><a id="__codelineno-17-54" name="__codelineno-17-54"></a><span class="w">    </span><span class="nx">p</span><span class="p">.</span><span class="nx">ID</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">s</span><span class="p">.</span><span class="nx">nextID</span>
+</span><span id="__span-17-55"><a id="__codelineno-17-55" name="__codelineno-17-55"></a><span class="w">    </span><span class="nx">p</span><span class="p">.</span><span class="nx">CreatedAt</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Now</span><span class="p">()</span>
+</span><span id="__span-17-56"><a id="__codelineno-17-56" name="__codelineno-17-56"></a><span class="w">    </span><span class="nx">p</span><span class="p">.</span><span class="nx">UpdatedAt</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Now</span><span class="p">()</span>
+</span><span id="__span-17-57"><a id="__codelineno-17-57" name="__codelineno-17-57"></a><span class="w">    </span><span class="nx">s</span><span class="p">.</span><span class="nx">products</span><span class="p">[</span><span class="nx">p</span><span class="p">.</span><span class="nx">ID</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">p</span>
+</span><span id="__span-17-58"><a id="__codelineno-17-58" name="__codelineno-17-58"></a><span class="w">    </span><span class="nx">s</span><span class="p">.</span><span class="nx">nextID</span><span class="o">++</span>
+</span><span id="__span-17-59"><a id="__codelineno-17-59" name="__codelineno-17-59"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">p</span><span class="p">.</span><span class="nx">ID</span>
+</span><span id="__span-17-60"><a id="__codelineno-17-60" name="__codelineno-17-60"></a><span class="p">}</span>
+</span><span id="__span-17-61"><a id="__codelineno-17-61" name="__codelineno-17-61"></a>
+</span><span id="__span-17-62"><a id="__codelineno-17-62" name="__codelineno-17-62"></a><span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="o">*</span><span class="nx">ProductStore</span><span class="p">)</span><span class="w"> </span><span class="nx">GetProduct</span><span class="p">(</span><span class="nx">id</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">Product</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-17-63"><a id="__codelineno-17-63" name="__codelineno-17-63"></a><span class="w">    </span><span class="nx">product</span><span class="p">,</span><span class="w"> </span><span class="nx">exists</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">s</span><span class="p">.</span><span class="nx">products</span><span class="p">[</span><span class="nx">id</span><span class="p">]</span>
+</span><span id="__span-17-64"><a id="__codelineno-17-64" name="__codelineno-17-64"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">product</span><span class="p">,</span><span class="w"> </span><span class="nx">exists</span>
+</span><span id="__span-17-65"><a id="__codelineno-17-65" name="__codelineno-17-65"></a><span class="p">}</span>
+</span><span id="__span-17-66"><a id="__codelineno-17-66" name="__codelineno-17-66"></a>
+</span><span id="__span-17-67"><a id="__codelineno-17-67" name="__codelineno-17-67"></a><span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="o">*</span><span class="nx">ProductStore</span><span class="p">)</span><span class="w"> </span><span class="nx">UpdateProduct</span><span class="p">(</span><span class="nx">id</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="nx">updates</span><span class="w"> </span><span class="o">*</span><span class="nx">ProductRequest</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">Product</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-17-68"><a id="__codelineno-17-68" name="__codelineno-17-68"></a><span class="w">    </span><span class="nx">product</span><span class="p">,</span><span class="w"> </span><span class="nx">exists</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">s</span><span class="p">.</span><span class="nx">products</span><span class="p">[</span><span class="nx">id</span><span class="p">]</span>
+</span><span id="__span-17-69"><a id="__codelineno-17-69" name="__codelineno-17-69"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">!</span><span class="nx">exists</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-17-70"><a id="__codelineno-17-70" name="__codelineno-17-70"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span>
+</span><span id="__span-17-71"><a id="__codelineno-17-71" name="__codelineno-17-71"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-17-72"><a id="__codelineno-17-72" name="__codelineno-17-72"></a>
+</span><span id="__span-17-73"><a id="__codelineno-17-73" name="__codelineno-17-73"></a><span class="w">    </span><span class="nx">product</span><span class="p">.</span><span class="nx">Name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">updates</span><span class="p">.</span><span class="nx">Name</span>
+</span><span id="__span-17-74"><a id="__codelineno-17-74" name="__codelineno-17-74"></a><span class="w">    </span><span class="nx">product</span><span class="p">.</span><span class="nx">Description</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">updates</span><span class="p">.</span><span class="nx">Description</span>
+</span><span id="__span-17-75"><a id="__codelineno-17-75" name="__codelineno-17-75"></a><span class="w">    </span><span class="nx">product</span><span class="p">.</span><span class="nx">Price</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">updates</span><span class="p">.</span><span class="nx">Price</span>
+</span><span id="__span-17-76"><a id="__codelineno-17-76" name="__codelineno-17-76"></a><span class="w">    </span><span class="nx">product</span><span class="p">.</span><span class="nx">Category</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">updates</span><span class="p">.</span><span class="nx">Category</span>
+</span><span id="__span-17-77"><a id="__codelineno-17-77" name="__codelineno-17-77"></a><span class="w">    </span><span class="nx">product</span><span class="p">.</span><span class="nx">InStock</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">updates</span><span class="p">.</span><span class="nx">InStock</span>
+</span><span id="__span-17-78"><a id="__codelineno-17-78" name="__codelineno-17-78"></a><span class="w">    </span><span class="nx">product</span><span class="p">.</span><span class="nx">UpdatedAt</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Now</span><span class="p">()</span>
+</span><span id="__span-17-79"><a id="__codelineno-17-79" name="__codelineno-17-79"></a>
+</span><span id="__span-17-80"><a id="__codelineno-17-80" name="__codelineno-17-80"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">product</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span>
+</span><span id="__span-17-81"><a id="__codelineno-17-81" name="__codelineno-17-81"></a><span class="p">}</span>
+</span><span id="__span-17-82"><a id="__codelineno-17-82" name="__codelineno-17-82"></a>
+</span><span id="__span-17-83"><a id="__codelineno-17-83" name="__codelineno-17-83"></a><span class="c1">// API Handlers</span>
+</span><span id="__span-17-84"><a id="__codelineno-17-84" name="__codelineno-17-84"></a><span class="kd">func</span><span class="w"> </span><span class="nx">createProduct</span><span class="p">(</span><span class="nx">store</span><span class="w"> </span><span class="o">*</span><span class="nx">ProductStore</span><span class="p">)</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">HandlerFunc</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-17-85"><a id="__codelineno-17-85" name="__codelineno-17-85"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">w</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span><span class="w"> </span><span class="nx">r</span><span class="w"> </span><span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-17-86"><a id="__codelineno-17-86" name="__codelineno-17-86"></a><span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nx">req</span><span class="w"> </span><span class="nx">ProductRequest</span>
+</span><span id="__span-17-87"><a id="__codelineno-17-87" name="__codelineno-17-87"></a>
+</span><span id="__span-17-88"><a id="__codelineno-17-88" name="__codelineno-17-88"></a><span class="w">        </span><span class="c1">// Decode JSON request</span>
+</span><span id="__span-17-89"><a id="__codelineno-17-89" name="__codelineno-17-89"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">json</span><span class="p">.</span><span class="nx">NewDecoder</span><span class="p">(</span><span class="nx">r</span><span class="p">.</span><span class="nx">Body</span><span class="p">).</span><span class="nx">Decode</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">req</span><span class="p">);</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-17-90"><a id="__codelineno-17-90" name="__codelineno-17-90"></a><span class="w">            </span><span class="nx">respondWithError</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusBadRequest</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Invalid request payload&quot;</span><span class="p">)</span>
+</span><span id="__span-17-91"><a id="__codelineno-17-91" name="__codelineno-17-91"></a><span class="w">            </span><span class="k">return</span>
+</span><span id="__span-17-92"><a id="__codelineno-17-92" name="__codelineno-17-92"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-17-93"><a id="__codelineno-17-93" name="__codelineno-17-93"></a>
+</span><span id="__span-17-94"><a id="__codelineno-17-94" name="__codelineno-17-94"></a><span class="w">        </span><span class="c1">// Create product</span>
+</span><span id="__span-17-95"><a id="__codelineno-17-95" name="__codelineno-17-95"></a><span class="w">        </span><span class="nx">product</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">Product</span><span class="p">{</span>
+</span><span id="__span-17-96"><a id="__codelineno-17-96" name="__codelineno-17-96"></a><span class="w">            </span><span class="nx">Name</span><span class="p">:</span><span class="w">        </span><span class="nx">req</span><span class="p">.</span><span class="nx">Name</span><span class="p">,</span>
+</span><span id="__span-17-97"><a id="__codelineno-17-97" name="__codelineno-17-97"></a><span class="w">            </span><span class="nx">Description</span><span class="p">:</span><span class="w"> </span><span class="nx">req</span><span class="p">.</span><span class="nx">Description</span><span class="p">,</span>
+</span><span id="__span-17-98"><a id="__codelineno-17-98" name="__codelineno-17-98"></a><span class="w">            </span><span class="nx">Price</span><span class="p">:</span><span class="w">       </span><span class="nx">req</span><span class="p">.</span><span class="nx">Price</span><span class="p">,</span>
+</span><span id="__span-17-99"><a id="__codelineno-17-99" name="__codelineno-17-99"></a><span class="w">            </span><span class="nx">Category</span><span class="p">:</span><span class="w">    </span><span class="nx">req</span><span class="p">.</span><span class="nx">Category</span><span class="p">,</span>
+</span><span id="__span-17-100"><a id="__codelineno-17-100" name="__codelineno-17-100"></a><span class="w">            </span><span class="nx">InStock</span><span class="p">:</span><span class="w">     </span><span class="nx">req</span><span class="p">.</span><span class="nx">InStock</span><span class="p">,</span>
+</span><span id="__span-17-101"><a id="__codelineno-17-101" name="__codelineno-17-101"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-17-102"><a id="__codelineno-17-102" name="__codelineno-17-102"></a>
+</span><span id="__span-17-103"><a id="__codelineno-17-103" name="__codelineno-17-103"></a><span class="w">        </span><span class="nx">id</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">store</span><span class="p">.</span><span class="nx">AddProduct</span><span class="p">(</span><span class="nx">product</span><span class="p">)</span>
+</span><span id="__span-17-104"><a id="__codelineno-17-104" name="__codelineno-17-104"></a><span class="w">        </span><span class="nx">product</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">store</span><span class="p">.</span><span class="nx">GetProduct</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span>
+</span><span id="__span-17-105"><a id="__codelineno-17-105" name="__codelineno-17-105"></a>
+</span><span id="__span-17-106"><a id="__codelineno-17-106" name="__codelineno-17-106"></a><span class="w">        </span><span class="nx">respondWithJSON</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusCreated</span><span class="p">,</span><span class="w"> </span><span class="nx">ProductResponse</span><span class="p">{</span>
+</span><span id="__span-17-107"><a id="__codelineno-17-107" name="__codelineno-17-107"></a><span class="w">            </span><span class="nx">Success</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span id="__span-17-108"><a id="__codelineno-17-108" name="__codelineno-17-108"></a><span class="w">            </span><span class="nx">Message</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Product created successfully&quot;</span><span class="p">,</span>
+</span><span id="__span-17-109"><a id="__codelineno-17-109" name="__codelineno-17-109"></a><span class="w">            </span><span class="nx">Data</span><span class="p">:</span><span class="w">    </span><span class="nx">product</span><span class="p">,</span>
+</span><span id="__span-17-110"><a id="__codelineno-17-110" name="__codelineno-17-110"></a><span class="w">        </span><span class="p">})</span>
+</span><span id="__span-17-111"><a id="__codelineno-17-111" name="__codelineno-17-111"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-17-112"><a id="__codelineno-17-112" name="__codelineno-17-112"></a><span class="p">}</span>
+</span><span id="__span-17-113"><a id="__codelineno-17-113" name="__codelineno-17-113"></a>
+</span><span id="__span-17-114"><a id="__codelineno-17-114" name="__codelineno-17-114"></a><span class="kd">func</span><span class="w"> </span><span class="nx">getProduct</span><span class="p">(</span><span class="nx">store</span><span class="w"> </span><span class="o">*</span><span class="nx">ProductStore</span><span class="p">)</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">HandlerFunc</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-17-115"><a id="__codelineno-17-115" name="__codelineno-17-115"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">w</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span><span class="w"> </span><span class="nx">r</span><span class="w"> </span><span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-17-116"><a id="__codelineno-17-116" name="__codelineno-17-116"></a><span class="w">        </span><span class="nx">id</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="c1">// In real app, get from URL params</span>
+</span><span id="__span-17-117"><a id="__codelineno-17-117" name="__codelineno-17-117"></a>
+</span><span id="__span-17-118"><a id="__codelineno-17-118" name="__codelineno-17-118"></a><span class="w">        </span><span class="nx">product</span><span class="p">,</span><span class="w"> </span><span class="nx">exists</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">store</span><span class="p">.</span><span class="nx">GetProduct</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span>
+</span><span id="__span-17-119"><a id="__codelineno-17-119" name="__codelineno-17-119"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">!</span><span class="nx">exists</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-17-120"><a id="__codelineno-17-120" name="__codelineno-17-120"></a><span class="w">            </span><span class="nx">respondWithError</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusNotFound</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Product not found&quot;</span><span class="p">)</span>
+</span><span id="__span-17-121"><a id="__codelineno-17-121" name="__codelineno-17-121"></a><span class="w">            </span><span class="k">return</span>
+</span><span id="__span-17-122"><a id="__codelineno-17-122" name="__codelineno-17-122"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-17-123"><a id="__codelineno-17-123" name="__codelineno-17-123"></a>
+</span><span id="__span-17-124"><a id="__codelineno-17-124" name="__codelineno-17-124"></a><span class="w">        </span><span class="nx">respondWithJSON</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusOK</span><span class="p">,</span><span class="w"> </span><span class="nx">ProductResponse</span><span class="p">{</span>
+</span><span id="__span-17-125"><a id="__codelineno-17-125" name="__codelineno-17-125"></a><span class="w">            </span><span class="nx">Success</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span id="__span-17-126"><a id="__codelineno-17-126" name="__codelineno-17-126"></a><span class="w">            </span><span class="nx">Data</span><span class="p">:</span><span class="w">    </span><span class="nx">product</span><span class="p">,</span>
+</span><span id="__span-17-127"><a id="__codelineno-17-127" name="__codelineno-17-127"></a><span class="w">        </span><span class="p">})</span>
+</span><span id="__span-17-128"><a id="__codelineno-17-128" name="__codelineno-17-128"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-17-129"><a id="__codelineno-17-129" name="__codelineno-17-129"></a><span class="p">}</span>
+</span><span id="__span-17-130"><a id="__codelineno-17-130" name="__codelineno-17-130"></a>
+</span><span id="__span-17-131"><a id="__codelineno-17-131" name="__codelineno-17-131"></a><span class="kd">func</span><span class="w"> </span><span class="nx">updateProduct</span><span class="p">(</span><span class="nx">store</span><span class="w"> </span><span class="o">*</span><span class="nx">ProductStore</span><span class="p">)</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">HandlerFunc</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-17-132"><a id="__codelineno-17-132" name="__codelineno-17-132"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">w</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span><span class="w"> </span><span class="nx">r</span><span class="w"> </span><span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-17-133"><a id="__codelineno-17-133" name="__codelineno-17-133"></a><span class="w">        </span><span class="nx">id</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="c1">// In real app, get from URL params</span>
+</span><span id="__span-17-134"><a id="__codelineno-17-134" name="__codelineno-17-134"></a>
+</span><span id="__span-17-135"><a id="__codelineno-17-135" name="__codelineno-17-135"></a><span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nx">req</span><span class="w"> </span><span class="nx">ProductRequest</span>
+</span><span id="__span-17-136"><a id="__codelineno-17-136" name="__codelineno-17-136"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">json</span><span class="p">.</span><span class="nx">NewDecoder</span><span class="p">(</span><span class="nx">r</span><span class="p">.</span><span class="nx">Body</span><span class="p">).</span><span class="nx">Decode</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">req</span><span class="p">);</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-17-137"><a id="__codelineno-17-137" name="__codelineno-17-137"></a><span class="w">            </span><span class="nx">respondWithError</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusBadRequest</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Invalid request payload&quot;</span><span class="p">)</span>
+</span><span id="__span-17-138"><a id="__codelineno-17-138" name="__codelineno-17-138"></a><span class="w">            </span><span class="k">return</span>
+</span><span id="__span-17-139"><a id="__codelineno-17-139" name="__codelineno-17-139"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-17-140"><a id="__codelineno-17-140" name="__codelineno-17-140"></a>
+</span><span id="__span-17-141"><a id="__codelineno-17-141" name="__codelineno-17-141"></a><span class="w">        </span><span class="nx">product</span><span class="p">,</span><span class="w"> </span><span class="nx">updated</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">store</span><span class="p">.</span><span class="nx">UpdateProduct</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">req</span><span class="p">)</span>
+</span><span id="__span-17-142"><a id="__codelineno-17-142" name="__codelineno-17-142"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">!</span><span class="nx">updated</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-17-143"><a id="__codelineno-17-143" name="__codelineno-17-143"></a><span class="w">            </span><span class="nx">respondWithError</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusNotFound</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Product not found&quot;</span><span class="p">)</span>
+</span><span id="__span-17-144"><a id="__codelineno-17-144" name="__codelineno-17-144"></a><span class="w">            </span><span class="k">return</span>
+</span><span id="__span-17-145"><a id="__codelineno-17-145" name="__codelineno-17-145"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-17-146"><a id="__codelineno-17-146" name="__codelineno-17-146"></a>
+</span><span id="__span-17-147"><a id="__codelineno-17-147" name="__codelineno-17-147"></a><span class="w">        </span><span class="nx">respondWithJSON</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusOK</span><span class="p">,</span><span class="w"> </span><span class="nx">ProductResponse</span><span class="p">{</span>
+</span><span id="__span-17-148"><a id="__codelineno-17-148" name="__codelineno-17-148"></a><span class="w">            </span><span class="nx">Success</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span id="__span-17-149"><a id="__codelineno-17-149" name="__codelineno-17-149"></a><span class="w">            </span><span class="nx">Message</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Product updated successfully&quot;</span><span class="p">,</span>
+</span><span id="__span-17-150"><a id="__codelineno-17-150" name="__codelineno-17-150"></a><span class="w">            </span><span class="nx">Data</span><span class="p">:</span><span class="w">    </span><span class="nx">product</span><span class="p">,</span>
+</span><span id="__span-17-151"><a id="__codelineno-17-151" name="__codelineno-17-151"></a><span class="w">        </span><span class="p">})</span>
+</span><span id="__span-17-152"><a id="__codelineno-17-152" name="__codelineno-17-152"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-17-153"><a id="__codelineno-17-153" name="__codelineno-17-153"></a><span class="p">}</span>
+</span><span id="__span-17-154"><a id="__codelineno-17-154" name="__codelineno-17-154"></a>
+</span><span id="__span-17-155"><a id="__codelineno-17-155" name="__codelineno-17-155"></a><span class="c1">// Helper functions</span>
+</span><span id="__span-17-156"><a id="__codelineno-17-156" name="__codelineno-17-156"></a><span class="kd">func</span><span class="w"> </span><span class="nx">respondWithError</span><span class="p">(</span><span class="nx">w</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span><span class="w"> </span><span class="nx">code</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="nx">message</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-17-157"><a id="__codelineno-17-157" name="__codelineno-17-157"></a><span class="w">    </span><span class="nx">respondWithJSON</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="w"> </span><span class="nx">code</span><span class="p">,</span><span class="w"> </span><span class="nx">ProductResponse</span><span class="p">{</span>
+</span><span id="__span-17-158"><a id="__codelineno-17-158" name="__codelineno-17-158"></a><span class="w">        </span><span class="nx">Success</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+</span><span id="__span-17-159"><a id="__codelineno-17-159" name="__codelineno-17-159"></a><span class="w">        </span><span class="nx">Message</span><span class="p">:</span><span class="w"> </span><span class="nx">message</span><span class="p">,</span>
+</span><span id="__span-17-160"><a id="__codelineno-17-160" name="__codelineno-17-160"></a><span class="w">    </span><span class="p">})</span>
+</span><span id="__span-17-161"><a id="__codelineno-17-161" name="__codelineno-17-161"></a><span class="p">}</span>
+</span><span id="__span-17-162"><a id="__codelineno-17-162" name="__codelineno-17-162"></a>
+</span><span id="__span-17-163"><a id="__codelineno-17-163" name="__codelineno-17-163"></a><span class="kd">func</span><span class="w"> </span><span class="nx">respondWithJSON</span><span class="p">(</span><span class="nx">w</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span><span class="w"> </span><span class="nx">code</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="nx">payload</span><span class="w"> </span><span class="kd">interface</span><span class="p">{})</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-17-164"><a id="__codelineno-17-164" name="__codelineno-17-164"></a><span class="w">    </span><span class="nx">response</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">json</span><span class="p">.</span><span class="nx">Marshal</span><span class="p">(</span><span class="nx">payload</span><span class="p">)</span>
+</span><span id="__span-17-165"><a id="__codelineno-17-165" name="__codelineno-17-165"></a><span class="w">    </span><span class="nx">w</span><span class="p">.</span><span class="nx">Header</span><span class="p">().</span><span class="nx">Set</span><span class="p">(</span><span class="s">&quot;Content-Type&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;application/json&quot;</span><span class="p">)</span>
+</span><span id="__span-17-166"><a id="__codelineno-17-166" name="__codelineno-17-166"></a><span class="w">    </span><span class="nx">w</span><span class="p">.</span><span class="nx">WriteHeader</span><span class="p">(</span><span class="nx">code</span><span class="p">)</span>
+</span><span id="__span-17-167"><a id="__codelineno-17-167" name="__codelineno-17-167"></a><span class="w">    </span><span class="nx">w</span><span class="p">.</span><span class="nx">Write</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span>
+</span><span id="__span-17-168"><a id="__codelineno-17-168" name="__codelineno-17-168"></a><span class="p">}</span>
+</span><span id="__span-17-169"><a id="__codelineno-17-169" name="__codelineno-17-169"></a>
+</span><span id="__span-17-170"><a id="__codelineno-17-170" name="__codelineno-17-170"></a><span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-17-171"><a id="__codelineno-17-171" name="__codelineno-17-171"></a><span class="w">    </span><span class="nx">store</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">NewProductStore</span><span class="p">()</span>
+</span><span id="__span-17-172"><a id="__codelineno-17-172" name="__codelineno-17-172"></a>
+</span><span id="__span-17-173"><a id="__codelineno-17-173" name="__codelineno-17-173"></a><span class="w">    </span><span class="c1">// Add some sample data</span>
+</span><span id="__span-17-174"><a id="__codelineno-17-174" name="__codelineno-17-174"></a><span class="w">    </span><span class="nx">store</span><span class="p">.</span><span class="nx">AddProduct</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">Product</span><span class="p">{</span>
+</span><span id="__span-17-175"><a id="__codelineno-17-175" name="__codelineno-17-175"></a><span class="w">        </span><span class="nx">Name</span><span class="p">:</span><span class="w">     </span><span class="s">&quot;Laptop&quot;</span><span class="p">,</span>
+</span><span id="__span-17-176"><a id="__codelineno-17-176" name="__codelineno-17-176"></a><span class="w">        </span><span class="nx">Price</span><span class="p">:</span><span class="w">    </span><span class="mf">999.99</span><span class="p">,</span>
+</span><span id="__span-17-177"><a id="__codelineno-17-177" name="__codelineno-17-177"></a><span class="w">        </span><span class="nx">Category</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Electronics&quot;</span><span class="p">,</span>
+</span><span id="__span-17-178"><a id="__codelineno-17-178" name="__codelineno-17-178"></a><span class="w">        </span><span class="nx">InStock</span><span class="p">:</span><span class="w">  </span><span class="kc">true</span><span class="p">,</span>
+</span><span id="__span-17-179"><a id="__codelineno-17-179" name="__codelineno-17-179"></a><span class="w">    </span><span class="p">})</span>
+</span><span id="__span-17-180"><a id="__codelineno-17-180" name="__codelineno-17-180"></a>
+</span><span id="__span-17-181"><a id="__codelineno-17-181" name="__codelineno-17-181"></a><span class="w">    </span><span class="c1">// Setup routes</span>
+</span><span id="__span-17-182"><a id="__codelineno-17-182" name="__codelineno-17-182"></a><span class="w">    </span><span class="nx">http</span><span class="p">.</span><span class="nx">HandleFunc</span><span class="p">(</span><span class="s">&quot;/products&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">createProduct</span><span class="p">(</span><span class="nx">store</span><span class="p">))</span>
+</span><span id="__span-17-183"><a id="__codelineno-17-183" name="__codelineno-17-183"></a><span class="w">    </span><span class="nx">http</span><span class="p">.</span><span class="nx">HandleFunc</span><span class="p">(</span><span class="s">&quot;/product&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">getProduct</span><span class="p">(</span><span class="nx">store</span><span class="p">))</span>
+</span><span id="__span-17-184"><a id="__codelineno-17-184" name="__codelineno-17-184"></a><span class="w">    </span><span class="nx">http</span><span class="p">.</span><span class="nx">HandleFunc</span><span class="p">(</span><span class="s">&quot;/product/update&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">updateProduct</span><span class="p">(</span><span class="nx">store</span><span class="p">))</span>
+</span><span id="__span-17-185"><a id="__codelineno-17-185" name="__codelineno-17-185"></a>
+</span><span id="__span-17-186"><a id="__codelineno-17-186" name="__codelineno-17-186"></a><span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Server starting on port 8080...&quot;</span><span class="p">)</span>
+</span><span id="__span-17-187"><a id="__codelineno-17-187" name="__codelineno-17-187"></a><span class="w">    </span><span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nx">ListenAndServe</span><span class="p">(</span><span class="s">&quot;:8080&quot;</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span><span class="p">))</span>
+</span><span id="__span-17-188"><a id="__codelineno-17-188" name="__codelineno-17-188"></a><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+<h3 id="how-this-example-demonstrates-struct-concepts">How This Example Demonstrates Struct Concepts:</h3>
+<ol>
+<li><strong>Struct Definition</strong>:</li>
+<li><code>Product</code> struct with various field types</li>
+<li><code>ProductRequest</code> for input validation</li>
+<li>
+<p><code>ProductResponse</code> for API responses</p>
+</li>
+<li>
+<p><strong>Struct Tags</strong>:</p>
+</li>
+<li>JSON tags for serialization (<code>json:"id"</code>)</li>
+<li>Validation tags (<code>validate:"required"</code>)</li>
+<li>
+<p>Special tags like <code>omitempty</code> and <code>-</code></p>
+</li>
+<li>
+<p><strong>Method Definitions</strong>:</p>
+</li>
+<li>Methods on <code>ProductStore</code> for data operations</li>
+<li>Pointer receivers for modifying data</li>
+<li>
+<p>Value receivers for read operations</p>
+</li>
+<li>
+<p><strong>Composition</strong>:</p>
+</li>
+<li><code>ProductResponse</code> embeds <code>Product</code> data</li>
+<li>
+<p>Clear separation of concerns between structs</p>
+</li>
+<li>
+<p><strong>Real-World Usage</strong>:</p>
+</li>
+<li>JSON serialization/deserialization</li>
+<li>API request/response handling</li>
+<li>Data validation through tags</li>
+</ol>
+<h3 id="real-world-applications-of-this-pattern">Real-World Applications of This Pattern:</h3>
+<ol>
+<li><strong>Web APIs</strong>:</li>
+<li>RESTful API endpoints</li>
+<li>GraphQL resolvers</li>
+<li>
+<p>Microservices communication</p>
+</li>
+<li>
+<p><strong>Database Models</strong>:</p>
+</li>
+<li>ORM mappings</li>
+<li>Database schema definitions</li>
+<li>
+<p>Data validation layers</p>
+</li>
+<li>
+<p><strong>Configuration Management</strong>:</p>
+</li>
+<li>Application configuration structs</li>
+<li>Environment variable mappings</li>
+<li>
+<p>Settings validation</p>
+</li>
+<li>
+<p><strong>Message Queues</strong>:</p>
+</li>
+<li>Event/message definitions</li>
+<li>Protocol buffer definitions</li>
+<li>Serialization formats</li>
+</ol>
+<h3 id="benefits-of-this-approach">Benefits of This Approach:</h3>
+<ol>
+<li><strong>Type Safety</strong>:</li>
+<li>Compile-time type checking</li>
+<li>Clear data contracts</li>
+<li>
+<p>Reduced runtime errors</p>
+</li>
+<li>
+<p><strong>Maintainability</strong>:</p>
+</li>
+<li>Self-documenting code through struct definitions</li>
+<li>Clear separation of concerns</li>
+<li>
+<p>Easy to modify and extend</p>
+</li>
+<li>
+<p><strong>Interoperability</strong>:</p>
+</li>
+<li>Standardized serialization (JSON, XML, etc.)</li>
+<li>Easy integration with external systems</li>
+<li>
+<p>Consistent data formats</p>
+</li>
+<li>
+<p><strong>Validation</strong>:</p>
+</li>
+<li>Built-in validation through tags</li>
+<li>Centralized validation logic</li>
+<li>Clear error messages</li>
+</ol>
+<h2 id="best-practices-for-structs">Best Practices for Structs</h2>
+<ol>
+<li><strong>Naming Conventions</strong>:</li>
+<li>Use PascalCase for struct names (<code>Product</code>, <code>UserAccount</code>)</li>
+<li>Use PascalCase for exported fields</li>
+<li>
+<p>Use camelCase for unexported fields</p>
+</li>
+<li>
+<p><strong>Field Organization</strong>:</p>
+</li>
+<li>Group related fields together</li>
+<li>Place similar types together</li>
+<li>
+<p>Consider memory alignment for performance-critical code</p>
+</li>
+<li>
+<p><strong>Embedding Guidelines</strong>:</p>
+</li>
+<li>Use embedding for true "is-a" relationships</li>
+<li>Avoid deep embedding hierarchies</li>
+<li>
+<p>Be aware of name conflicts</p>
+</li>
+<li>
+<p><strong>Tag Usage</strong>:</p>
+</li>
+<li>Keep tags concise and meaningful</li>
+<li>Use standard tag formats when possible</li>
+<li>
+<p>Document custom tag formats</p>
+</li>
+<li>
+<p><strong>Memory Considerations</strong>:</p>
+</li>
+<li>Be mindful of struct size for performance</li>
+<li>Consider using pointers for large fields</li>
+<li>Understand memory alignment and padding</li>
+</ol>
+<h2 id="conclusion">Conclusion</h2>
+<p>Structs are a fundamental building block in Go that enable:</p>
+<ol>
+<li><strong>Data Organization</strong>:</li>
+<li>Group related data into logical units</li>
+<li>Create meaningful domain-specific types</li>
+<li>
+<p>Implement complex data structures</p>
+</li>
+<li>
+<p><strong>Behavior Implementation</strong>:</p>
+</li>
+<li>Attach methods to data types</li>
+<li>Implement interfaces</li>
+<li>
+<p>Create reusable components</p>
+</li>
+<li>
+<p><strong>System Integration</strong>:</p>
+</li>
+<li>Define clear data contracts</li>
+<li>Enable serialization/deserialization</li>
+<li>
+<p>Facilitate validation and transformation</p>
+</li>
+<li>
+<p><strong>Code Organization</strong>:</p>
+</li>
+<li>Improve code readability</li>
+<li>Reduce complexity</li>
+<li>Enable better testing</li>
+</ol>
+<p>The JSON API handler example demonstrates how structs form the backbone of real-world Go applications, providing structure to data, enabling serialization, and facilitating clean API design. Mastering structs is essential for building robust, maintainable Go applications.</p>
+<p>By understanding and effectively using structs, you can:
+- Create more organized and maintainable code
+- Build type-safe applications with clear data contracts
+- Implement complex business logic in a structured way
+- Integrate seamlessly with external systems and APIs
+- Leverage Go's powerful type system to its fullest</p>
+<p>Structs, combined with interfaces and methods, provide Go's approach to object-oriented programming, emphasizing composition over inheritance and simplicity over complexity.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../6.%20FMT-Package/" class="md-footer__link md-footer__link--prev" aria-label="Previous: FMT Package">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                FMT Package
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../8.%20Methods/" class="md-footer__link md-footer__link--next" aria-label="Next: Methods">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Methods
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://linkedin.com" target="_blank" rel="noopener" title="linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zM102.2 96a38.5 38.5 0 1 1 0 77 38.5 38.5 0 1 1 0-77m282.1 320h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.footer", "content.code.copy"], "search": "../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.f55a23d4.min.js"></script>
+      
+    
+  </body>
+</html>
