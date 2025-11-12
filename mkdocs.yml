@@ -80,7 +80,16 @@ nav:
       - Type Conversions: "2. Intermediate/36. Type-Conversions.md"
       - IO Package: "2. Intermediate/37. IO-Package.md"
       - Math Package: "2. Intermediate/38. Math-Package.md"
-
+  - Advanced:
+      - Goroutines: "3. Advanced/1. Goroutines.md"
+      - Channels: "3. Advanced/2. Channels-and-Unbuffered-Channels.md"
+      - Buffered Channels: "3. Advanced/3. Buffered-Channels.md"
+      - Select: "3. Advanced/4. Select.md"
+      - Concurrency: "3. Advanced/5. Concurrency.md"
+      - Rate Limiting: "3. Advanced/6. Rate-Limiting-and-Algorithms.md"
+      - Utilities and Sys Ops: "3. Advanced/7. Utilities-and-System-Operations.md"
+      - Reflection: "3. Advanced/8. Reflection.md"
+      - Stateful Goroutines: "3. Advanced/9. Stateful-Goroutines.md"
       
 
 extra:
