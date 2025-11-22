@@ -10,16 +10,16 @@
     - High-performance statically typed languages (like C++)
     - Developer-friendly dynamic languages (like Python)
 
-## Key Features :star2:
+## Key Features
 
-### Simplicity and Readability :book:
+### Simplicity and Readability
 !!! tip "Clean and Simple"
     - Only 25 keywords in total
     - Easy to learn and read
     - Built-in `gofmt` tool for consistent formatting
     - Reduces cognitive load on developers
 
-### Strong Typing with Inference :shield:
+### Strong Typing with Inference
 
 !!! example "Type System"
     ```go
@@ -32,7 +32,7 @@
 
     Go combines safety with convenience through its smart type system.
 
-### Excellent Concurrency Support :twisted_rightwards_arrows:
+### Excellent Concurrency Support
 
 !!! success "Built for Modern Computing"
     === "Goroutines"
@@ -49,7 +49,7 @@
         msg := <-ch     // Receive
         ```
 
-### Fast Compilation :zap:
+### Fast Compilation
 
 !!! note "Speed Features"
     - Smart dependency management
@@ -57,7 +57,7 @@
     - Quick compile times even for large projects
     - Enhanced developer productivity
 
-### Garbage Collection :recycle:
+### Garbage Collection
 
 !!! info "Memory Management"
     - Automatic memory management
@@ -65,7 +65,7 @@
     - No manual memory allocation/deallocation
     - Optimized for performance
 
-### Rich Standard Library :package:
+### Rich Standard Library
 
 !!! example "Built-in Packages"
     - Networking
@@ -75,7 +75,7 @@
     - Testing frameworks
     - And much more!
 
-### Cross-Platform Compilation :computer:
+### Cross-Platform Compilation
 
 !!! tip "Build Once, Run Anywhere"
     ```bash
@@ -86,7 +86,7 @@
     GOOS=darwin GOARCH=amd64 go build
     ```
 
-## Perfect Use Cases :bulb:
+## Perfect Use Cases
 
 !!! example "Where Go Shines"
 
@@ -123,20 +123,20 @@
         - Built-in HTTP support
         - Easy deployment
 
-## Philosophy :thinking:
+## Philosophy
 
 !!! quote "Go Proverb"
     > "Less is exponentially more" - Rob Pike
 
 !!! info "Design Principles"
-    - :white_check_mark: Simplicity over complexity
-    - :white_check_mark: Clarity over cleverness
-    - :white_check_mark: Practicality over theory
-    - :white_check_mark: Performance without obscurity
+    - Simplicity over complexity
+    - Clarity over cleverness
+    - Practicality over theory
+    - Performance without obscurity
 
     Go 1.18+ added generics while maintaining these core values!
 
-## Community and Ecosystem :people_holding_hands:
+## Community and Ecosystem
 
 !!! success "Growing Community"
     === "Backing"
@@ -151,7 +151,7 @@
         - ![Dropbox](https://upload.wikimedia.org/wikipedia/commons/7/71/Dropbox_logo_2017.svg){ width=50 }
 
 
-## Ready to Start? :rocket:
+## Ready to Start?
 
 !!! tip "Next Steps"
     1. [Install Go](https://golang.org/dl/)
