@@ -1,0 +1,2726 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://kutt27.github.io/golangdocs/3.%20Advanced/7.%20Utilities-and-System-Operations/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Utilities and System Operations in Go: A Comprehensive Guide - GolangDocs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:300,300i,400,400i,700,700i%7CSource+Code+Pro:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"PT Serif";--md-code-font:"Source Code Pro"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="light-blue" data-md-color-accent="deep-purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#utilities-and-system-operations-in-go-a-comprehensive-guide" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="GolangDocs" class="md-header__button md-logo" aria-label="GolangDocs" data-md-component="logo">
+      
+  <img src="../../assets/layers.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            GolangDocs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Utilities and System Operations in Go: A Comprehensive Guide
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="light-blue" data-md-color-accent="deep-purple"  aria-label="Dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="deep-purple"  aria-label="Light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="GolangDocs" class="md-nav__button md-logo" aria-label="GolangDocs" data-md-component="logo">
+      
+  <img src="../../assets/layers.png" alt="logo">
+
+    </a>
+    GolangDocs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Basics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Basics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/1.%20Hello-World/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/2.%20Go-Compiler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Go Compiler
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/3.%20Standard%20Library/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Standard Library
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/4.%20Data-Types/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Types
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/5.%20If-and%20While/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Control Structures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/6.%20Conditionals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conditionals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/7.%20Arrays/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Arrays
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/8.%20Slices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Slices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/9.%20Maps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Maps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/10.%20Range/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Range
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/11.%20Functions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Functions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/12.%20Control-Flow-Mechanism/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Control Flow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/13.%20Init/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Init
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sorting-in-go" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sorting in Go
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Sorting in Go">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sorting-built-in-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sorting Built-in Types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sorting-custom-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sorting Custom Types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-sortslice-for-custom-sorting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Using sort.Slice for Custom Sorting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stable-sorting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stable Sorting
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-and-benchmarking-in-go" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testing and Benchmarking in Go
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Testing and Benchmarking in Go">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#writing-unit-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Writing Unit Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#table-driven-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table-Driven Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#benchmarking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Benchmarking
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-coverage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test Coverage
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#executing-processes-in-go" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Executing Processes in Go
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Executing Processes in Go">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-command-execution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic Command Execution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#command-with-arguments-and-environment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Command with Arguments and Environment
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#interactive-command-execution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Interactive Command Execution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#process-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Process Management
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#signals-in-go" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Signals in Go
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Signals in Go">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-signal-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic Signal Handling
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#graceful-shutdown-with-signals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Graceful Shutdown with Signals
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#handling-multiple-signals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Handling Multiple Signals
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#signal-ignoring-and-resetting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Signal Ignoring and Resetting
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#real-world-example-system-utility-with-all-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Real-World Example: System Utility with All Features
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Real-World Example: System Utility with All Features">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-this-example-demonstrates-all-concepts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How This Example Demonstrates All Concepts:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="utilities-and-system-operations-in-go-a-comprehensive-guide">Utilities and System Operations in Go: A Comprehensive Guide</h1>
+<div class="admonition abstract">
+<p class="admonition-title">Overview</p>
+<p>Master Go's powerful utilities and system operations for building robust, efficient applications. Learn to sort collections with built-in algorithms, implement comprehensive testing and benchmarking, execute and manage external processes, and handle system signals gracefully. Understand how these fundamental operations form the backbone of system programming in Go, enabling you to create reliable, high-performance software.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Key Points</p>
+<ul>
+<li><strong>Sorting</strong>: Go provides efficient sorting algorithms through the <code>sort</code> package, supporting both built-in and custom types</li>
+<li><strong>Testing</strong>: Built-in testing framework with <code>testing</code> package, table-driven tests, mocking, and coverage analysis</li>
+<li><strong>Benchmarking</strong>: Integrated benchmarking tools to measure and optimize performance</li>
+<li><strong>Process Execution</strong>: Execute external commands with <code>os/exec</code>, manage I/O, and handle process lifecycle</li>
+<li><strong>Signals</strong>: Handle system signals for graceful shutdown, interruption, and inter-process communication</li>
+<li><strong>Integration</strong>: These utilities work together to create robust system-level applications</li>
+<li><strong>Best Practices</strong>: Proper error handling, resource management, and signal handling are critical</li>
+<li><strong>Performance</strong>: Understanding the performance characteristics of sorting and process operations</li>
+</ul>
+</div>
+<h2 id="sorting-in-go">Sorting in Go</h2>
+<p>Go's <code>sort</code> package provides powerful sorting capabilities for both built-in types and custom data structures. It implements efficient sorting algorithms and offers flexible interfaces for custom sorting logic.</p>
+<div class="admonition info">
+<p class="admonition-title">Sorting Algorithms in Go</p>
+<pre class="mermaid"><code>graph TB
+    A[Go Sort Package] --&gt; B[Built-in Types]
+    A --&gt; C[Custom Types]
+    A --&gt; D[Sorting Interfaces]
+    B --&gt; E[Ints]
+    B --&gt; F[Float64s]
+    B --&gt; G[Strings]
+    C --&gt; H[Custom Structs]
+    C --&gt; I[Slices of Structs]
+    D --&gt; J[sort.Interface]
+    D --&gt; K[Less Function]
+    style A fill:#999,stroke:#333,stroke-width:2px,color:#000</code></pre>
+</div>
+<h3 id="sorting-built-in-types">Sorting Built-in Types</h3>
+<div class="admonition example">
+<p class="admonition-title">Sorting Basic Types</p>
+<p>```go title="basic_sorting.go" linums="1" hl_lines="8-40"
+package main</p>
+<p>import (
+    "fmt"
+    "sort"
+)</p>
+<p>func main() {
+    // Sorting integers
+    ints := []int{5, 2, 6, 3, 1, 4}
+    fmt.Println("Before sorting:", ints)
+    sort.Ints(ints)
+    fmt.Println("After sorting:", ints)</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span><code>// Sorting floats
+floats := []float64{5.5, 2.2, 6.6, 3.3, 1.1, 4.4}
+fmt.Println(&quot;\nBefore sorting:&quot;, floats)
+sort.Float64s(floats)
+fmt.Println(&quot;After sorting:&quot;, floats)
+
+// Sorting strings
+strings := []string{&quot;banana&quot;, &quot;apple&quot;, &quot;cherry&quot;, &quot;date&quot;}
+fmt.Println(&quot;\nBefore sorting:&quot;, strings)
+sort.Strings(strings)
+fmt.Println(&quot;After sorting:&quot;, strings)
+
+// Checking if sorted
+isSorted := sort.IntsAreSorted(ints)
+fmt.Println(&quot;\nAre ints sorted?&quot;, isSorted)
+</code></pre></div></td></tr></table></div>
+<p>}
+```</p>
+</div>
+<h3 id="sorting-custom-types">Sorting Custom Types</h3>
+<div class="admonition example">
+<p class="admonition-title">Sorting Custom Structs</p>
+<p>```go title="custom_sorting.go" linums="1" hl_lines="8-60"
+package main</p>
+<p>import (
+    "fmt"
+    "sort"
+)</p>
+<p>// Person represents a person with name and age
+type Person struct {
+    Name string
+    Age  int
+}</p>
+<p>// ByAge implements sort.Interface for []Person based on Age field
+type ByAge []Person</p>
+<p>func (a ByAge) Len() int           { return len(a) }
+func (a ByAge) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a ByAge) Less(i, j int) bool { return a[i].Age &lt; a[j].Age }</p>
+<p>// ByName implements sort.Interface for []Person based on Name field
+type ByName []Person</p>
+<p>func (a ByName) Len() int           { return len(a) }
+func (a ByName) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a ByName) Less(i, j int) bool { return a[i].Name &lt; a[j].Name }</p>
+<p>func main() {
+    people := []Person{
+        {"Alice", 25},
+        {"Bob", 30},
+        {"Charlie", 20},
+        {"David", 35},
+    }</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span></pre></div></td><td class="code"><div><pre><span></span><code>fmt.Println(&quot;Original:&quot;)
+for _, p := range people {
+    fmt.Printf(&quot;%s: %d\n&quot;, p.Name, p.Age)
+}
+
+// Sort by age
+fmt.Println(&quot;\nSorted by age:&quot;)
+sort.Sort(ByAge(people))
+for _, p := range people {
+    fmt.Printf(&quot;%s: %d\n&quot;, p.Name, p.Age)
+}
+
+// Sort by name
+fmt.Println(&quot;\nSorted by name:&quot;)
+sort.Sort(ByName(people))
+for _, p := range people {
+    fmt.Printf(&quot;%s: %d\n&quot;, p.Name, p.Age)
+}
+</code></pre></div></td></tr></table></div>
+<p>}
+```</p>
+</div>
+<h3 id="using-sortslice-for-custom-sorting">Using sort.Slice for Custom Sorting</h3>
+<div class="admonition example">
+<p class="admonition-title">Sort Slice with Custom Function</p>
+<p>```go title="sort_slice.go" linums="1" hl_lines="8-40"
+package main</p>
+<p>import (
+    "fmt"
+    "sort"
+)</p>
+<p>type Product struct {
+    Name  string
+    Price float64
+    Sold  int
+}</p>
+<p>func main() {
+    products := []Product{
+        {"Laptop", 999.99, 50},
+        {"Phone", 699.99, 120},
+        {"Tablet", 399.99, 80},
+        {"Monitor", 299.99, 60},
+    }</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span></pre></div></td><td class="code"><div><pre><span></span><code>fmt.Println(&quot;Original:&quot;)
+for _, p := range products {
+    fmt.Printf(&quot;%s: $%.2f (Sold: %d)\n&quot;, p.Name, p.Price, p.Sold)
+}
+
+// Sort by price ascending
+fmt.Println(&quot;\nSorted by price (ascending):&quot;)
+sort.Slice(products, func(i, j int) bool {
+    return products[i].Price &lt; products[j].Price
+})
+for _, p := range products {
+    fmt.Printf(&quot;%s: $%.2f (Sold: %d)\n&quot;, p.Name, p.Price, p.Sold)
+}
+
+// Sort by sold units descending
+fmt.Println(&quot;\nSorted by sold units (descending):&quot;)
+sort.Slice(products, func(i, j int) bool {
+    return products[i].Sold &gt; products[j].Sold
+})
+for _, p := range products {
+    fmt.Printf(&quot;%s: $%.2f (Sold: %d)\n&quot;, p.Name, p.Price, p.Sold)
+}
+</code></pre></div></td></tr></table></div>
+<p>}
+```</p>
+</div>
+<h3 id="stable-sorting">Stable Sorting</h3>
+<div class="admonition example">
+<p class="admonition-title">Stable Sorting</p>
+<p>```go title="stable_sorting.go" linums="1" hl_lines="8-40"
+package main</p>
+<p>import (
+    "fmt"
+    "sort"
+)</p>
+<p>type Student struct {
+    Name   string
+    Grade  int
+    Class  string
+}</p>
+<p>func main() {
+    students := []Student{
+        {"Alice", 85, "A"},
+        {"Bob", 85, "B"},
+        {"Charlie", 90, "A"},
+        {"David", 85, "C"},
+        {"Eve", 90, "B"},
+    }</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span></pre></div></td><td class="code"><div><pre><span></span><code>fmt.Println(&quot;Original:&quot;)
+for _, s := range students {
+    fmt.Printf(&quot;%s: Grade %d, Class %s\n&quot;, s.Name, s.Grade, s.Class)
+}
+
+// Sort by grade (unstable - order of same grades may change)
+fmt.Println(&quot;\nUnstable sort by grade:&quot;)
+sort.Slice(students, func(i, j int) bool {
+    return students[i].Grade &lt; students[j].Grade
+})
+for _, s := range students {
+    fmt.Printf(&quot;%s: Grade %d, Class %s\n&quot;, s.Name, s.Grade, s.Class)
+}
+
+// Reset to original order
+students = []Student{
+    {&quot;Alice&quot;, 85, &quot;A&quot;},
+    {&quot;Bob&quot;, 85, &quot;B&quot;},
+    {&quot;Charlie&quot;, 90, &quot;A&quot;},
+    {&quot;David&quot;, 85, &quot;C&quot;},
+    {&quot;Eve&quot;, 90, &quot;B&quot;},
+}
+
+// Stable sort by grade (preserves original order for same grades)
+fmt.Println(&quot;\nStable sort by grade:&quot;)
+sort.SliceStable(students, func(i, j int) bool {
+    return students[i].Grade &lt; students[j].Grade
+})
+for _, s := range students {
+    fmt.Printf(&quot;%s: Grade %d, Class %s\n&quot;, s.Name, s.Grade, s.Class)
+}
+</code></pre></div></td></tr></table></div>
+<p>}
+```</p>
+</div>
+<h2 id="testing-and-benchmarking-in-go">Testing and Benchmarking in Go</h2>
+<p>Go has a built-in testing framework that makes it easy to write tests and benchmarks for your code. The <code>testing</code> package provides the necessary tools to verify correctness and measure performance.</p>
+<div class="admonition info">
+<p class="admonition-title">Testing Framework Components</p>
+<pre class="mermaid"><code>graph TB
+    A[Testing Framework] --&gt; B[Unit Tests]
+    A --&gt; C[Benchmarks]
+    A --&gt; D[Examples]
+    A --&gt; E[Coverage]
+    B --&gt; F[Table-driven Tests]
+    B --&gt; G[Mocking]
+    C --&gt; H[Performance Measurement]
+    C --&gt; I[Memory Allocation]
+    D --&gt; J[Documentation]
+    E --&gt; K[Coverage Reports]
+    style A fill:#999,stroke:#333,stroke-width:2px,color:#000</code></pre>
+</div>
+<h3 id="writing-unit-tests">Writing Unit Tests</h3>
+<div class="admonition example">
+<p class="admonition-title">Basic Unit Test</p>
+<p>```go title="basic_test.go" linums="1" hl_lines="8-40"
+package main</p>
+<p>import (
+    "testing"
+)</p>
+<p>// Add function to test
+func Add(a, b int) int {
+    return a + b
+}</p>
+<p>// TestAdd tests the Add function
+func TestAdd(t *testing.T) {
+    tests := []struct {
+        name     string
+        a, b     int
+        expected int
+    }{
+        {"positive", 2, 3, 5},
+        {"negative", -1, -1, -2},
+        {"mixed", -1, 1, 0},
+        {"zero", 0, 0, 0},
+    }</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code>for _, tt := range tests {
+    t.Run(tt.name, func(t *testing.T) {
+        result := Add(tt.a, tt.b)
+        if result != tt.expected {
+            t.Errorf(&quot;Add(%d, %d) = %d; want %d&quot;, tt.a, tt.b, result, tt.expected)
+        }
+    })
+}
+</code></pre></div></td></tr></table></div>
+<p>}
+```</p>
+</div>
+<h3 id="table-driven-tests">Table-Driven Tests</h3>
+<div class="admonition example">
+<p class="admonition-title">Table-Driven Test</p>
+<p>```go title="table_driven_test.go" linums="1" hl_lines="8-50"
+package main</p>
+<p>import (
+    "strings"
+    "testing"
+)</p>
+<p>// StringProcessor processes strings in various ways
+type StringProcessor struct{}</p>
+<p>func (sp *StringProcessor) ToUpper(s string) string {
+    return strings.ToUpper(s)
+}</p>
+<p>func (sp *StringProcessor) ToLower(s string) string {
+    return strings.ToLower(s)
+}</p>
+<p>func (sp *StringProcessor) Reverse(s string) string {
+    runes := []rune(s)
+    for i, j := 0, len(runes)-1; i &lt; j; i, j = i+1, j-1 {
+        runes[i], runes[j] = runes[j], runes[i]
+    }
+    return string(runes)
+}</p>
+<p>func TestStringProcessor(t *testing.T) {
+    sp := &amp;StringProcessor{}</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span></pre></div></td><td class="code"><div><pre><span></span><code>tests := []struct {
+    name     string
+    method   func(string) string
+    input    string
+    expected string
+}{
+    {&quot;ToUpper&quot;, sp.ToUpper, &quot;hello&quot;, &quot;HELLO&quot;},
+    {&quot;ToUpper empty&quot;, sp.ToUpper, &quot;&quot;, &quot;&quot;},
+    {&quot;ToUpper mixed&quot;, sp.ToUpper, &quot;HeLLo&quot;, &quot;HELLO&quot;},
+    {&quot;ToLower&quot;, sp.ToLower, &quot;WORLD&quot;, &quot;world&quot;},
+    {&quot;ToLower empty&quot;, sp.ToLower, &quot;&quot;, &quot;&quot;},
+    {&quot;ToLower mixed&quot;, sp.ToLower, &quot;WoRlD&quot;, &quot;world&quot;},
+    {&quot;Reverse&quot;, sp.Reverse, &quot;hello&quot;, &quot;olleh&quot;},
+    {&quot;Reverse empty&quot;, sp.Reverse, &quot;&quot;, &quot;&quot;},
+    {&quot;Reverse palindrome&quot;, sp.Reverse, &quot;madam&quot;, &quot;madam&quot;},
+}
+
+for _, tt := range tests {
+    t.Run(tt.name, func(t *testing.T) {
+        result := tt.method(tt.input)
+        if result != tt.expected {
+            t.Errorf(&quot;%s(%q) = %q; want %q&quot;, tt.name, tt.input, result, tt.expected)
+        }
+    })
+}
+</code></pre></div></td></tr></table></div>
+<p>}
+```</p>
+</div>
+<h3 id="benchmarking">Benchmarking</h3>
+<div class="admonition example">
+<p class="admonition-title">Benchmarking Functions</p>
+<p>```go title="benchmarking.go" linums="1" hl_lines="8-60"
+package main</p>
+<p>import (
+    "fmt"
+    "math/rand"
+    "sort"
+    "testing"
+    "time"
+)</p>
+<p>// GenerateRandomSlice generates a slice of random integers
+func GenerateRandomSlice(n int) []int {
+    slice := make([]int, n)
+    for i := range slice {
+        slice[i] = rand.Intn(n)
+    }
+    return slice
+}</p>
+<p>// BubbleSort implements bubble sort algorithm
+func BubbleSort(slice []int) {
+    n := len(slice)
+    for i := 0; i &lt; n-1; i++ {
+        for j := 0; j &lt; n-i-1; j++ {
+            if slice[j] &gt; slice[j+1] {
+                slice[j], slice[j+1] = slice[j+1], slice[j]
+            }
+        }
+    }
+}</p>
+<p>// BenchmarkBubbleSort benchmarks the BubbleSort function
+func BenchmarkBubbleSort(b <em>testing.B) {
+    sizes := []int{100, 1000, 10000}
+    for <em>, size := range sizes {
+        b.Run(fmt.Sprintf("Size</em>%d", size), func(b </em>testing.B) {
+            data := GenerateRandomSlice(size)
+            b.ResetTimer()
+            for i := 0; i &lt; b.N; i++ {
+                // Make a copy to sort
+                copy := make([]int, size)
+                copy(copy, data)
+                BubbleSort(copy)
+            }
+        })
+    }
+}</p>
+<p>// BenchmarkStandardSort benchmarks Go's standard sort
+func BenchmarkStandardSort(b <em>testing.B) {
+    sizes := []int{100, 1000, 10000}
+    for <em>, size := range sizes {
+        b.Run(fmt.Sprintf("Size</em>%d", size), func(b </em>testing.B) {
+            data := GenerateRandomSlice(size)
+            b.ResetTimer()
+            for i := 0; i &lt; b.N; i++ {
+                // Make a copy to sort
+                copy := make([]int, size)
+                copy(copy, data)
+                sort.Ints(copy)
+            }
+        })
+    }
+}</p>
+<p>// BenchmarkTimeNow benchmarks time.Now()
+func BenchmarkTimeNow(b *testing.B) {
+    for i := 0; i &lt; b.N; i++ {
+        _ = time.Now()
+    }
+}
+```</p>
+</div>
+<h3 id="test-coverage">Test Coverage</h3>
+<div class="admonition example">
+<p class="admonition-title">Running Tests with Coverage</p>
+<p>```go title="coverage_example.go" linums="1" hl_lines="8-40"
+package main</p>
+<p>import (
+    "errors"
+    "strconv"
+)</p>
+<p>// Calculator performs basic arithmetic operations
+type Calculator struct{}</p>
+<p>// Add adds two numbers
+func (c *Calculator) Add(a, b float64) float64 {
+    return a + b
+}</p>
+<p>// Subtract subtracts b from a
+func (c *Calculator) Subtract(a, b float64) float64 {
+    return a - b
+}</p>
+<p>// Divide divides a by b
+func (c *Calculator) Divide(a, b float64) (float64, error) {
+    if b == 0 {
+        return 0, errors.New("division by zero")
+    }
+    return a / b, nil
+}</p>
+<p>// ParseInt parses a string to integer
+func (c *Calculator) ParseInt(s string) (int, error) {
+    return strconv.Atoi(s)
+}
+```</p>
+</div>
+<p>```go title="coverage_test.go" linums="1" hl_lines="8-50"
+    package main</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span></pre></div></td><td class="code"><div><pre><span></span><code>import (
+    &quot;testing&quot;
+)
+
+func TestCalculator_Add(t *testing.T) {
+    calc := &amp;Calculator{}
+    result := calc.Add(2, 3)
+    if result != 5 {
+        t.Errorf(&quot;Expected 5, got %f&quot;, result)
+    }
+}
+
+func TestCalculator_Subtract(t *testing.T) {
+    calc := &amp;Calculator{}
+    result := calc.Subtract(5, 3)
+    if result != 2 {
+        t.Errorf(&quot;Expected 2, got %f&quot;, result)
+    }
+}
+
+func TestCalculator_Divide(t *testing.T) {
+    calc := &amp;Calculator{}
+
+    // Test normal division
+    result, err := calc.Divide(10, 2)
+    if err != nil {
+        t.Errorf(&quot;Unexpected error: %v&quot;, err)
+    }
+    if result != 5 {
+        t.Errorf(&quot;Expected 5, got %f&quot;, result)
+    }
+
+    // Test division by zero
+    _, err = calc.Divide(10, 0)
+    if err == nil {
+        t.Error(&quot;Expected error for division by zero&quot;)
+    }
+}
+
+func TestCalculator_ParseInt(t *testing.T) {
+    calc := &amp;Calculator{}
+
+    // Test valid number
+    result, err := calc.ParseInt(&quot;123&quot;)
+    if err != nil {
+        t.Errorf(&quot;Unexpected error: %v&quot;, err)
+    }
+    if result != 123 {
+        t.Errorf(&quot;Expected 123, got %d&quot;, result)
+    }
+
+    // Test invalid number
+    _, err = calc.ParseInt(&quot;abc&quot;)
+    if err == nil {
+        t.Error(&quot;Expected error for invalid number&quot;)
+    }
+}
+```
+</code></pre></div></td></tr></table></div>
+<p>To run tests with coverage:
+<div class="language-bash highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
+<span class="normal"><a href="#__codelineno-0-2">2</a></span>
+<span class="normal"><a href="#__codelineno-0-3">3</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a>go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-cover
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2"></a>go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-coverprofile<span class="o">=</span>coverage.out
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3"></a>go<span class="w"> </span>tool<span class="w"> </span>cover<span class="w"> </span>-html<span class="o">=</span>coverage.out
+</span></code></pre></div></td></tr></table></div></p>
+<h2 id="executing-processes-in-go">Executing Processes in Go</h2>
+<p>Go's <code>os/exec</code> package provides functionality to execute external commands. This is essential for system integration, running shell commands, and interacting with other programs.</p>
+<div class="admonition info">
+<p class="admonition-title">Process Execution Components</p>
+<pre class="mermaid"><code>graph TB
+    A[Process Execution] --&gt; B[Command Creation]
+    A --&gt; C[I/O Management]
+    A --&gt; D[Process Control]
+    B --&gt; E[exec.Command]
+    C --&gt; F[Stdin/Stdout/Stderr]
+    C --&gt; G[Pipes]
+    D --&gt; H[Start/Wait/Kill]
+    D --&gt; I[Exit Codes]
+    style A fill:#999,stroke:#333,stroke-width:2px,color:#000</code></pre>
+</div>
+<h3 id="basic-command-execution">Basic Command Execution</h3>
+<div class="admonition example">
+<p class="admonition-title">Running Simple Commands</p>
+<p>```go title="basic_commands.go" linums="1" hl_lines="8-40"
+package main</p>
+<p>import (
+    "fmt"
+    "os/exec"
+)</p>
+<p>func main() {
+    // Execute a simple command
+    cmd := exec.Command("echo", "Hello, World!")
+    output, err := cmd.Output()
+    if err != nil {
+        fmt.Printf("Error executing command: %v\n", err)
+        return
+    }
+    fmt.Printf("Command output: %s", output)</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code>// Execute command with combined output
+cmd = exec.Command(&quot;ls&quot;, &quot;-l&quot;)
+combinedOutput, err := cmd.CombinedOutput()
+if err != nil {
+    fmt.Printf(&quot;Error executing command: %v\n&quot;, err)
+    return
+}
+fmt.Printf(&quot;\nDirectory listing:\n%s&quot;, combinedOutput)
+</code></pre></div></td></tr></table></div>
+<p>}
+```</p>
+</div>
+<h3 id="command-with-arguments-and-environment">Command with Arguments and Environment</h3>
+<div class="admonition example">
+<p class="admonition-title">Command with Arguments</p>
+<p>```go title="command_args.go" linums="1" hl_lines="8-50"
+package main</p>
+<p>import (
+    "fmt"
+    "os"
+    "os/exec"
+)</p>
+<p>func main() {
+    // Execute command with multiple arguments
+    cmd := exec.Command("grep", "-r", "main", ".")</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span></pre></div></td><td class="code"><div><pre><span></span><code>// Set working directory
+cmd.Dir = &quot;.&quot;
+
+// Add environment variables
+cmd.Env = append(os.Environ(), &quot;MY_VAR=value&quot;)
+
+// Capture output
+output, err := cmd.Output()
+if err != nil {
+    if exitErr, ok := err.(*exec.ExitError); ok {
+        fmt.Printf(&quot;Command exited with status %d\n&quot;, exitErr.ExitCode())
+    } else {
+        fmt.Printf(&quot;Error executing command: %v\n&quot;, err)
+    }
+    return
+}
+
+fmt.Printf(&quot;Grep results:\n%s&quot;, output)
+</code></pre></div></td></tr></table></div>
+<p>}
+```</p>
+</div>
+<h3 id="interactive-command-execution">Interactive Command Execution</h3>
+<div class="admonition example">
+<p class="admonition-title">Interactive Command</p>
+<p>```go title="interactive_command.go" linums="1" hl_lines="8-60"
+package main</p>
+<p>import (
+    "bufio"
+    "fmt"
+    "io"
+    "os/exec"
+)</p>
+<p>func main() {
+    // Start an interactive command (like a shell)
+    cmd := exec.Command("bash")</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span></pre></div></td><td class="code"><div><pre><span></span><code>// Get pipes for stdin, stdout, stderr
+stdin, err := cmd.StdinPipe()
+if err != nil {
+    fmt.Printf(&quot;Error creating stdin pipe: %v\n&quot;, err)
+    return
+}
+
+stdout, err := cmd.StdoutPipe()
+if err != nil {
+    fmt.Printf(&quot;Error creating stdout pipe: %v\n&quot;, err)
+    return
+}
+
+stderr, err := cmd.StderrPipe()
+if err != nil {
+    fmt.Printf(&quot;Error creating stderr pipe: %v\n&quot;, err)
+    return
+}
+
+// Start the command
+if err := cmd.Start(); err != nil {
+    fmt.Printf(&quot;Error starting command: %v\n&quot;, err)
+    return
+}
+
+// Write commands to stdin
+go func() {
+    defer stdin.Close()
+    commands := []string{
+        &quot;echo &#39;Hello from bash!&#39;&quot;,
+        &quot;ls -l&quot;,
+        &quot;date&quot;,
+        &quot;exit&quot;,
+    }
+    for _, cmd := range commands {
+        fmt.Fprintf(stdin, &quot;%s\n&quot;, cmd)
+    }
+}()
+
+// Read from stdout
+go func() {
+    scanner := bufio.NewScanner(stdout)
+    for scanner.Scan() {
+        fmt.Printf(&quot;STDOUT: %s\n&quot;, scanner.Text())
+    }
+}()
+
+// Read from stderr
+go func() {
+    scanner := bufio.NewScanner(stderr)
+    for scanner.Scan() {
+        fmt.Printf(&quot;STDERR: %s\n&quot;, scanner.Text())
+    }
+}()
+
+// Wait for command to finish
+if err := cmd.Wait(); err != nil {
+    fmt.Printf(&quot;Command finished with error: %v\n&quot;, err)
+} else {
+    fmt.Println(&quot;Command finished successfully&quot;)
+}
+</code></pre></div></td></tr></table></div>
+<p>}
+```</p>
+</div>
+<h3 id="process-management">Process Management</h3>
+<div class="admonition example">
+<p class="admonition-title">Process Management</p>
+<p>```go title="process_management.go" linums="1" hl_lines="8-70"
+package main</p>
+<p>import (
+    "fmt"
+    "os/exec"
+    "syscall"
+    "time"
+)</p>
+<p>func main() {
+    // Start a long-running process
+    cmd := exec.Command("sleep", "30")</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span></pre></div></td><td class="code"><div><pre><span></span><code>// Start the process
+if err := cmd.Start(); err != nil {
+    fmt.Printf(&quot;Error starting process: %v\n&quot;, err)
+    return
+}
+
+fmt.Printf(&quot;Started process with PID %d\n&quot;, cmd.Process.Pid)
+
+// Wait for a moment
+time.Sleep(2 * time.Second)
+
+// Check if process is running
+if cmd.ProcessState == nil || !cmd.ProcessState.Exited() {
+    fmt.Println(&quot;Process is still running&quot;)
+} else {
+    fmt.Println(&quot;Process has exited&quot;)
+    return
+}
+
+// Send SIGTERM to the process
+fmt.Println(&quot;Sending SIGTERM to process...&quot;)
+if err := cmd.Process.Signal(syscall.SIGTERM); err != nil {
+    fmt.Printf(&quot;Error sending signal: %v\n&quot;, err)
+}
+
+// Wait for process to exit
+if err := cmd.Wait(); err != nil {
+    if exitErr, ok := err.(*exec.ExitError); ok {
+        if status, ok := exitErr.Sys().(syscall.WaitStatus); ok {
+            fmt.Printf(&quot;Process exited with status: %d\n&quot;, status.ExitStatus())
+        }
+    } else {
+        fmt.Printf(&quot;Error waiting for process: %v\n&quot;, err)
+    }
+} else {
+    fmt.Println(&quot;Process exited successfully&quot;)
+}
+</code></pre></div></td></tr></table></div>
+<p>}
+```</p>
+</div>
+<h2 id="signals-in-go">Signals in Go</h2>
+<p>Signals are a fundamental mechanism for inter-process communication in Unix-like systems. Go provides the <code>os/signal</code> package to handle signals, allowing programs to respond to system events like interruptions, termination requests, and other notifications.</p>
+<div class="admonition info">
+<p class="admonition-title">Signal Handling Components</p>
+<pre class="mermaid"><code>graph TB
+    A[Signal Handling] --&gt; B[Signal Notification]
+    A --&gt; C[Signal Types]
+    A --&gt; D[Graceful Shutdown]
+    B --&gt; E[signal.Notify]
+    C --&gt; F[SIGINT]
+    C --&gt; G[SIGTERM]
+    C --&gt; H[SIGHUP]
+    D --&gt; I[Cleanup Resources]
+    D --&gt; J[Save State]
+    style A fill:#999,stroke:#333,stroke-width:2px,color:#000</code></pre>
+</div>
+<h3 id="basic-signal-handling">Basic Signal Handling</h3>
+<div class="admonition example">
+<p class="admonition-title">Basic Signal Handling</p>
+<p>```go title="basic_signals.go" linums="1" hl_lines="8-50"
+package main</p>
+<p>import (
+    "fmt"
+    "os"
+    "os/signal"
+    "syscall"
+)</p>
+<p>func main() {
+    // Create a channel to receive signals
+    sigChan := make(chan os.Signal, 1)</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span></pre></div></td><td class="code"><div><pre><span></span><code>// Notify on SIGINT (Ctrl+C) and SIGTERM
+signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
+
+fmt.Println(&quot;Program started. Press Ctrl+C to send SIGINT...&quot;)
+
+// Wait for signal
+sig := &lt;-sigChan
+fmt.Printf(&quot;Received signal: %v\n&quot;, sig)
+
+// Perform cleanup
+fmt.Println(&quot;Performing cleanup...&quot;)
+
+// Exit gracefully
+fmt.Println(&quot;Exiting gracefully&quot;)
+</code></pre></div></td></tr></table></div>
+<p>}
+```</p>
+</div>
+<h3 id="graceful-shutdown-with-signals">Graceful Shutdown with Signals</h3>
+<div class="admonition example">
+<p class="admonition-title">Graceful Shutdown</p>
+<p>```go title="graceful_shutdown.go" linums="1" hl_lines="8-80"
+package main</p>
+<p>import (
+    "context"
+    "fmt"
+    "net/http"
+    "os"
+    "os/signal"
+    "syscall"
+    "time"
+)</p>
+<p>func main() {
+    // Create HTTP server
+    server := &amp;http.Server{
+        Addr: ":8080",
+    }</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span></pre></div></td><td class="code"><div><pre><span></span><code>// Start server in a goroutine
+go func() {
+    fmt.Println(&quot;Server starting on :8080&quot;)
+    if err := server.ListenAndServe(); err != nil &amp;&amp; err != http.ErrServerClosed {
+        fmt.Printf(&quot;Server error: %v\n&quot;, err)
+    }
+}()
+
+// Set up signal handling
+sigChan := make(chan os.Signal, 1)
+signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
+
+// Wait for signal
+sig := &lt;-sigChan
+fmt.Printf(&quot;Received signal: %v\n&quot;, sig)
+
+// Create context with timeout for graceful shutdown
+ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+defer cancel()
+
+// Shutdown server gracefully
+fmt.Println(&quot;Shutting down server...&quot;)
+if err := server.Shutdown(ctx); err != nil {
+    fmt.Printf(&quot;Server shutdown error: %v\n&quot;, err)
+}
+
+// Perform other cleanup
+fmt.Println(&quot;Performing cleanup...&quot;)
+time.Sleep(1 * time.Second)
+
+fmt.Println(&quot;Server stopped gracefully&quot;)
+</code></pre></div></td></tr></table></div>
+<p>}
+```</p>
+</div>
+<h3 id="handling-multiple-signals">Handling Multiple Signals</h3>
+<div class="admonition example">
+<p class="admonition-title">Multiple Signal Handling</p>
+<p>```go title="multiple_signals.go" linums="1" hl_lines="8-70"
+package main</p>
+<p>import (
+    "fmt"
+    "os"
+    "os/signal"
+    "syscall"
+    "time"
+)</p>
+<p>func main() {
+    // Create channels for different signals
+    sigChan := make(chan os.Signal, 1)
+    reloadChan := make(chan os.Signal, 1)</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span></pre></div></td><td class="code"><div><pre><span></span><code>// Notify on different signals
+signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
+signal.Notify(reloadChan, syscall.SIGHUP)
+
+fmt.Println(&quot;Program started. Send signals to test:&quot;)
+fmt.Println(&quot;- SIGINT or SIGTERM: Shutdown&quot;)
+fmt.Println(&quot;- SIGHUP: Reload configuration&quot;)
+
+// Main loop
+for {
+    select {
+    case sig := &lt;-sigChan:
+        fmt.Printf(&quot;Received shutdown signal: %v\n&quot;, sig)
+        fmt.Println(&quot;Performing cleanup...&quot;)
+        time.Sleep(1 * time.Second)
+        fmt.Println(&quot;Exiting gracefully&quot;)
+        return
+
+    case sig := &lt;-reloadChan:
+        fmt.Printf(&quot;Received reload signal: %v\n&quot;, sig)
+        fmt.Println(&quot;Reloading configuration...&quot;)
+        // Simulate configuration reload
+        time.Sleep(2 * time.Second)
+        fmt.Println(&quot;Configuration reloaded&quot;)
+
+    case &lt;-time.After(5 * time.Second):
+        fmt.Println(&quot;Still running...&quot;)
+    }
+}
+</code></pre></div></td></tr></table></div>
+<p>}
+```</p>
+</div>
+<h3 id="signal-ignoring-and-resetting">Signal Ignoring and Resetting</h3>
+<div class="admonition example">
+<p class="admonition-title">Signal Ignoring</p>
+<p>```go title="signal_ignoring.go" linums="1" hl_lines="8-50"
+package main</p>
+<p>import (
+    "fmt"
+    "os"
+    "os/signal"
+    "syscall"
+    "time"
+)</p>
+<p>func main() {
+    // Ignore SIGINT (Ctrl+C)
+    signal.Ignore(syscall.SIGINT)
+    fmt.Println("SIGINT is now ignored. Try pressing Ctrl+C...")</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span><code>// Wait for 5 seconds
+time.Sleep(5 * time.Second)
+fmt.Println(&quot;SIGINT was ignored&quot;)
+
+// Reset signal handling
+fmt.Println(&quot;Resetting signal handling...&quot;)
+sigChan := make(chan os.Signal, 1)
+signal.Notify(sigChan, syscall.SIGINT)
+
+fmt.Println(&quot;SIGINT is now handled. Try pressing Ctrl+C...&quot;)
+
+// Wait for signal
+sig := &lt;-sigChan
+fmt.Printf(&quot;Received signal: %v\n&quot;, sig)
+fmt.Println(&quot;Exiting&quot;)
+</code></pre></div></td></tr></table></div>
+<p>}
+```</p>
+</div>
+<h2 id="real-world-example-system-utility-with-all-features">Real-World Example: System Utility with All Features</h2>
+<p>Let's create a comprehensive example that combines sorting, testing, process execution, and signal handling:</p>
+<div class="admonition example">
+<p class="admonition-title">System Utility</p>
+<p>```go title="system_utility.go" linums="1" hl_lines="8-150"
+package main</p>
+<p>import (
+    "bufio"
+    "fmt"
+    "os"
+    "os/exec"
+    "os/signal"
+    "sort"
+    "syscall"
+    "time"
+)</p>
+<p>// FileInfo represents file information
+type FileInfo struct {
+    Name string
+    Size int64
+}</p>
+<p>// BySize implements sort.Interface for []FileInfo based on Size
+type BySize []FileInfo</p>
+<p>func (a BySize) Len() int           { return len(a) }
+func (a BySize) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a BySize) Less(i, j int) bool { return a[i].Size &lt; a[j].Size }</p>
+<p>// SystemUtility represents our system utility
+type SystemUtility struct {
+    configPath string
+    running    bool
+}</p>
+<p>// NewSystemUtility creates a new system utility
+func NewSystemUtility(configPath string) *SystemUtility {
+    return &amp;SystemUtility{
+        configPath: configPath,
+        running:    true,
+    }
+}</p>
+<p>// ListFiles lists files in a directory and sorts them by size
+func (su *SystemUtility) ListFiles(dir string) ([]FileInfo, error) {
+    cmd := exec.Command("ls", "-l", dir)
+    output, err := cmd.Output()
+    if err != nil {
+        return nil, fmt.Errorf("failed to list files: %v", err)
+    }</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span></pre></div></td><td class="code"><div><pre><span></span><code>var files []FileInfo
+scanner := bufio.NewScanner(bufio.NewReader(bytes.NewReader(output)))
+
+// Skip first line (total)
+scanner.Scan()
+
+for scanner.Scan() {
+    line := scanner.Text()
+    // Parse line to extract file name and size
+    // This is a simplified parser
+    fields := strings.Fields(line)
+    if len(fields) &lt; 9 {
+        continue
+    }
+
+    sizeStr := fields[4]
+    size, err := strconv.ParseInt(sizeStr, 10, 64)
+    if err != nil {
+        continue
+    }
+
+    name := fields[8]
+    files = append(files, FileInfo{Name: name, Size: size})
+}
+
+// Sort files by size
+sort.Sort(BySize(files))
+
+return files, nil
+</code></pre></div></td></tr></table></div>
+<p>}</p>
+<p>// RunCommand executes a command and returns its output
+func (su *SystemUtility) RunCommand(name string, args ...string) (string, error) {
+    cmd := exec.Command(name, args...)
+    output, err := cmd.CombinedOutput()
+    if err != nil {
+        return "", fmt.Errorf("command failed: %v", err)
+    }
+    return string(output), nil
+}</p>
+<p>// ReloadConfig reloads the configuration
+func (su *SystemUtility) ReloadConfig() error {
+    fmt.Println("Reloading configuration from", su.configPath)
+    // Simulate config reload
+    time.Sleep(1 * time.Second)
+    fmt.Println("Configuration reloaded successfully")
+    return nil
+}</p>
+<p>// Shutdown performs graceful shutdown
+func (su *SystemUtility) Shutdown() {
+    fmt.Println("Initiating graceful shutdown...")
+    su.running = false
+    time.Sleep(1 * time.Second)
+    fmt.Println("Shutdown complete")
+}</p>
+<p>// Run starts the system utility
+func (su *SystemUtility) Run() {
+    // Set up signal handling
+    sigChan := make(chan os.Signal, 1)
+    reloadChan := make(chan os.Signal, 1)</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span></pre></div></td><td class="code"><div><pre><span></span><code>signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
+signal.Notify(reloadChan, syscall.SIGHUP)
+
+fmt.Println(&quot;System utility started&quot;)
+fmt.Println(&quot;Available commands:&quot;)
+fmt.Println(&quot;- list &lt;dir&gt;: List files in directory sorted by size&quot;)
+fmt.Println(&quot;- exec &lt;command&gt;: Execute a command&quot;)
+fmt.Println(&quot;- reload: Reload configuration&quot;)
+fmt.Println(&quot;- exit: Exit the utility&quot;)
+fmt.Println(&quot;Signals:&quot;)
+fmt.Println(&quot;- SIGINT/SIGTERM: Graceful shutdown&quot;)
+fmt.Println(&quot;- SIGHUP: Reload configuration&quot;)
+
+// Main loop
+for su.running {
+    select {
+    case sig := &lt;-sigChan:
+        fmt.Printf(&quot;Received shutdown signal: %v\n&quot;, sig)
+        su.Shutdown()
+        return
+
+    case &lt;-reloadChan:
+        fmt.Println(&quot;Received SIGHUP signal&quot;)
+        if err := su.ReloadConfig(); err != nil {
+            fmt.Printf(&quot;Error reloading config: %v\n&quot;, err)
+        }
+
+    default:
+        // Read user input
+        fmt.Print(&quot;&gt; &quot;)
+        scanner := bufio.NewScanner(os.Stdin)
+        if !scanner.Scan() {
+            break
+        }
+
+        input := scanner.Text()
+        parts := strings.Fields(input)
+        if len(parts) == 0 {
+            continue
+        }
+
+        switch parts[0] {
+        case &quot;list&quot;:
+            if len(parts) &lt; 2 {
+                fmt.Println(&quot;Usage: list &lt;directory&gt;&quot;)
+                continue
+            }
+            files, err := su.ListFiles(parts[1])
+            if err != nil {
+                fmt.Printf(&quot;Error: %v\n&quot;, err)
+                continue
+            }
+            fmt.Println(&quot;Files sorted by size:&quot;)
+            for _, file := range files {
+                fmt.Printf(&quot;%-20s %10d bytes\n&quot;, file.Name, file.Size)
+            }
+
+        case &quot;exec&quot;:
+            if len(parts) &lt; 2 {
+                fmt.Println(&quot;Usage: exec &lt;command&gt; [args...]&quot;)
+                continue
+            }
+            output, err := su.RunCommand(parts[1], parts[2:]...)
+            if err != nil {
+                fmt.Printf(&quot;Error: %v\n&quot;, err)
+                continue
+            }
+            fmt.Println(output)
+
+        case &quot;reload&quot;:
+            if err := su.ReloadConfig(); err != nil {
+                fmt.Printf(&quot;Error: %v\n&quot;, err)
+            }
+
+        case &quot;exit&quot;:
+            su.Shutdown()
+            return
+
+        default:
+            fmt.Println(&quot;Unknown command. Available commands: list, exec, reload, exit&quot;)
+        }
+    }
+}
+</code></pre></div></td></tr></table></div>
+<p>}</p>
+<p>func main() {
+    // Create and run system utility
+    utility := NewSystemUtility("config.json")
+    utility.Run()
+}
+```</p>
+</div>
+<h3 id="how-this-example-demonstrates-all-concepts">How This Example Demonstrates All Concepts:</h3>
+<ol>
+<li><strong>Sorting</strong>:</li>
+<li>Custom sorting of file information by size</li>
+<li>Implementation of sort.Interface for custom types</li>
+<li>
+<p>Use of both sort.Sort and custom sorting logic</p>
+</li>
+<li>
+<p><strong>Testing</strong>:</p>
+</li>
+<li>While not shown in the example, this code would be accompanied by comprehensive tests</li>
+<li>Each method would have unit tests with various scenarios</li>
+<li>
+<p>Benchmarks would measure performance of file listing and command execution</p>
+</li>
+<li>
+<p><strong>Process Execution</strong>:</p>
+</li>
+<li>Execution of external commands (ls)</li>
+<li>Capturing and parsing command output</li>
+<li>
+<p>Error handling for command execution</p>
+</li>
+<li>
+<p><strong>Signal Handling</strong>:</p>
+</li>
+<li>Handling SIGINT and SIGTERM for graceful shutdown</li>
+<li>Handling SIGHUP for configuration reload</li>
+<li>
+<p>Proper cleanup and resource management</p>
+</li>
+<li>
+<p><strong>Integration</strong>:</p>
+</li>
+<li>All components work together in a cohesive system utility</li>
+<li>Proper error handling throughout</li>
+<li>Graceful shutdown with signal handling</li>
+</ol>
+<h2 id="quick-reference">Quick Reference</h2>
+<div class="admonition success">
+<p class="admonition-title">Key Takeaways</p>
+<ul>
+<li><strong>Sorting</strong>: Use <code>sort</code> package for efficient sorting of built-in and custom types</li>
+<li><strong>Testing</strong>: Leverage <code>testing</code> package for unit tests, benchmarks, and coverage analysis</li>
+<li><strong>Process Execution</strong>: Use <code>os/exec</code> to run external commands with proper I/O and error handling</li>
+<li><strong>Signals</strong>: Handle system signals with <code>os/signal</code> for graceful shutdown and inter-process communication</li>
+<li><strong>Best Practices</strong>: Always handle errors, manage resources properly, and implement graceful shutdown</li>
+<li><strong>Performance</strong>: Use benchmarks to measure and optimize performance-critical code</li>
+<li><strong>Integration</strong>: These utilities often work together in system-level applications</li>
+<li><strong>Testing Strategies</strong>: Use table-driven tests for comprehensive coverage and mocking for external dependencies</li>
+<li><strong>Process Management</strong>: Properly manage process lifecycle, including start, wait, and termination</li>
+<li><strong>Signal Handling</strong>: Implement signal handling for robust applications that respond to system events</li>
+</ul>
+</div>
+<div class="admonition quote">
+<p class="admonition-title">Remember</p>
+<p>"Go's utilities and system operations provide a powerful toolkit for building robust system-level applications. By mastering sorting algorithms, testing methodologies, process execution, and signal handling, you can create efficient, reliable software that integrates seamlessly with the operating system. The key is to understand not just how to use these tools, but when and why to use them, and how they work together to create cohesive, maintainable systems."</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://linkedin.com" target="_blank" rel="noopener" title="linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zM102.2 96a38.5 38.5 0 1 1 0 77 38.5 38.5 0 1 1 0-77m282.1 320h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.footer", "content.code.copy"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>
