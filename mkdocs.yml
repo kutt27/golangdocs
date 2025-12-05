@@ -30,8 +30,8 @@ nav:
   - Basics:
       - Introduction: "1. Basics/1. Hello-World.md"
       - Go Compiler: "1. Basics/2. Go-Compiler.md"
-      - Standard Library: "1. Basics/3. Standard Library.md"
-      - Data Types: "1. Basics/4. Data-Types.md"
+      - Data Types: "1. Basics/3. Data-Types.md"
+      - Standard Library: "1. Basics/4. Standard Library.md"
       - Control Structures: "1. Basics/5. If-and While.md"
       - Conditionals: "1. Basics/6. Conditionals.md"
       - Arrays: "1. Basics/7. Arrays.md"
