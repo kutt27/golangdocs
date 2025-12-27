@@ -1,0 +1,2325 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://kutt27.github.io/golangdocs/3.%20Advanced/6.%20Rate-Limiting-and-Algorithms/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>6. Rate Limiting and Algorithms - GolangDocs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:300,300i,400,400i,700,700i%7CSource+Code+Pro:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"PT Serif";--md-code-font:"Source Code Pro"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="light-blue" data-md-color-accent="deep-purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#rate-limiting-in-go-a-comprehensive-guide" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="GolangDocs" class="md-header__button md-logo" aria-label="GolangDocs" data-md-component="logo">
+      
+  <img src="../../assets/layers.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            GolangDocs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              6. Rate Limiting and Algorithms
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="light-blue" data-md-color-accent="deep-purple"  aria-label="Dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="deep-purple"  aria-label="Light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="GolangDocs" class="md-nav__button md-logo" aria-label="GolangDocs" data-md-component="logo">
+      
+  <img src="../../assets/layers.png" alt="logo">
+
+    </a>
+    GolangDocs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Basics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Basics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/1.%20Hello-World/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/2.%20Go-Compiler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Go Compiler
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/3.%20Data-Types/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Types
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/4.%20Standard%20Library/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Standard Library
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/5.%20If-and%20While/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Control Structures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/6.%20Conditionals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conditionals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/7.%20Arrays/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Arrays
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/8.%20Slices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Slices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/9.%20Maps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Maps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/10.%20Range/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Range
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/11.%20Functions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Functions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/12.%20Control-Flow-Mechanism/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Control Flow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/13.%20Init/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Init
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#understanding-rate-limiting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Understanding Rate Limiting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#token-bucket-algorithm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Token Bucket Algorithm
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Token Bucket Algorithm">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-token-bucket-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How Token Bucket Works
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-gos-xtimerate-package" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Using Go's x/time/rate Package
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fixed-window-counter-algorithm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fixed Window Counter Algorithm
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Fixed Window Counter Algorithm">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-fixed-window-counter-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How Fixed Window Counter Works
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sliding-window-log-improved-fixed-window" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sliding Window Log (Improved Fixed Window)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#leaky-bucket-algorithm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Leaky Bucket Algorithm
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Leaky Bucket Algorithm">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-leaky-bucket-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How Leaky Bucket Works
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#comparing-rate-limiting-algorithms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Comparing Rate Limiting Algorithms
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#distributed-rate-limiting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Distributed Rate Limiting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#best-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Best Practices
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#real-world-example-api-rate-limiting-middleware" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Real-World Example: API Rate Limiting Middleware
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Real-World Example: API Rate Limiting Middleware">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-this-example-demonstrates-rate-limiting-concepts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How This Example Demonstrates Rate Limiting Concepts:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<p>{</p>
+<h1 id="rate-limiting-in-go-a-comprehensive-guide">Rate Limiting in Go: A Comprehensive Guide</h1>
+<div class="admonition abstract">
+<p class="admonition-title">Overview</p>
+<p>Master rate limiting techniques in Go to control traffic flow, protect resources, and ensure fair usage. Learn to implement three fundamental rate limiting algorithms: Token Bucket, Fixed Window Counter, and Leaky Bucket. Understand their trade-offs, use cases, and how to apply them in real-world scenarios. Explore Go's native rate limiting packages and build custom implementations for fine-grained control.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Key Points</p>
+<ul>
+<li><strong>Rate Limiting</strong>: Essential for protecting services from abuse, managing resources, and ensuring fair usage</li>
+<li><strong>Token Bucket</strong>: Allows bursts up to bucket capacity, refills at a fixed rate, ideal for bursty traffic</li>
+<li><strong>Fixed Window Counter</strong>: Simple implementation using time windows, but vulnerable to boundary bursts</li>
+<li><strong>Leaky Bucket</strong>: Smooths traffic by processing requests at a constant rate, prevents bursts entirely</li>
+<li><strong>Go's x/time/rate</strong>: Provides a production-ready Token Bucket implementation</li>
+<li><strong>Distributed Rate Limiting</strong>: Requires coordination across multiple instances using Redis or similar</li>
+<li><strong>Trade-offs</strong>: Each algorithm has different characteristics for burst handling, resource usage, and implementation complexity</li>
+<li><strong>Best Practices</strong>: Choose the right algorithm for your use case, monitor effectiveness, and adjust limits dynamically</li>
+</ul>
+</div>
+<h2 id="understanding-rate-limiting">Understanding Rate Limiting</h2>
+<p>Rate limiting is a technique used to control the rate of incoming traffic to a service. It's crucial for preventing abuse, managing resource consumption, and ensuring fair usage among clients. Different algorithms offer different trade-offs between simplicity, burst handling, and resource efficiency.</p>
+<div class="admonition info">
+<p class="admonition-title">Rate Limiting Algorithms Comparison</p>
+<pre class="mermaid"><code>graph TD
+    A[Rate Limiting Algorithms] --&gt; B[Token Bucket]
+    A --&gt; C[Fixed Window Counter]
+    A --&gt; D[Leaky Bucket]
+    B --&gt; E[Allows bursts]
+    B --&gt; F[Refills at fixed rate]
+    C --&gt; G[Simple implementation]
+    C --&gt; H[Vulnerable to boundary bursts]
+    D --&gt; I[Smooths traffic]
+    D --&gt; J[Constant processing rate]
+    style A fill:#999,stroke:#333,stroke-width:2px,color:#000</code></pre>
+</div>
+<h2 id="token-bucket-algorithm">Token Bucket Algorithm</h2>
+<p>The Token Bucket algorithm is one of the most popular rate limiting approaches. It allows bursts of requests up to the bucket capacity while maintaining a long-term average rate.</p>
+<h3 id="how-token-bucket-works">How Token Bucket Works</h3>
+<ol>
+<li><strong>Bucket</strong>: Holds tokens up to a maximum capacity</li>
+<li><strong>Token Generation</strong>: Tokens are added to the bucket at a fixed rate</li>
+<li><strong>Request Processing</strong>: Each request consumes one token</li>
+<li><strong>Burst Handling</strong>: If the bucket has tokens, requests can be processed immediately</li>
+<li><strong>Rate Limiting</strong>: If the bucket is empty, requests must wait or be rejected</li>
+</ol>
+<div class="admonition example">
+<p class="admonition-title">Token Bucket Implementation</p>
+<div class="language-go highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">token_bucket.go</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-0-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-0-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-0-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-0-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-0-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-0-10">10</a></span>
+<span class="normal"><a href="#__codelineno-0-11">11</a></span>
+<span class="normal"><a href="#__codelineno-0-12">12</a></span>
+<span class="normal"><a href="#__codelineno-0-13">13</a></span>
+<span class="normal"><a href="#__codelineno-0-14">14</a></span>
+<span class="normal"><a href="#__codelineno-0-15">15</a></span>
+<span class="normal"><a href="#__codelineno-0-16">16</a></span>
+<span class="normal"><a href="#__codelineno-0-17">17</a></span>
+<span class="normal"><a href="#__codelineno-0-18">18</a></span>
+<span class="normal"><a href="#__codelineno-0-19">19</a></span>
+<span class="normal"><a href="#__codelineno-0-20">20</a></span>
+<span class="normal"><a href="#__codelineno-0-21">21</a></span>
+<span class="normal"><a href="#__codelineno-0-22">22</a></span>
+<span class="normal"><a href="#__codelineno-0-23">23</a></span>
+<span class="normal"><a href="#__codelineno-0-24">24</a></span>
+<span class="normal"><a href="#__codelineno-0-25">25</a></span>
+<span class="normal"><a href="#__codelineno-0-26">26</a></span>
+<span class="normal"><a href="#__codelineno-0-27">27</a></span>
+<span class="normal"><a href="#__codelineno-0-28">28</a></span>
+<span class="normal"><a href="#__codelineno-0-29">29</a></span>
+<span class="normal"><a href="#__codelineno-0-30">30</a></span>
+<span class="normal"><a href="#__codelineno-0-31">31</a></span>
+<span class="normal"><a href="#__codelineno-0-32">32</a></span>
+<span class="normal"><a href="#__codelineno-0-33">33</a></span>
+<span class="normal"><a href="#__codelineno-0-34">34</a></span>
+<span class="normal"><a href="#__codelineno-0-35">35</a></span>
+<span class="normal"><a href="#__codelineno-0-36">36</a></span>
+<span class="normal"><a href="#__codelineno-0-37">37</a></span>
+<span class="normal"><a href="#__codelineno-0-38">38</a></span>
+<span class="normal"><a href="#__codelineno-0-39">39</a></span>
+<span class="normal"><a href="#__codelineno-0-40">40</a></span>
+<span class="normal"><a href="#__codelineno-0-41">41</a></span>
+<span class="normal"><a href="#__codelineno-0-42">42</a></span>
+<span class="normal"><a href="#__codelineno-0-43">43</a></span>
+<span class="normal"><a href="#__codelineno-0-44">44</a></span>
+<span class="normal"><a href="#__codelineno-0-45">45</a></span>
+<span class="normal"><a href="#__codelineno-0-46">46</a></span>
+<span class="normal"><a href="#__codelineno-0-47">47</a></span>
+<span class="normal"><a href="#__codelineno-0-48">48</a></span>
+<span class="normal"><a href="#__codelineno-0-49">49</a></span>
+<span class="normal"><a href="#__codelineno-0-50">50</a></span>
+<span class="normal"><a href="#__codelineno-0-51">51</a></span>
+<span class="normal"><a href="#__codelineno-0-52">52</a></span>
+<span class="normal"><a href="#__codelineno-0-53">53</a></span>
+<span class="normal"><a href="#__codelineno-0-54">54</a></span>
+<span class="normal"><a href="#__codelineno-0-55">55</a></span>
+<span class="normal"><a href="#__codelineno-0-56">56</a></span>
+<span class="normal"><a href="#__codelineno-0-57">57</a></span>
+<span class="normal"><a href="#__codelineno-0-58">58</a></span>
+<span class="normal"><a href="#__codelineno-0-59">59</a></span>
+<span class="normal"><a href="#__codelineno-0-60">60</a></span>
+<span class="normal"><a href="#__codelineno-0-61">61</a></span>
+<span class="normal"><a href="#__codelineno-0-62">62</a></span>
+<span class="normal"><a href="#__codelineno-0-63">63</a></span>
+<span class="normal"><a href="#__codelineno-0-64">64</a></span>
+<span class="normal"><a href="#__codelineno-0-65">65</a></span>
+<span class="normal"><a href="#__codelineno-0-66">66</a></span>
+<span class="normal"><a href="#__codelineno-0-67">67</a></span>
+<span class="normal"><a href="#__codelineno-0-68">68</a></span>
+<span class="normal"><a href="#__codelineno-0-69">69</a></span>
+<span class="normal"><a href="#__codelineno-0-70">70</a></span>
+<span class="normal"><a href="#__codelineno-0-71">71</a></span>
+<span class="normal"><a href="#__codelineno-0-72">72</a></span>
+<span class="normal"><a href="#__codelineno-0-73">73</a></span>
+<span class="normal"><a href="#__codelineno-0-74">74</a></span>
+<span class="normal"><a href="#__codelineno-0-75">75</a></span>
+<span class="normal"><a href="#__codelineno-0-76">76</a></span>
+<span class="normal"><a href="#__codelineno-0-77">77</a></span>
+<span class="normal"><a href="#__codelineno-0-78">78</a></span>
+<span class="normal"><a href="#__codelineno-0-79">79</a></span>
+<span class="normal"><a href="#__codelineno-0-80">80</a></span>
+<span class="normal"><a href="#__codelineno-0-81">81</a></span>
+<span class="normal"><a href="#__codelineno-0-82">82</a></span>
+<span class="normal"><a href="#__codelineno-0-83">83</a></span>
+<span class="normal"><a href="#__codelineno-0-84">84</a></span>
+<span class="normal"><a href="#__codelineno-0-85">85</a></span>
+<span class="normal"><a href="#__codelineno-0-86">86</a></span>
+<span class="normal"><a href="#__codelineno-0-87">87</a></span>
+<span class="normal"><a href="#__codelineno-0-88">88</a></span>
+<span class="normal"><a href="#__codelineno-0-89">89</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">    </span><span class="s">&quot;fmt&quot;</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="w">    </span><span class="s">&quot;sync&quot;</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">    </span><span class="s">&quot;time&quot;</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="p">)</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="hll">
+</span></span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="hll"><span class="c1">// TokenBucket implements the token bucket algorithm</span>
+</span></span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="hll"><span class="kd">type</span><span class="w"> </span><span class="nx">TokenBucket</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+</span></span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="hll"><span class="w">    </span><span class="nx">capacity</span><span class="w">     </span><span class="kt">int64</span><span class="w">       </span><span class="c1">// Maximum number of tokens in the bucket</span>
+</span></span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="hll"><span class="w">    </span><span class="nx">tokens</span><span class="w">       </span><span class="kt">int64</span><span class="w">       </span><span class="c1">// Current number of tokens in the bucket</span>
+</span></span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="hll"><span class="w">    </span><span class="nx">refillRate</span><span class="w">   </span><span class="nx">time</span><span class="p">.</span><span class="nx">Duration</span><span class="w"> </span><span class="c1">// Time between token refills</span>
+</span></span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="hll"><span class="w">    </span><span class="nx">lastRefill</span><span class="w">   </span><span class="nx">time</span><span class="p">.</span><span class="nx">Time</span><span class="w">   </span><span class="c1">// Time of last token refill</span>
+</span></span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15"></a><span class="hll"><span class="w">    </span><span class="nx">mu</span><span class="w">           </span><span class="nx">sync</span><span class="p">.</span><span class="nx">Mutex</span><span class="w">  </span><span class="c1">// Mutex for thread safety</span>
+</span></span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16"></a><span class="hll"><span class="p">}</span>
+</span></span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="hll">
+</span></span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18"></a><span class="hll"><span class="c1">// NewTokenBucket creates a new token bucket</span>
+</span></span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19"></a><span class="hll"><span class="kd">func</span><span class="w"> </span><span class="nx">NewTokenBucket</span><span class="p">(</span><span class="nx">capacity</span><span class="w"> </span><span class="kt">int64</span><span class="p">,</span><span class="w"> </span><span class="nx">refillRate</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Duration</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="nx">TokenBucket</span><span class="w"> </span><span class="p">{</span>
+</span></span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20"></a><span class="hll"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">TokenBucket</span><span class="p">{</span>
+</span></span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21"></a><span class="hll"><span class="w">        </span><span class="nx">capacity</span><span class="p">:</span><span class="w">   </span><span class="nx">capacity</span><span class="p">,</span>
+</span></span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22"></a><span class="hll"><span class="w">        </span><span class="nx">tokens</span><span class="p">:</span><span class="w">     </span><span class="nx">capacity</span><span class="p">,</span>
+</span></span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23"></a><span class="hll"><span class="w">        </span><span class="nx">refillRate</span><span class="p">:</span><span class="w"> </span><span class="nx">refillRate</span><span class="p">,</span>
+</span></span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24"></a><span class="hll"><span class="w">        </span><span class="nx">lastRefill</span><span class="p">:</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Now</span><span class="p">(),</span>
+</span></span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25"></a><span class="hll"><span class="w">    </span><span class="p">}</span>
+</span></span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26"></a><span class="hll"><span class="p">}</span>
+</span></span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27"></a><span class="hll">
+</span></span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28"></a><span class="hll"><span class="c1">// Allow checks if a request can be processed</span>
+</span></span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29"></a><span class="hll"><span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">tb</span><span class="w"> </span><span class="o">*</span><span class="nx">TokenBucket</span><span class="p">)</span><span class="w"> </span><span class="nx">Allow</span><span class="p">()</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="p">{</span>
+</span></span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30"></a><span class="hll"><span class="w">    </span><span class="nx">tb</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nx">Lock</span><span class="p">()</span>
+</span></span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31"></a><span class="hll"><span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="nx">tb</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nx">Unlock</span><span class="p">()</span>
+</span></span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32"></a><span class="hll">
+</span></span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33"></a><span class="hll"><span class="w">    </span><span class="c1">// Refill tokens based on elapsed time</span>
+</span></span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34"></a><span class="hll"><span class="w">    </span><span class="nx">now</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Now</span><span class="p">()</span>
+</span></span><span id="__span-0-35"><a id="__codelineno-0-35" name="__codelineno-0-35"></a><span class="hll"><span class="w">    </span><span class="nx">elapsed</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">now</span><span class="p">.</span><span class="nx">Sub</span><span class="p">(</span><span class="nx">tb</span><span class="p">.</span><span class="nx">lastRefill</span><span class="p">)</span>
+</span></span><span id="__span-0-36"><a id="__codelineno-0-36" name="__codelineno-0-36"></a><span class="hll"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">elapsed</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="nx">tb</span><span class="p">.</span><span class="nx">refillRate</span><span class="w"> </span><span class="p">{</span>
+</span></span><span id="__span-0-37"><a id="__codelineno-0-37" name="__codelineno-0-37"></a><span class="hll"><span class="w">        </span><span class="c1">// Calculate how many tokens to add</span>
+</span></span><span id="__span-0-38"><a id="__codelineno-0-38" name="__codelineno-0-38"></a><span class="hll"><span class="w">        </span><span class="nx">tokensToAdd</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">int64</span><span class="p">(</span><span class="nx">elapsed</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nx">tb</span><span class="p">.</span><span class="nx">refillRate</span><span class="p">)</span>
+</span></span><span id="__span-0-39"><a id="__codelineno-0-39" name="__codelineno-0-39"></a><span class="hll"><span class="w">        </span><span class="nx">tb</span><span class="p">.</span><span class="nx">tokens</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">min</span><span class="p">(</span><span class="nx">tb</span><span class="p">.</span><span class="nx">tokens</span><span class="o">+</span><span class="nx">tokensToAdd</span><span class="p">,</span><span class="w"> </span><span class="nx">tb</span><span class="p">.</span><span class="nx">capacity</span><span class="p">)</span>
+</span></span><span id="__span-0-40"><a id="__codelineno-0-40" name="__codelineno-0-40"></a><span class="hll"><span class="w">        </span><span class="nx">tb</span><span class="p">.</span><span class="nx">lastRefill</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">now</span>
+</span></span><span id="__span-0-41"><a id="__codelineno-0-41" name="__codelineno-0-41"></a><span class="hll"><span class="w">    </span><span class="p">}</span>
+</span></span><span id="__span-0-42"><a id="__codelineno-0-42" name="__codelineno-0-42"></a><span class="hll">
+</span></span><span id="__span-0-43"><a id="__codelineno-0-43" name="__codelineno-0-43"></a><span class="hll"><span class="w">    </span><span class="c1">// Check if we have tokens available</span>
+</span></span><span id="__span-0-44"><a id="__codelineno-0-44" name="__codelineno-0-44"></a><span class="hll"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">tb</span><span class="p">.</span><span class="nx">tokens</span><span class="w"> </span><span class="p">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">{</span>
+</span></span><span id="__span-0-45"><a id="__codelineno-0-45" name="__codelineno-0-45"></a><span class="hll"><span class="w">        </span><span class="nx">tb</span><span class="p">.</span><span class="nx">tokens</span><span class="o">--</span>
+</span></span><span id="__span-0-46"><a id="__codelineno-0-46" name="__codelineno-0-46"></a><span class="hll"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span>
+</span></span><span id="__span-0-47"><a id="__codelineno-0-47" name="__codelineno-0-47"></a><span class="hll"><span class="w">    </span><span class="p">}</span>
+</span></span><span id="__span-0-48"><a id="__codelineno-0-48" name="__codelineno-0-48"></a><span class="hll">
+</span></span><span id="__span-0-49"><a id="__codelineno-0-49" name="__codelineno-0-49"></a><span class="hll"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kc">false</span>
+</span></span><span id="__span-0-50"><a id="__codelineno-0-50" name="__codelineno-0-50"></a><span class="hll"><span class="p">}</span>
+</span></span><span id="__span-0-51"><a id="__codelineno-0-51" name="__codelineno-0-51"></a><span class="hll">
+</span></span><span id="__span-0-52"><a id="__codelineno-0-52" name="__codelineno-0-52"></a><span class="hll"><span class="c1">// Wait waits until a token is available</span>
+</span></span><span id="__span-0-53"><a id="__codelineno-0-53" name="__codelineno-0-53"></a><span class="hll"><span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">tb</span><span class="w"> </span><span class="o">*</span><span class="nx">TokenBucket</span><span class="p">)</span><span class="w"> </span><span class="nx">Wait</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span></span><span id="__span-0-54"><a id="__codelineno-0-54" name="__codelineno-0-54"></a><span class="hll"><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">!</span><span class="nx">tb</span><span class="p">.</span><span class="nx">Allow</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span></span><span id="__span-0-55"><a id="__codelineno-0-55" name="__codelineno-0-55"></a><span class="hll"><span class="w">        </span><span class="nx">time</span><span class="p">.</span><span class="nx">Sleep</span><span class="p">(</span><span class="nx">tb</span><span class="p">.</span><span class="nx">refillRate</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="c1">// Sleep for a fraction of refill rate</span>
+</span></span><span id="__span-0-56"><a id="__codelineno-0-56" name="__codelineno-0-56"></a><span class="hll"><span class="w">    </span><span class="p">}</span>
+</span></span><span id="__span-0-57"><a id="__codelineno-0-57" name="__codelineno-0-57"></a><span class="hll"><span class="p">}</span>
+</span></span><span id="__span-0-58"><a id="__codelineno-0-58" name="__codelineno-0-58"></a><span class="hll">
+</span></span><span id="__span-0-59"><a id="__codelineno-0-59" name="__codelineno-0-59"></a><span class="hll"><span class="kd">func</span><span class="w"> </span><span class="nb">min</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="w"> </span><span class="nx">b</span><span class="w"> </span><span class="kt">int64</span><span class="p">)</span><span class="w"> </span><span class="kt">int64</span><span class="w"> </span><span class="p">{</span>
+</span></span><span id="__span-0-60"><a id="__codelineno-0-60" name="__codelineno-0-60"></a><span class="hll"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="nx">b</span><span class="w"> </span><span class="p">{</span>
+</span></span><span id="__span-0-61"><a id="__codelineno-0-61" name="__codelineno-0-61"></a><span class="hll"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">a</span>
+</span></span><span id="__span-0-62"><a id="__codelineno-0-62" name="__codelineno-0-62"></a><span class="hll"><span class="w">    </span><span class="p">}</span>
+</span></span><span id="__span-0-63"><a id="__codelineno-0-63" name="__codelineno-0-63"></a><span class="hll"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">b</span>
+</span></span><span id="__span-0-64"><a id="__codelineno-0-64" name="__codelineno-0-64"></a><span class="hll"><span class="p">}</span>
+</span></span><span id="__span-0-65"><a id="__codelineno-0-65" name="__codelineno-0-65"></a><span class="hll">
+</span></span><span id="__span-0-66"><a id="__codelineno-0-66" name="__codelineno-0-66"></a><span class="hll"><span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span></span><span id="__span-0-67"><a id="__codelineno-0-67" name="__codelineno-0-67"></a><span class="hll"><span class="w">    </span><span class="c1">// Create a token bucket with capacity 5 and refill rate of 1 token per second</span>
+</span></span><span id="__span-0-68"><a id="__codelineno-0-68" name="__codelineno-0-68"></a><span class="hll"><span class="w">    </span><span class="nx">bucket</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">NewTokenBucket</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
+</span></span><span id="__span-0-69"><a id="__codelineno-0-69" name="__codelineno-0-69"></a><span class="hll">
+</span></span><span id="__span-0-70"><a id="__codelineno-0-70" name="__codelineno-0-70"></a><span class="hll"><span class="w">    </span><span class="c1">// Simulate requests</span>
+</span></span><span id="__span-0-71"><a id="__codelineno-0-71" name="__codelineno-0-71"></a><span class="hll"><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">15</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="o">++</span><span class="w"> </span><span class="p">{</span>
+</span></span><span id="__span-0-72"><a id="__codelineno-0-72" name="__codelineno-0-72"></a><span class="hll"><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nx">bucket</span><span class="p">.</span><span class="nx">Allow</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span></span><span id="__span-0-73"><a id="__codelineno-0-73" name="__codelineno-0-73"></a><span class="hll"><span class="w">            </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;Request %d: Allowed\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">i</span><span class="p">)</span>
+</span></span><span id="__span-0-74"><a id="__codelineno-0-74" name="__codelineno-0-74"></a><span class="hll"><span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+</span></span><span id="__span-0-75"><a id="__codelineno-0-75" name="__codelineno-0-75"></a><span class="hll"><span class="w">            </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;Request %d: Denied\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">i</span><span class="p">)</span>
+</span></span><span id="__span-0-76"><a id="__codelineno-0-76" name="__codelineno-0-76"></a><span class="hll"><span class="w">        </span><span class="p">}</span>
+</span></span><span id="__span-0-77"><a id="__codelineno-0-77" name="__codelineno-0-77"></a><span class="hll"><span class="w">        </span><span class="nx">time</span><span class="p">.</span><span class="nx">Sleep</span><span class="p">(</span><span class="mi">200</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Millisecond</span><span class="p">)</span>
+</span></span><span id="__span-0-78"><a id="__codelineno-0-78" name="__codelineno-0-78"></a><span class="hll"><span class="w">    </span><span class="p">}</span>
+</span></span><span id="__span-0-79"><a id="__codelineno-0-79" name="__codelineno-0-79"></a>
+</span><span id="__span-0-80"><a id="__codelineno-0-80" name="__codelineno-0-80"></a><span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;\nDemonstrating Wait() method:&quot;</span><span class="p">)</span>
+</span><span id="__span-0-81"><a id="__codelineno-0-81" name="__codelineno-0-81"></a><span class="w">    </span><span class="c1">// Reset bucket</span>
+</span><span id="__span-0-82"><a id="__codelineno-0-82" name="__codelineno-0-82"></a><span class="w">    </span><span class="nx">bucket</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">NewTokenBucket</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">500</span><span class="o">*</span><span class="nx">time</span><span class="p">.</span><span class="nx">Millisecond</span><span class="p">)</span>
+</span><span id="__span-0-83"><a id="__codelineno-0-83" name="__codelineno-0-83"></a>
+</span><span id="__span-0-84"><a id="__codelineno-0-84" name="__codelineno-0-84"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="o">++</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-85"><a id="__codelineno-0-85" name="__codelineno-0-85"></a><span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;Request %d: Waiting... &quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">i</span><span class="p">)</span>
+</span><span id="__span-0-86"><a id="__codelineno-0-86" name="__codelineno-0-86"></a><span class="w">        </span><span class="nx">bucket</span><span class="p">.</span><span class="nx">Wait</span><span class="p">()</span>
+</span><span id="__span-0-87"><a id="__codelineno-0-87" name="__codelineno-0-87"></a><span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Allowed&quot;</span><span class="p">)</span>
+</span><span id="__span-0-88"><a id="__codelineno-0-88" name="__codelineno-0-88"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-0-89"><a id="__codelineno-0-89" name="__codelineno-0-89"></a><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+</div>
+<h3 id="using-gos-xtimerate-package">Using Go's x/time/rate Package</h3>
+<p>Go's standard library provides a production-ready Token Bucket implementation in the <code>x/time/rate</code> package:</p>
+<div class="admonition example">
+<p class="admonition-title">Using x/time/rate</p>
+<p>```go title="x_time_rate.go" linums="1" hl_lines="8-40"
+package main</p>
+<p>import (
+    "fmt"
+    "golang.org/x/time/rate"
+    "time"
+)</p>
+<p>func main() {
+    // Create a limiter that allows 10 requests per second with a burst of 5
+    limiter := rate.NewLimiter(10, 5)</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span></pre></div></td><td class="code"><div><pre><span></span><code>// Simulate requests
+for i := 1; i &lt;= 15; i++ {
+    if limiter.Allow() {
+        fmt.Printf(&quot;Request %d: Allowed\n&quot;, i)
+    } else {
+        fmt.Printf(&quot;Request %d: Denied\n&quot;, i)
+    }
+    time.Sleep(100 * time.Millisecond)
+}
+
+fmt.Println(&quot;\nUsing Wait() method:&quot;)
+// Reset limiter
+limiter = rate.NewLimiter(2, 3)
+
+for i := 1; i &lt;= 5; i++ {
+    start := time.Now()
+    err := limiter.Wait(context.Background())
+    if err != nil {
+        fmt.Printf(&quot;Request %d: Error: %v\n&quot;, i, err)
+    } else {
+        fmt.Printf(&quot;Request %d: Allowed (waited %v)\n&quot;, i, time.Since(start))
+    }
+}
+</code></pre></div></td></tr></table></div>
+<p>}
+```</p>
+</div>
+<h2 id="fixed-window-counter-algorithm">Fixed Window Counter Algorithm</h2>
+<p>The Fixed Window Counter algorithm divides time into fixed windows (e.g., 1 second) and counts requests within each window. It's simple to implement but can allow bursts at window boundaries.</p>
+<h3 id="how-fixed-window-counter-works">How Fixed Window Counter Works</h3>
+<ol>
+<li><strong>Time Windows</strong>: Time is divided into fixed-size windows (e.g., 1 second)</li>
+<li><strong>Counter</strong>: Each window has a counter for the number of requests</li>
+<li><strong>Request Processing</strong>: When a request arrives, check the current window's counter</li>
+<li><strong>Rate Limiting</strong>: If the counter is below the limit, increment it and allow the request</li>
+<li><strong>Window Reset</strong>: When the window ends, the counter resets to zero</li>
+</ol>
+<div class="admonition example">
+<p class="admonition-title">Fixed Window Counter Implementation</p>
+<p>```go title="fixed_window.go" linums="1" hl_lines="8-80"
+package main</p>
+<p>import (
+    "fmt"
+    "sync"
+    "time"
+)</p>
+<p>// FixedWindowCounter implements the fixed window counter algorithm
+type FixedWindowCounter struct {
+    limit       int           // Maximum requests per window
+    windowSize  time.Duration // Size of each time window
+    counters    map[int64]int // Map of window start time to request count
+    mu          sync.Mutex    // Mutex for thread safety
+}</p>
+<p>// NewFixedWindowCounter creates a new fixed window counter
+func NewFixedWindowCounter(limit int, windowSize time.Duration) *FixedWindowCounter {
+    return &amp;FixedWindowCounter{
+        limit:      limit,
+        windowSize: windowSize,
+        counters:   make(map[int64]int),
+    }
+}</p>
+<p>// Allow checks if a request can be processed
+func (fwc *FixedWindowCounter) Allow() bool {
+    fwc.mu.Lock()
+    defer fwc.mu.Unlock()</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span></pre></div></td><td class="code"><div><pre><span></span><code>// Get current window start time
+now := time.Now()
+windowStart := now.Truncate(fwc.windowSize).UnixNano()
+
+// Clean up old windows (optional, for memory efficiency)
+for ws := range fwc.counters {
+    if ws &lt; windowStart-fwc.windowSize.Nanoseconds() {
+        delete(fwc.counters, ws)
+    }
+}
+
+// Get or create counter for current window
+count := fwc.counters[windowStart]
+
+// Check if we&#39;re within the limit
+if count &lt; fwc.limit {
+    fwc.counters[windowStart] = count + 1
+    return true
+}
+
+return false
+</code></pre></div></td></tr></table></div>
+<p>}</p>
+<p>func main() {
+    // Create a fixed window counter with limit 5 per second
+    limiter := NewFixedWindowCounter(5, time.Second)</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span></pre></div></td><td class="code"><div><pre><span></span><code>// Simulate requests
+for i := 1; i &lt;= 15; i++ {
+    if limiter.Allow() {
+        fmt.Printf(&quot;Request %d: Allowed\n&quot;, i)
+    } else {
+        fmt.Printf(&quot;Request %d: Denied\n&quot;, i)
+    }
+    time.Sleep(200 * time.Millisecond)
+}
+
+fmt.Println(&quot;\nDemonstrating window boundary issue:&quot;)
+// Create a new limiter to demonstrate boundary issue
+limiter = NewFixedWindowCounter(3, 2*time.Second)
+
+// Time just before window boundary
+time.Sleep(time.Until(time.Now().Truncate(2*time.Second).Add(2*time.Second)) - 10*time.Millisecond)
+
+// Send requests around window boundary
+for i := 1; i &lt;= 6; i++ {
+    if limiter.Allow() {
+        fmt.Printf(&quot;Request %d: Allowed at %v\n&quot;, i, time.Now().Format(&quot;15:04:05.000&quot;))
+    } else {
+        fmt.Printf(&quot;Request %d: Denied at %v\n&quot;, i, time.Now().Format(&quot;15:04:05.000&quot;))
+    }
+    time.Sleep(100 * time.Millisecond)
+}
+</code></pre></div></td></tr></table></div>
+<p>}
+```</p>
+</div>
+<h3 id="sliding-window-log-improved-fixed-window">Sliding Window Log (Improved Fixed Window)</h3>
+<p>To address the boundary issue of Fixed Window Counter, we can implement a Sliding Window Log that tracks request timestamps:</p>
+<div class="admonition example">
+<p class="admonition-title">Sliding Window Log</p>
+<p>```go title="sliding_window.go" linums="1" hl_lines="8-70"
+package main</p>
+<p>import (
+    "container/list"
+    "fmt"
+    "sync"
+    "time"
+)</p>
+<p>// SlidingWindowLog implements a sliding window log algorithm
+type SlidingWindowLog struct {
+    limit      int           // Maximum requests in the window
+    windowSize time.Duration // Size of the sliding window
+    requests   *list.List    // List of request timestamps
+    mu         sync.Mutex    // Mutex for thread safety
+}</p>
+<p>// NewSlidingWindowLog creates a new sliding window log
+func NewSlidingWindowLog(limit int, windowSize time.Duration) *SlidingWindowLog {
+    return &amp;SlidingWindowLog{
+        limit:      limit,
+        windowSize: windowSize,
+        requests:   list.New(),
+    }
+}</p>
+<p>// Allow checks if a request can be processed
+func (swl *SlidingWindowLog) Allow() bool {
+    swl.mu.Lock()
+    defer swl.mu.Unlock()</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span></pre></div></td><td class="code"><div><pre><span></span><code>now := time.Now()
+cutoff := now.Add(-swl.windowSize)
+
+// Remove old requests outside the window
+for e := swl.requests.Front(); e != nil; {
+    next := e.Next()
+    if e.Value.(time.Time).Before(cutoff) {
+        swl.requests.Remove(e)
+    } else {
+        break
+    }
+    e = next
+}
+
+// Check if we&#39;re within the limit
+if swl.requests.Len() &lt; swl.limit {
+    swl.requests.PushBack(now)
+    return true
+}
+
+return false
+</code></pre></div></td></tr></table></div>
+<p>}</p>
+<p>func main() {
+    // Create a sliding window log with limit 5 per second
+    limiter := NewSlidingWindowLog(5, time.Second)</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span>
+<span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><code>// Simulate requests
+for i := 1; i &lt;= 15; i++ {
+    if limiter.Allow() {
+        fmt.Printf(&quot;Request %d: Allowed\n&quot;, i)
+    } else {
+        fmt.Printf(&quot;Request %d: Denied\n&quot;, i)
+    }
+    time.Sleep(200 * time.Millisecond)
+}
+</code></pre></div></td></tr></table></div>
+<p>}
+```</p>
+</div>
+<h2 id="leaky-bucket-algorithm">Leaky Bucket Algorithm</h2>
+<p>The Leaky Bucket algorithm smooths out traffic by processing requests at a constant rate. It's particularly useful when you want to prevent bursts entirely and maintain a steady flow of requests.</p>
+<h3 id="how-leaky-bucket-works">How Leaky Bucket Works</h3>
+<ol>
+<li><strong>Bucket</strong>: Holds requests up to a maximum capacity</li>
+<li><strong>Leak Rate</strong>: Requests are processed (leaked) at a constant rate</li>
+<li><strong>Request Processing</strong>: New requests are added to the bucket if there's space</li>
+<li><strong>Overflow</strong>: If the bucket is full, new requests are rejected</li>
+<li><strong>Constant Output</strong>: The leak rate ensures a steady flow of processed requests</li>
+</ol>
+<div class="admonition example">
+<p class="admonition-title">Leaky Bucket Implementation</p>
+<p>```go title="leaky_bucket.go" linums="1" hl_lines="8-90"
+package main</p>
+<p>import (
+    "container/list"
+    "fmt"
+    "sync"
+    "time"
+)</p>
+<p>// LeakyBucket implements the leaky bucket algorithm
+type LeakyBucket struct {
+    capacity   int           // Maximum number of requests in the bucket
+    leakRate   time.Duration // Time between request processing (leaks)
+    bucket     *list.List    // Queue of request timestamps
+    lastLeak   time.Time     // Time of last leak
+    mu         sync.Mutex    // Mutex for thread safety
+}</p>
+<p>// NewLeakyBucket creates a new leaky bucket
+func NewLeakyBucket(capacity int, leakRate time.Duration) *LeakyBucket {
+    return &amp;LeakyBucket{
+        capacity: capacity,
+        leakRate: leakRate,
+        bucket:   list.New(),
+        lastLeak: time.Now(),
+    }
+}</p>
+<p>// Allow checks if a request can be added to the bucket
+func (lb *LeakyBucket) Allow() bool {
+    lb.mu.Lock()
+    defer lb.mu.Unlock()</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span></pre></div></td><td class="code"><div><pre><span></span><code>now := time.Now()
+
+// Process (leak) requests based on elapsed time
+elapsed := now.Sub(lb.lastLeak)
+if elapsed &gt;= lb.leakRate {
+    // Calculate how many requests to process
+    leaks := int(elapsed / lb.leakRate)
+    for i := 0; i &lt; leaks &amp;&amp; lb.bucket.Len() &gt; 0; i++ {
+        lb.bucket.Remove(lb.bucket.Front())
+    }
+    lb.lastLeak = now
+}
+
+// Check if we have space in the bucket
+if lb.bucket.Len() &lt; lb.capacity {
+    lb.bucket.PushBack(now)
+    return true
+}
+
+return false
+</code></pre></div></td></tr></table></div>
+<p>}</p>
+<p>// Wait waits until the request can be added to the bucket
+func (lb *LeakyBucket) Wait() {
+    for !lb.Allow() {
+        time.Sleep(lb.leakRate / 10) // Sleep for a fraction of leak rate
+    }
+}</p>
+<p>func main() {
+    // Create a leaky bucket with capacity 5 and leak rate of 1 request per second
+    bucket := NewLeakyBucket(5, time.Second)</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span></pre></div></td><td class="code"><div><pre><span></span><code>// Simulate burst of requests
+fmt.Println(&quot;Simulating burst of requests:&quot;)
+for i := 1; i &lt;= 10; i++ {
+    if bucket.Allow() {
+        fmt.Printf(&quot;Request %d: Added to bucket\n&quot;, i)
+    } else {
+        fmt.Printf(&quot;Request %d: Bucket full, rejected\n&quot;, i)
+    }
+}
+
+fmt.Println(&quot;\nWaiting for bucket to empty...&quot;)
+time.Sleep(6 * time.Second)
+
+fmt.Println(&quot;\nDemonstrating steady flow:&quot;)
+for i := 1; i &lt;= 5; i++ {
+    fmt.Printf(&quot;Request %d: Waiting... &quot;, i+10)
+    bucket.Wait()
+    fmt.Println(&quot;Added to bucket&quot;)
+}
+</code></pre></div></td></tr></table></div>
+<p>}
+```</p>
+</div>
+<h2 id="comparing-rate-limiting-algorithms">Comparing Rate Limiting Algorithms</h2>
+<p>Let's compare the three algorithms with a comprehensive example:</p>
+<div class="admonition example">
+<p class="admonition-title">Algorithm Comparison</p>
+<p>```go title="comparison.go" linums="1" hl_lines="8-120"
+package main</p>
+<p>import (
+    "fmt"
+    "time"
+)</p>
+<p>// We'll use the implementations from previous examples
+// TokenBucket, FixedWindowCounter, and LeakyBucket</p>
+<p>func simulateAlgorithm(name string, limiter interface{}, requests int, interval time.Duration) {
+    fmt.Printf("\n=== %s ===\n", name)</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span></pre></div></td><td class="code"><div><pre><span></span><code>allowed := 0
+denied := 0
+
+for i := 1; i &lt;= requests; i++ {
+    var ok bool
+
+    switch l := limiter.(type) {
+    case *TokenBucket:
+        ok = l.Allow()
+    case *FixedWindowCounter:
+        ok = l.Allow()
+    case *LeakyBucket:
+        ok = l.Allow()
+    }
+
+    if ok {
+        allowed++
+        fmt.Printf(&quot;Request %d: Allowed\n&quot;, i)
+    } else {
+        denied++
+        fmt.Printf(&quot;Request %d: Denied\n&quot;, i)
+    }
+
+    time.Sleep(interval)
+}
+
+fmt.Printf(&quot;Summary: %d allowed, %d denied\n&quot;, allowed, denied)
+</code></pre></div></td></tr></table></div>
+<p>}</p>
+<p>func main() {
+    // Create limiters with similar settings
+    tokenBucket := NewTokenBucket(5, time.Second)       // 5 tokens, refills 1 per second
+    fixedWindow := NewFixedWindowCounter(5, time.Second) // 5 requests per second
+    leakyBucket := NewLeakyBucket(5, time.Second)      // Capacity 5, leaks 1 per second</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span></pre></div></td><td class="code"><div><pre><span></span><code>// Simulate 15 requests with 200ms interval
+requests := 15
+interval := 200 * time.Millisecond
+
+simulateAlgorithm(&quot;Token Bucket&quot;, tokenBucket, requests, interval)
+simulateAlgorithm(&quot;Fixed Window Counter&quot;, fixedWindow, requests, interval)
+simulateAlgorithm(&quot;Leaky Bucket&quot;, leakyBucket, requests, interval)
+
+// Test burst handling
+fmt.Println(&quot;\n=== Burst Handling Test ===&quot;)
+
+// Reset limiters
+tokenBucket = NewTokenBucket(5, time.Second)
+fixedWindow = NewFixedWindowCounter(5, time.Second)
+leakyBucket = NewLeakyBucket(5, time.Second)
+
+// Send 10 requests as quickly as possible
+burstRequests := 10
+
+fmt.Println(&quot;\nToken Bucket - Burst Test:&quot;)
+for i := 1; i &lt;= burstRequests; i++ {
+    if tokenBucket.Allow() {
+        fmt.Printf(&quot;Request %d: Allowed\n&quot;, i)
+    } else {
+        fmt.Printf(&quot;Request %d: Denied\n&quot;, i)
+    }
+}
+
+fmt.Println(&quot;\nFixed Window Counter - Burst Test:&quot;)
+for i := 1; i &lt;= burstRequests; i++ {
+    if fixedWindow.Allow() {
+        fmt.Printf(&quot;Request %d: Allowed\n&quot;, i)
+    } else {
+        fmt.Printf(&quot;Request %d: Denied\n&quot;, i)
+    }
+}
+
+fmt.Println(&quot;\nLeaky Bucket - Burst Test:&quot;)
+for i := 1; i &lt;= burstRequests; i++ {
+    if leakyBucket.Allow() {
+        fmt.Printf(&quot;Request %d: Allowed\n&quot;, i)
+    } else {
+        fmt.Printf(&quot;Request %d: Denied\n&quot;, i)
+    }
+}
+</code></pre></div></td></tr></table></div>
+<p>}
+```</p>
+</div>
+<h2 id="distributed-rate-limiting">Distributed Rate Limiting</h2>
+<p>For distributed systems, rate limiting needs to be coordinated across multiple instances. Redis is commonly used for this purpose:</p>
+<div class="admonition example">
+<p class="admonition-title">Distributed Rate Limiting with Redis</p>
+<p>```go title="distributed_rate_limiting.go" linums="1" hl_lines="8-80"
+package main</p>
+<p>import (
+    "context"
+    "fmt"
+    "github.com/go-redis/redis/v8"
+    "time"
+)</p>
+<p>// RedisRateLimiter implements a distributed rate limiter using Redis
+type RedisRateLimiter struct {
+    client     *redis.Client
+    key        string
+    limit      int64
+    window     time.Duration
+}</p>
+<p>// NewRedisRateLimiter creates a new Redis-based rate limiter
+func NewRedisRateLimiter(client <em>redis.Client, key string, limit int64, window time.Duration) </em>RedisRateLimiter {
+    return &amp;RedisRateLimiter{
+        client: client,
+        key:    key,
+        limit:  limit,
+        window: window,
+    }
+}</p>
+<p>// Allow checks if a request can be processed using Redis
+func (rl *RedisRateLimiter) Allow(ctx context.Context) (bool, error) {
+    // Use Redis INCR and EXPIRE commands for fixed window counter
+    pipe := rl.client.Pipeline()
+    incr := pipe.Incr(ctx, rl.key)
+    pipe.Expire(ctx, rl.key, rl.window)</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code>_, err := pipe.Exec(ctx)
+if err != nil {
+    return false, err
+}
+
+count := incr.Val()
+return count &lt;= rl.limit, nil
+</code></pre></div></td></tr></table></div>
+<p>}</p>
+<p>func main() {
+    // Create Redis client
+    rdb := redis.NewClient(&amp;redis.Options{
+        Addr:     "localhost:6379",
+        Password: "", // no password set
+        DB:       0,  // use default DB
+    })</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span></pre></div></td><td class="code"><div><pre><span></span><code>// Test connection
+ctx := context.Background()
+_, err := rdb.Ping(ctx).Result()
+if err != nil {
+    fmt.Printf(&quot;Failed to connect to Redis: %v\n&quot;, err)
+    fmt.Println(&quot;This example requires a running Redis server&quot;)
+    return
+}
+
+// Create rate limiter: 5 requests per 10 seconds
+limiter := NewRedisRateLimiter(rdb, &quot;rate_limit:test&quot;, 5, 10*time.Second)
+
+// Simulate requests
+for i := 1; i &lt;= 10; i++ {
+    allowed, err := limiter.Allow(ctx)
+    if err != nil {
+        fmt.Printf(&quot;Request %d: Error: %v\n&quot;, i, err)
+        continue
+    }
+
+    if allowed {
+        fmt.Printf(&quot;Request %d: Allowed\n&quot;, i)
+    } else {
+        fmt.Printf(&quot;Request %d: Denied\n&quot;, i)
+    }
+
+    time.Sleep(1 * time.Second)
+}
+</code></pre></div></td></tr></table></div>
+<p>}
+```</p>
+</div>
+<h2 id="best-practices">Best Practices</h2>
+<div class="admonition tip">
+<p class="admonition-title">Choose the Right Algorithm</p>
+<p>Select the rate limiting algorithm based on your specific requirements:
+- <strong>Token Bucket</strong>: Best for allowing controlled bursts (e.g., API endpoints)
+- <strong>Fixed Window</strong>: Simple implementation for basic rate limiting (e.g., login attempts)
+- <strong>Leaky Bucket</strong>: Best for smoothing traffic and preventing bursts (e.g., message queues)</p>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Algorithm Selection</p>
+<p>```go title="algorithm_selection.go" linums="1" hl_lines="8-40"
+package main</p>
+<p>import (
+    "fmt"
+    "time"
+)</p>
+<p>func main() {
+    // Example 1: API endpoint with burst allowance
+fmt.Println("API Endpoint - Token Bucket:")
+apiLimiter := NewTokenBucket(100, time.Second) // 100 requests per second, burst up to 100
+// Use for general API traffic</p>
+<p>// Example 2: Login attempts - strict limiting
+fmt.Println("\nLogin Attempts - Fixed Window:")
+loginLimiter := NewFixedWindowCounter(5, time.Minute) // 5 attempts per minute
+// Use for sensitive operations</p>
+<p>// Example 3: Email sending - smooth traffic
+fmt.Println("\nEmail Sending - Leaky Bucket:")
+emailLimiter := NewLeakyBucket(50, time.Second) // Process 1 email per second, queue up to 50
+// Use for outbound communication
+}
+```</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Implement Multiple Tiers</p>
+<p>Use different rate limits for different user tiers or endpoints:</p>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Multi-tier Rate Limiting</p>
+<p>```go title="multi_tier.go" linums="1" hl_lines="8-50"
+package main</p>
+<p>import (
+    "fmt"
+    "time"
+)</p>
+<p>type UserTier string</p>
+<p>const (
+    TierFree    UserTier = "free"
+    TierPremium UserTier = "premium"
+    TierEnterprise UserTier = "enterprise"
+)</p>
+<p>type RateLimiterFactory struct{}</p>
+<p>func (f *RateLimiterFactory) CreateLimiter(tier UserTier) interface{} {
+    switch tier {
+    case TierFree:
+        return NewTokenBucket(10, time.Minute) // 10 requests per minute
+    case TierPremium:
+        return NewTokenBucket(100, time.Minute) // 100 requests per minute
+    case TierEnterprise:
+        return NewTokenBucket(1000, time.Minute) // 1000 requests per minute
+    default:
+        return NewTokenBucket(5, time.Minute) // Default limit
+    }
+}</p>
+<p>func main() {
+    factory := RateLimiterFactory{}</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span></pre></div></td><td class="code"><div><pre><span></span><code>// Create limiters for different tiers
+freeLimiter := factory.CreateLimiter(TierFree).(*TokenBucket)
+premiumLimiter := factory.CreateLimiter(TierPremium).(*TokenBucket)
+enterpriseLimiter := factory.CreateLimiter(TierEnterprise).(*TokenBucket)
+
+fmt.Println(&quot;Free tier limit test:&quot;)
+for i := 1; i &lt;= 15; i++ {
+    if freeLimiter.Allow() {
+        fmt.Printf(&quot;Request %d: Allowed\n&quot;, i)
+    } else {
+        fmt.Printf(&quot;Request %d: Denied\n&quot;, i)
+    }
+}
+</code></pre></div></td></tr></table></div>
+<p>}
+```</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Monitor and Adjust Limits</p>
+<p>Implement monitoring to track rate limiting effectiveness and adjust limits dynamically:</p>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Dynamic Rate Limiting</p>
+<p>```go title="dynamic_limits.go" linums="1" hl_lines="8-60"
+package main</p>
+<p>import (
+    "fmt"
+    "sync/atomic"
+    "time"
+)</p>
+<p>// DynamicRateLimiter adjusts limits based on system load
+type DynamicRateLimiter struct {
+    baseLimit  int64
+    currentLimit int64
+    loadFactor float64
+    lastAdjust time.Time
+}</p>
+<p>func NewDynamicRateLimiter(baseLimit int64) *DynamicRateLimiter {
+    return &amp;DynamicRateLimiter{
+        baseLimit:     baseLimit,
+        currentLimit:  baseLimit,
+        loadFactor:    1.0,
+        lastAdjust:    time.Now(),
+    }
+}</p>
+<p>func (d *DynamicRateLimiter) AdjustLimit(load float64) {
+    // Adjust limit based on load (0.0 = no load, 1.0 = max load)
+    if load &lt; 0.5 {
+        // Low load, increase limit
+        d.loadFactor = 1.5
+    } else if load &gt; 0.8 {
+        // High load, decrease limit
+        d.loadFactor = 0.5
+    } else {
+        // Normal load
+        d.loadFactor = 1.0
+    }</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code>newLimit := int64(float64(d.baseLimit) * d.loadFactor)
+atomic.StoreInt64(&amp;d.currentLimit, newLimit)
+d.lastAdjust = time.Now()
+</code></pre></div></td></tr></table></div>
+<p>}</p>
+<p>func (d *DynamicRateLimiter) GetLimit() int64 {
+    return atomic.LoadInt64(&amp;d.currentLimit)
+}</p>
+<p>func main() {
+    limiter := NewDynamicRateLimiter(100) // Base limit of 100</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span>
+<span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><code>fmt.Printf(&quot;Initial limit: %d\n&quot;, limiter.GetLimit())
+
+// Simulate high load
+limiter.AdjustLimit(0.9)
+fmt.Printf(&quot;High load limit: %d\n&quot;, limiter.GetLimit())
+
+// Simulate low load
+limiter.AdjustLimit(0.3)
+fmt.Printf(&quot;Low load limit: %d\n&quot;, limiter.GetLimit())
+</code></pre></div></td></tr></table></div>
+<p>}
+```</p>
+</div>
+<h2 id="real-world-example-api-rate-limiting-middleware">Real-World Example: API Rate Limiting Middleware</h2>
+<p>Let's create a comprehensive example that demonstrates rate limiting in a web API context:</p>
+<div class="admonition example">
+<p class="admonition-title">API Rate Limiting Middleware</p>
+<p>```go title="api_middleware.go" linums="1" hl_lines="8-150"
+package main</p>
+<p>import (
+    "fmt"
+    "net/http"
+    "sync"
+    "time"
+    "golang.org/x/time/rate"
+)</p>
+<p>// RateLimiterConfig holds configuration for rate limiting
+type RateLimiterConfig struct {
+    RequestsPerSecond int
+    BurstSize        int
+    CleanupInterval  time.Duration
+}</p>
+<p>// ClientRateLimiter tracks rate limiting per client
+type ClientRateLimiter struct {
+    limiter  *rate.Limiter
+    lastSeen time.Time
+}</p>
+<p>// RateLimitMiddleware implements rate limiting middleware
+type RateLimitMiddleware struct {
+    limiters map[string]*ClientRateLimiter
+    mu       sync.RWMutex
+    config   RateLimiterConfig
+}</p>
+<p>// NewRateLimitMiddleware creates a new rate limiting middleware
+func NewRateLimitMiddleware(config RateLimiterConfig) <em>RateLimitMiddleware {
+    m := &amp;RateLimitMiddleware{
+        limiters: make(map[string]</em>ClientRateLimiter),
+        config:   config,
+    }</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span></pre></div></td><td class="code"><div><pre><span></span><code>// Start cleanup goroutine
+go m.cleanupStaleLimiters()
+
+return m
+</code></pre></div></td></tr></table></div>
+<p>}</p>
+<p>// cleanupStaleLimiters removes limiters that haven't been used recently
+func (m *RateLimitMiddleware) cleanupStaleLimiters() {
+    ticker := time.NewTicker(m.config.CleanupInterval)
+    defer ticker.Stop()</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span>
+<span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><code>for range ticker.C {
+    m.mu.Lock()
+    for ip, limiter := range m.limiters {
+        if time.Since(limiter.lastSeen) &gt; m.config.CleanupInterval {
+            delete(m.limiters, ip)
+        }
+    }
+    m.mu.Unlock()
+}
+</code></pre></div></td></tr></table></div>
+<p>}</p>
+<p>// getLimiter returns a rate limiter for the given IP
+func (m <em>RateLimitMiddleware) getLimiter(ip string) </em>rate.Limiter {
+    m.mu.Lock()
+    defer m.mu.Unlock()</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span></pre></div></td><td class="code"><div><pre><span></span><code>limiter, exists := m.limiters[ip]
+if !exists {
+    limiter = &amp;ClientRateLimiter{
+        limiter: rate.NewLimiter(
+            rate.Limit(m.config.RequestsPerSecond),
+            m.config.BurstSize,
+        ),
+        lastSeen: time.Now(),
+    }
+    m.limiters[ip] = limiter
+}
+
+limiter.lastSeen = time.Now()
+return limiter.limiter
+</code></pre></div></td></tr></table></div>
+<p>}</p>
+<p>// Middleware returns the HTTP middleware handler
+func (m <em>RateLimitMiddleware) Middleware(next http.Handler) http.Handler {
+    return http.HandlerFunc(func(w http.ResponseWriter, r </em>http.Request) {
+        // Get client IP (simplified for example)
+        ip := r.RemoteAddr</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span></pre></div></td><td class="code"><div><pre><span></span><code>    // Get rate limiter for this IP
+    limiter := m.getLimiter(ip)
+
+    // Check if request is allowed
+    if !limiter.Allow() {
+        http.Error(w, &quot;Rate limit exceeded&quot;, http.StatusTooManyRequests)
+        return
+    }
+
+    // Add rate limit headers
+    w.Header().Set(&quot;X-RateLimit-Limit&quot;, fmt.Sprintf(&quot;%d&quot;, m.config.RequestsPerSecond))
+    w.Header().Set(&quot;X-RateLimit-Remaining&quot;, fmt.Sprintf(&quot;%d&quot;, limiter.Tokens()))
+    w.Header().Set(&quot;X-RateLimit-Reset&quot;, fmt.Sprintf(&quot;%d&quot;, time.Now().Add(time.Second).Unix()))
+
+    // Call next handler
+    next.ServeHTTP(w, r)
+})
+</code></pre></div></td></tr></table></div>
+<p>}</p>
+<p>// APIHandler is a simple API endpoint handler
+func APIHandler(w http.ResponseWriter, r *http.Request) {
+    fmt.Fprintf(w, "API request processed successfully")
+}</p>
+<p>func main() {
+    // Create rate limiting middleware
+    config := RateLimiterConfig{
+        RequestsPerSecond: 10,
+        BurstSize:        20,
+        CleanupInterval:  time.Hour,
+    }</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span></pre></div></td><td class="code"><div><pre><span></span><code>rateLimitMiddleware := NewRateLimitMiddleware(config)
+
+// Create router
+mux := http.NewServeMux()
+
+// Apply middleware to API endpoint
+mux.Handle(&quot;/api&quot;, rateLimitMiddleware.Middleware(http.HandlerFunc(APIHandler)))
+
+// Start server
+fmt.Println(&quot;Server starting on :8080&quot;)
+http.ListenAndServe(&quot;:8080&quot;, mux)
+</code></pre></div></td></tr></table></div>
+<p>}
+```</p>
+</div>
+<h3 id="how-this-example-demonstrates-rate-limiting-concepts">How This Example Demonstrates Rate Limiting Concepts:</h3>
+<ol>
+<li><strong>Token Bucket Implementation</strong>:</li>
+<li>Uses Go's <code>x/time/rate</code> package for production-ready token bucket</li>
+<li>
+<p>Configurable requests per second and burst size</p>
+</li>
+<li>
+<p><strong>Per-Client Rate Limiting</strong>:</p>
+</li>
+<li>Tracks rate limiters separately for each client IP</li>
+<li>
+<p>Prevents one client from affecting others</p>
+</li>
+<li>
+<p><strong>Resource Management</strong>:</p>
+</li>
+<li>Cleanup goroutine removes stale limiters to prevent memory leaks</li>
+<li>
+<p>Thread-safe access to limiters map</p>
+</li>
+<li>
+<p><strong>HTTP Integration</strong>:</p>
+</li>
+<li>Implements standard HTTP middleware pattern</li>
+<li>Returns appropriate HTTP status codes (429 for rate limit exceeded)</li>
+<li>
+<p>Includes rate limit headers for client information</p>
+</li>
+<li>
+<p><strong>Configurable Parameters</strong>:</p>
+</li>
+<li>Easy to adjust rate limits based on requirements</li>
+<li>Separate configuration for burst size and sustained rate</li>
+</ol>
+<h2 id="quick-reference">Quick Reference</h2>
+<div class="admonition success">
+<p class="admonition-title">Key Takeaways</p>
+<ul>
+<li><strong>Token Bucket</strong>: Best for allowing controlled bursts, refills at fixed rate, ideal for APIs</li>
+<li><strong>Fixed Window Counter</strong>: Simple implementation, but vulnerable to boundary bursts</li>
+<li><strong>Leaky Bucket</strong>: Smooths traffic, prevents bursts, good for steady processing</li>
+<li><strong>Go's x/time/rate</strong>: Production-ready Token Bucket implementation in standard library</li>
+<li><strong>Distributed Rate Limiting</strong>: Use Redis or similar for coordination across multiple instances</li>
+<li><strong>Algorithm Selection</strong>: Choose based on burst tolerance, implementation complexity, and traffic patterns</li>
+<li><strong>Multi-tier Limiting</strong>: Implement different limits for different user tiers or endpoints</li>
+<li><strong>Dynamic Adjustment</strong>: Monitor system load and adjust limits dynamically</li>
+<li><strong>HTTP Integration</strong>: Implement as middleware with proper status codes and headers</li>
+<li><strong>Resource Management</strong>: Clean up stale limiters to prevent memory leaks</li>
+</ul>
+</div>
+<div class="admonition quote">
+<p class="admonition-title">Remember</p>
+<p>"Rate limiting is a critical component of any robust service, protecting against abuse, managing resources, and ensuring fair usage. The choice of algorithm depends on your specific requirements: Token Bucket for controlled bursts, Fixed Window for simplicity, and Leaky Bucket for traffic smoothing. By implementing proper rate limiting, you can build more resilient and user-friendly services that handle traffic spikes gracefully while maintaining system stability."}</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://linkedin.com" target="_blank" rel="noopener" title="linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zM102.2 96a38.5 38.5 0 1 1 0 77 38.5 38.5 0 1 1 0-77m282.1 320h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.footer", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
