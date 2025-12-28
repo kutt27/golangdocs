@@ -1,0 +1,3457 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://kutt27.github.io/golangdocs/3.%20Advanced/9.%20Stateful-Goroutines/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>9. Stateful Goroutines - GolangDocs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:300,300i,400,400i,700,700i%7CSource+Code+Pro:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"PT Serif";--md-code-font:"Source Code Pro"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="light-blue" data-md-color-accent="deep-purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#stateful-goroutines-in-go-a-comprehensive-guide" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="GolangDocs" class="md-header__button md-logo" aria-label="GolangDocs" data-md-component="logo">
+      
+  <img src="../../assets/layers.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            GolangDocs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              9. Stateful Goroutines
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="light-blue" data-md-color-accent="deep-purple"  aria-label="Dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="deep-purple"  aria-label="Light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="GolangDocs" class="md-nav__button md-logo" aria-label="GolangDocs" data-md-component="logo">
+      
+  <img src="../../assets/layers.png" alt="logo">
+
+    </a>
+    GolangDocs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Basics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Basics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/1.%20Hello-World/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/2.%20Go-Compiler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Go Compiler
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/3.%20Data-Types/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Types
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/4.%20Standard%20Library/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Standard Library
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/5.%20If-and%20While/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Control Structures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/6.%20Conditionals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conditionals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/7.%20Arrays/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Arrays
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/8.%20Slices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Slices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/9.%20Maps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Maps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/10.%20Range/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Range
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/11.%20Functions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Functions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/12.%20Control-Flow-Mechanism/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Control Flow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/13.%20Init/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Init
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#understanding-stateful-goroutines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Understanding Stateful Goroutines
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Understanding Stateful Goroutines">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core-principles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Core Principles
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#basic-stateful-goroutine-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic Stateful Goroutine Pattern
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#actor-model-implementation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Actor Model Implementation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Patterns
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Common Patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-worker-pool-with-shared-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Worker Pool with Shared State
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-chat-room-with-stateful-goroutines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Chat Room with Stateful Goroutines
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-rate-limiter-with-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Rate Limiter with State
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#best-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Best Practices
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pitfalls-and-solutions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pitfalls and Solutions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#real-world-example-distributed-task-queue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Real-World Example: Distributed Task Queue
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Real-World Example: Distributed Task Queue">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-this-example-demonstrates-stateful-goroutine-concepts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How This Example Demonstrates Stateful Goroutine Concepts:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<p>{</p>
+<h1 id="stateful-goroutines-in-go-a-comprehensive-guide">Stateful Goroutines in Go: A Comprehensive Guide</h1>
+<div class="admonition abstract">
+<p class="admonition-title">Overview</p>
+<p>Master stateful goroutines in Go to build concurrent systems that maintain state without locks. Learn how to encapsulate state within goroutines and communicate via channels, following the "Do not communicate by sharing memory; instead, share memory by communicating" philosophy. Understand the actor model, common patterns, and best practices for building robust, concurrent state management in Go.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Key Points</p>
+<ul>
+<li><strong>Stateful Goroutines</strong>: Goroutines that encapsulate and manage state, communicating via channels rather than shared memory</li>
+<li><strong>Actor Model</strong>: Each stateful goroutine acts as an independent actor with its own state and message queue</li>
+<li><strong>Channel Communication</strong>: Use channels for all state operations, ensuring thread-safe access without locks</li>
+<li><strong>Common Patterns</strong>: Counter, bank account, chat room, and worker pool with state</li>
+<li><strong>Benefits</strong>: Eliminates race conditions, simplifies concurrency, and provides clear state boundaries</li>
+<li><strong>Pitfalls</strong>: Deadlocks, goroutine leaks, and complex error handling require careful design</li>
+<li><strong>Best Practices</strong>: Always handle shutdown gracefully, use buffered channels appropriately, and test thoroughly</li>
+<li><strong>Performance</strong>: Stateful goroutines can be more efficient than mutex-based solutions for high-contention scenarios</li>
+</ul>
+</div>
+<h2 id="understanding-stateful-goroutines">Understanding Stateful Goroutines</h2>
+<p>Stateful goroutines are a powerful concurrency pattern in Go where each goroutine maintains its own private state and communicates with other goroutines exclusively through channels. This approach follows Go's core philosophy of communication over shared memory, providing a clean way to manage state in concurrent systems.</p>
+<div class="admonition info">
+<p class="admonition-title">Stateful Goroutine Architecture</p>
+<pre class="mermaid"><code>graph TB
+    A[Client Goroutines] --&gt;|Messages| B[Stateful Goroutine]
+    B --&gt; C[Private State]
+    B --&gt; D[Message Queue]
+    D --&gt; E[Process Messages]
+    E --&gt; F[Update State]
+    E --&gt; G[Send Response]
+    style A fill:#ccf,stroke:#333,stroke-width:2px,color:#000
+    style B fill:#f9f,stroke:#333,stroke-width:2px,color:#000
+    style C fill:#9cf,stroke:#333,stroke-width:2px,color:#000</code></pre>
+</div>
+<h3 id="core-principles">Core Principles</h3>
+<ol>
+<li><strong>Encapsulation</strong>: State is private to the goroutine and never shared directly</li>
+<li><strong>Message Passing</strong>: All state modifications happen through channel messages</li>
+<li><strong>Sequential Processing</strong>: Messages are processed one at a time, ensuring consistency</li>
+<li><strong>Isolation</strong>: Each stateful goroutine operates independently, reducing contention</li>
+</ol>
+<h2 id="basic-stateful-goroutine-pattern">Basic Stateful Goroutine Pattern</h2>
+<div class="admonition example">
+<p class="admonition-title">Simple Counter with Stateful Goroutine</p>
+<p>```go title="counter.go" linums="1" hl_lines="8-60"
+package main</p>
+<p>import (
+    "fmt"
+    "sync"
+    "time"
+)</p>
+<p>// Command represents an operation on the counter
+type Command struct {
+    Op    string // "increment", "decrement", "get", "quit"
+    Value int    // For increment/decrement
+    Resp  chan int // Channel for response
+}</p>
+<p>// counterGoroutine manages the counter state
+func counterGoroutine(commands &lt;-chan Command) {
+    counter := 0 // Private state</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span></pre></div></td><td class="code"><div><pre><span></span><code>for cmd := range commands {
+    switch cmd.Op {
+    case &quot;increment&quot;:
+        counter += cmd.Value
+        if cmd.Resp != nil {
+            cmd.Resp &lt;- counter
+        }
+    case &quot;decrement&quot;:
+        counter -= cmd.Value
+        if cmd.Resp != nil {
+            cmd.Resp &lt;- counter
+        }
+    case &quot;get&quot;:
+        if cmd.Resp != nil {
+            cmd.Resp &lt;- counter
+        }
+    case &quot;quit&quot;:
+        return
+    }
+}
+</code></pre></div></td></tr></table></div>
+<p>}</p>
+<p>func main() {
+    commands := make(chan Command, 10)</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span></pre></div></td><td class="code"><div><pre><span></span><code>// Start the counter goroutine
+go counterGoroutine(commands)
+
+var wg sync.WaitGroup
+
+// Start multiple goroutines to interact with the counter
+for i := 0; i &lt; 5; i++ {
+    wg.Add(1)
+    go func(id int) {
+        defer wg.Done()
+
+        for j := 0; j &lt; 3; j++ {
+            resp := make(chan int, 1)
+            commands &lt;- Command{Op: &quot;increment&quot;, Value: 1, Resp: resp}
+            value := &lt;-resp
+            fmt.Printf(&quot;Worker %d: Counter = %d\n&quot;, id, value)
+            time.Sleep(time.Millisecond * 100)
+        }
+    }(i)
+}
+
+wg.Wait()
+
+// Get final value
+resp := make(chan int, 1)
+commands &lt;- Command{Op: &quot;get&quot;, Resp: resp}
+fmt.Printf(&quot;Final counter value: %d\n&quot;, &lt;-resp)
+
+// Shutdown the goroutine
+commands &lt;- Command{Op: &quot;quit&quot;}
+close(commands)
+</code></pre></div></td></tr></table></div>
+<p>}
+```</p>
+</div>
+<h2 id="actor-model-implementation">Actor Model Implementation</h2>
+<p>The actor model is a conceptual model where concurrent computation is performed by actors, which are stateful goroutines that respond to messages.</p>
+<div class="admonition example">
+<p class="admonition-title">Actor Model Example</p>
+<p>```go title="actor_model.go" linums="1" hl_lines="8-100"
+package main</p>
+<p>import (
+    "fmt"
+    "math/rand"
+    "time"
+)</p>
+<p>// Message represents a message sent to an actor
+type Message interface {
+    Sender() *Actor
+    Content() interface{}
+}</p>
+<p>// BaseMessage implements the Message interface
+type BaseMessage struct {
+    sender  *Actor
+    content interface{}
+}</p>
+<p>func (m BaseMessage) Sender() *Actor    { return m.sender }
+func (m BaseMessage) Content() interface{} { return m.content }</p>
+<p>// Actor represents a stateful goroutine
+type Actor struct {
+    inbox    chan Message
+    handlers map[string]func(Message)
+    state    interface{}
+}</p>
+<p>// NewActor creates a new actor
+func NewActor(initialState interface{}) *Actor {
+    return &amp;Actor{
+        inbox:    make(chan Message, 100),
+        handlers: make(map[string]func(Message)),
+        state:    initialState,
+    }
+}</p>
+<p>// RegisterHandler registers a message handler
+func (a *Actor) RegisterHandler(msgType string, handler func(Message)) {
+    a.handlers[msgType] = handler
+}</p>
+<p>// Send sends a message to the actor
+func (a *Actor) Send(msg Message) {
+    a.inbox &lt;- msg
+}</p>
+<p>// Start starts the actor's message processing loop
+func (a *Actor) Start() {
+    go func() {
+        for msg := range a.inbox {
+            if handler, exists := a.handlers[msg.Content().(string)]; exists {
+                handler(msg)
+            }
+        }
+    }()
+}</p>
+<p>// Stop stops the actor
+func (a *Actor) Stop() {
+    close(a.inbox)
+}</p>
+<p>// BankAccount represents a bank account actor
+type BankAccount struct {
+    balance float64
+    owner   string
+}</p>
+<p>// BankAccountMessage represents a bank account operation
+type BankAccountMessage struct {
+    Operation string
+    Amount    float64
+    Sender    *Actor
+}</p>
+<p>func main() {
+    // Create a bank account actor
+    account := NewActor(&amp;BankAccount{
+        balance: 1000.0,
+        owner:   "Alice",
+    })</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span></pre></div></td><td class="code"><div><pre><span></span><code>// Register handlers
+account.RegisterHandler(&quot;deposit&quot;, func(msg Message) {
+    content := msg.Content().(BankAccountMessage)
+    state := account.state.(*BankAccount)
+    state.balance += content.Amount
+    fmt.Printf(&quot;Deposited %.2f, new balance: %.2f\n&quot;, content.Amount, state.balance)
+})
+
+account.RegisterHandler(&quot;withdraw&quot;, func(msg Message) {
+    content := msg.Content().(BankAccountMessage)
+    state := account.state.(*BankAccount)
+    if state.balance &gt;= content.Amount {
+        state.balance -= content.Amount
+        fmt.Printf(&quot;Withdrew %.2f, new balance: %.2f\n&quot;, content.Amount, state.balance)
+    } else {
+        fmt.Printf(&quot;Insufficient funds for withdrawal of %.2f\n&quot;, content.Amount)
+    }
+})
+
+account.RegisterHandler(&quot;balance&quot;, func(msg Message) {
+    state := account.state.(*BankAccount)
+    fmt.Printf(&quot;Current balance: %.2f\n&quot;, state.balance)
+})
+
+// Start the actor
+account.Start()
+
+// Simulate transactions
+transactions := []BankAccountMessage{
+    {&quot;deposit&quot;, 500.0, nil},
+    {&quot;withdraw&quot;, 200.0, nil},
+    {&quot;withdraw&quot;, 1500.0, nil}, // Should fail
+    {&quot;balance&quot;, 0, nil},
+    {&quot;deposit&quot;, 300.0, nil},
+    {&quot;balance&quot;, 0, nil},
+}
+
+for _, tx := range transactions {
+    account.Send(BaseMessage{
+        sender:  nil,
+        content: tx,
+    })
+    time.Sleep(time.Millisecond * 100)
+}
+
+// Stop the actor
+time.Sleep(time.Second)
+account.Stop()
+</code></pre></div></td></tr></table></div>
+<p>}
+```</p>
+</div>
+<h2 id="common-patterns">Common Patterns</h2>
+<h3 id="1-worker-pool-with-shared-state">1. Worker Pool with Shared State</h3>
+<div class="admonition example">
+<p class="admonition-title">Worker Pool with Shared State</p>
+<p>```go title="worker_pool_state.go" linums="1" hl_lines="8-90"
+package main</p>
+<p>import (
+    "fmt"
+    "sync"
+    "time"
+)</p>
+<p>// Task represents a unit of work
+type Task struct {
+    ID   int
+    Data string
+}</p>
+<p>// Result represents the result of a task
+type Result struct {
+    TaskID int
+    Output string
+    Error  error
+}</p>
+<p>// WorkerPoolCommand represents a command to the worker pool
+type WorkerPoolCommand struct {
+    Op      string // "add", "remove", "status", "quit"
+    Task    Task
+    WorkerID int
+    Resp    chan interface{}
+}</p>
+<p>// WorkerPool manages a pool of workers with shared state
+func WorkerPool(commands &lt;-chan WorkerPoolCommand) {
+    workers := make(map[int]chan Task)
+    results := make(chan Result, 100)
+    nextID := 1</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span></pre></div></td><td class="code"><div><pre><span></span><code>for cmd := range commands {
+    switch cmd.Op {
+    case &quot;add&quot;:
+        workerID := nextID
+        nextID++
+
+        // Create worker channels
+        taskCh := make(chan Task, 10)
+        workers[workerID] = taskCh
+
+        // Start worker goroutine
+        go func(id int, tasks &lt;-chan Task) {
+            for task := range tasks {
+                // Simulate work
+                time.Sleep(time.Duration(task.ID%3+1) * 100 * time.Millisecond)
+
+                // Simulate occasional errors
+                var err error
+                if task.ID%7 == 0 {
+                    err = fmt.Errorf(&quot;worker %d failed on task %d&quot;, id, task.ID)
+                }
+
+                results &lt;- Result{
+                    TaskID: task.ID,
+                    Output: fmt.Sprintf(&quot;Worker %d processed: %s&quot;, id, task.Data),
+                    Error:  err,
+                }
+            }
+        }(workerID, taskCh)
+
+        if cmd.Resp != nil {
+            cmd.Resp &lt;- workerID
+        }
+
+    case &quot;remove&quot;:
+        if taskCh, exists := workers[cmd.WorkerID]; exists {
+            close(taskCh)
+            delete(workers, cmd.WorkerID)
+            if cmd.Resp != nil {
+                cmd.Resp &lt;- nil
+            }
+        } else if cmd.Resp != nil {
+            cmd.Resp &lt;- fmt.Errorf(&quot;worker not found&quot;)
+        }
+
+    case &quot;status&quot;:
+        status := struct {
+            WorkerCount int
+            ActiveTasks int
+        }{
+            WorkerCount: len(workers),
+            ActiveTasks: len(results),
+        }
+        if cmd.Resp != nil {
+            cmd.Resp &lt;- status
+        }
+
+    case &quot;quit&quot;:
+        // Close all worker channels
+        for id, taskCh := range workers {
+            close(taskCh)
+            fmt.Printf(&quot;Stopped worker %d\n&quot;, id)
+        }
+        return
+    }
+}
+</code></pre></div></td></tr></table></div>
+<p>}</p>
+<p>func main() {
+    commands := make(chan WorkerPoolCommand, 10)</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span></pre></div></td><td class="code"><div><pre><span></span><code>// Start the worker pool
+go WorkerPool(commands)
+
+// Add workers
+for i := 0; i &lt; 3; i++ {
+    resp := make(chan interface{}, 1)
+    commands &lt;- WorkerPoolCommand{Op: &quot;add&quot;, Resp: resp}
+    workerID := &lt;-resp
+    fmt.Printf(&quot;Added worker %d\n&quot;, workerID)
+}
+
+// Submit tasks
+var wg sync.WaitGroup
+for i := 1; i &lt;= 10; i++ {
+    wg.Add(1)
+    go func(taskID int) {
+        defer wg.Done()
+
+        // Get a random worker
+        workerID := (taskID % 3) + 1
+
+        // Submit task (in a real system, we&#39;d route to specific workers)
+        resp := make(chan interface{}, 1)
+        commands &lt;- WorkerPoolCommand{
+            Op:      &quot;status&quot;,
+            Resp:    resp,
+        }
+        status := &lt;-resp
+
+        fmt.Printf(&quot;Task %d submitted (workers: %d)\n&quot;, taskID, status.(struct {
+            WorkerCount int
+            ActiveTasks int
+        }).WorkerCount)
+    }(i)
+}
+
+wg.Wait()
+
+// Check status
+resp := make(chan interface{}, 1)
+commands &lt;- WorkerPoolCommand{Op: &quot;status&quot;, Resp: resp}
+status := &lt;-resp
+fmt.Printf(&quot;Final status: %+v\n&quot;, status)
+
+// Shutdown
+commands &lt;- WorkerPoolCommand{Op: &quot;quit&quot;}
+close(commands)
+</code></pre></div></td></tr></table></div>
+<p>}
+```</p>
+</div>
+<h3 id="2-chat-room-with-stateful-goroutines">2. Chat Room with Stateful Goroutines</h3>
+<div class="admonition example">
+<p class="admonition-title">Chat Room Implementation</p>
+<p>```go title="chat_room.go" linums="1" hl_lines="8-120"
+package main</p>
+<p>import (
+    "bufio"
+    "fmt"
+    "os"
+    "strings"
+    "sync"
+    "time"
+)</p>
+<p>// Message represents a chat message
+type Message struct {
+    User    string
+    Content string
+    Time    time.Time
+}</p>
+<p>// ChatCommand represents a command to the chat room
+type ChatCommand struct {
+    Op      string // "join", "leave", "message", "history", "quit"
+    User    string
+    Content string
+    Resp    chan interface{}
+}</p>
+<p>// ChatRoom manages the chat state
+func ChatRoom(commands &lt;-chan ChatCommand) {
+    users := make(map[string]chan Message)
+    history := make([]Message, 0, 100)</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span></pre></div></td><td class="code"><div><pre><span></span><code>for cmd := range commands {
+    switch cmd.Op {
+    case &quot;join&quot;:
+        if _, exists := users[cmd.User]; !exists {
+            userCh := make(chan Message, 50)
+            users[cmd.User] = userCh
+
+            // Broadcast join message
+            joinMsg := Message{
+                User:    &quot;System&quot;,
+                Content: fmt.Sprintf(&quot;%s joined the chat&quot;, cmd.User),
+                Time:    time.Now(),
+            }
+            broadcastMessage(users, joinMsg)
+
+            if cmd.Resp != nil {
+                cmd.Resp &lt;- userCh
+            }
+        } else if cmd.Resp != nil {
+            cmd.Resp &lt;- fmt.Errorf(&quot;user already exists&quot;)
+        }
+
+    case &quot;leave&quot;:
+        if userCh, exists := users[cmd.User]; exists {
+            // Broadcast leave message
+            leaveMsg := Message{
+                User:    &quot;System&quot;,
+                Content: fmt.Sprintf(&quot;%s left the chat&quot;, cmd.User),
+                Time:    time.Now(),
+            }
+            broadcastMessage(users, leaveMsg)
+
+            // Remove user
+            close(userCh)
+            delete(users, cmd.User)
+
+            if cmd.Resp != nil {
+                cmd.Resp &lt;- nil
+            }
+        } else if cmd.Resp != nil {
+            cmd.Resp &lt;- fmt.Errorf(&quot;user not found&quot;)
+        }
+
+    case &quot;message&quot;:
+        if _, exists := users[cmd.User]; exists {
+            msg := Message{
+                User:    cmd.User,
+                Content: cmd.Content,
+                Time:    time.Now(),
+            }
+
+            // Add to history
+            history = append(history, msg)
+            if len(history) &gt; 100 {
+                history = history[1:]
+            }
+
+            // Broadcast to all users
+            broadcastMessage(users, msg)
+
+            if cmd.Resp != nil {
+                cmd.Resp &lt;- nil
+            }
+        } else if cmd.Resp != nil {
+            cmd.Resp &lt;- fmt.Errorf(&quot;user not in chat&quot;)
+        }
+
+    case &quot;history&quot;:
+        if cmd.Resp != nil {
+            cmd.Resp &lt;- history
+        }
+
+    case &quot;quit&quot;:
+        // Close all user channels
+        for user, userCh := range users {
+            close(userCh)
+            fmt.Printf(&quot;Removed user %s\n&quot;, user)
+        }
+        return
+    }
+}
+</code></pre></div></td></tr></table></div>
+<p>}</p>
+<p>// broadcastMessage sends a message to all users
+func broadcastMessage(users map[string]chan Message, msg Message) {
+    for _, userCh := range users {
+        select {
+        case userCh &lt;- msg:
+            // Message sent
+        default:
+            // User channel full, message dropped
+        }
+    }
+}</p>
+<p>// userSimulator simulates a chat user
+func userSimulator(name string, commands chan&lt;- ChatCommand, wg *sync.WaitGroup) {
+    defer wg.Done()</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span></pre></div></td><td class="code"><div><pre><span></span><code>// Join the chat
+resp := make(chan interface{}, 1)
+commands &lt;- ChatCommand{Op: &quot;join&quot;, User: name, Resp: resp}
+userCh := &lt;-resp.(chan Message)
+
+// Start listening for messages
+go func() {
+    for msg := range userCh {
+        fmt.Printf(&quot;[%s] %s: %s\n&quot;, msg.Time.Format(&quot;15:04:05&quot;), msg.User, msg.Content)
+    }
+}()
+
+// Send some messages
+messages := []string{
+    &quot;Hello everyone!&quot;,
+    &quot;How are you doing?&quot;,
+    &quot;Nice weather today&quot;,
+    &quot;Goodbye!&quot;,
+}
+
+for _, msg := range messages {
+    commands &lt;- ChatCommand{Op: &quot;message&quot;, User: name, Content: msg}
+    time.Sleep(time.Millisecond * 500)
+}
+
+// Leave the chat
+commands &lt;- ChatCommand{Op: &quot;leave&quot;, User: name}
+</code></pre></div></td></tr></table></div>
+<p>}</p>
+<p>func main() {
+    commands := make(chan ChatCommand, 10)</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span></pre></div></td><td class="code"><div><pre><span></span><code>// Start the chat room
+go ChatRoom(commands)
+
+var wg sync.WaitGroup
+
+// Start user simulators
+users := []string{&quot;Alice&quot;, &quot;Bob&quot;, &quot;Charlie&quot;}
+for _, user := range users {
+    wg.Add(1)
+    go userSimulator(user, commands, &amp;wg)
+}
+
+// Wait for all users to finish
+wg.Wait()
+
+// Get chat history
+resp := make(chan interface{}, 1)
+commands &lt;- ChatCommand{Op: &quot;history&quot;, Resp: resp}
+history := &lt;-resp.([]Message)
+
+fmt.Printf(&quot;\nChat History (%d messages):\n&quot;, len(history))
+for _, msg := range history {
+    fmt.Printf(&quot;[%s] %s: %s\n&quot;, msg.Time.Format(&quot;15:04:05&quot;), msg.User, msg.Content)
+}
+
+// Shutdown
+commands &lt;- ChatCommand{Op: &quot;quit&quot;}
+close(commands)
+</code></pre></div></td></tr></table></div>
+<p>}
+```</p>
+</div>
+<h3 id="3-rate-limiter-with-state">3. Rate Limiter with State</h3>
+<div class="admonition example">
+<p class="admonition-title">Rate Limiter Stateful Goroutine</p>
+<p>```go title="rate_limiter.go" linums="1" hl_lines="8-80"
+package main</p>
+<p>import (
+    "fmt"
+    "sync"
+    "time"
+)</p>
+<p>// RateLimitCommand represents a command to the rate limiter
+type RateLimitCommand struct {
+    Op      string // "allow", "reset", "status", "quit"
+    Key     string
+    Tokens  int
+    Resp    chan bool
+}</p>
+<p>// RateLimiter manages rate limiting state
+func RateLimiter(commands &lt;-chan RateLimitCommand) {
+    // State: map of key to (tokens, lastRefill)
+    limiters := make(map[string]struct {
+        tokens    int
+        lastRefill time.Time
+    })</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span></pre></div></td><td class="code"><div><pre><span></span><code>// Configuration
+maxTokens := 10
+refillRate := time.Second
+
+ticker := time.NewTicker(100 * time.Millisecond)
+defer ticker.Stop()
+
+for {
+    select {
+    case cmd := &lt;-commands:
+        switch cmd.Op {
+        case &quot;allow&quot;:
+            state, exists := limiters[cmd.Key]
+            if !exists {
+                state = struct {
+                    tokens    int
+                    lastRefill time.Time
+                }{
+                    tokens:    maxTokens,
+                    lastRefill: time.Now(),
+                }
+                limiters[cmd.Key] = state
+            }
+
+            // Check if we have enough tokens
+            if state.tokens &gt;= cmd.Tokens {
+                state.tokens -= cmd.Tokens
+                limiters[cmd.Key] = state
+                if cmd.Resp != nil {
+                    cmd.Resp &lt;- true
+                }
+            } else {
+                if cmd.Resp != nil {
+                    cmd.Resp &lt;- false
+                }
+            }
+
+        case &quot;reset&quot;:
+            if _, exists := limiters[cmd.Key]; exists {
+                delete(limiters, cmd.Key)
+            }
+            if cmd.Resp != nil {
+                cmd.Resp &lt;- true
+            }
+
+        case &quot;status&quot;:
+            if state, exists := limiters[cmd.Key]; exists {
+                status := struct {
+                    Tokens int
+                    Key    string
+                }{
+                    Tokens: state.tokens,
+                    Key:    cmd.Key,
+                }
+                if cmd.Resp != nil {
+                    cmd.Resp &lt;- status
+                }
+            } else if cmd.Resp != nil {
+                cmd.Resp &lt;- nil
+            }
+
+        case &quot;quit&quot;:
+            return
+        }
+
+    case &lt;-ticker.C:
+        // Refill tokens for all limiters
+        now := time.Now()
+        for key, state := range limiters {
+            elapsed := now.Sub(state.lastRefill)
+            if elapsed &gt;= refillRate {
+                tokensToAdd := int(elapsed / refillRate)
+                if tokensToAdd &gt; 0 {
+                    state.tokens = min(state.tokens+tokensToAdd, maxTokens)
+                    state.lastRefill = now
+                    limiters[key] = state
+                }
+            }
+        }
+    }
+}
+</code></pre></div></td></tr></table></div>
+<p>}</p>
+<p>func min(a, b int) int {
+    if a &lt; b {
+        return a
+    }
+    return b
+}</p>
+<p>func main() {
+    commands := make(chan RateLimitCommand, 10)</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span></pre></div></td><td class="code"><div><pre><span></span><code>// Start the rate limiter
+go RateLimiter(commands)
+
+var wg sync.WaitGroup
+
+// Simulate multiple clients
+clients := []string{&quot;client1&quot;, &quot;client2&quot;, &quot;client3&quot;}
+for _, client := range clients {
+    wg.Add(1)
+    go func(clientID string) {
+        defer wg.Done()
+
+        for i := 0; i &lt; 15; i++ {
+            resp := make(chan bool, 1)
+            commands &lt;- RateLimitCommand{
+                Op:     &quot;allow&quot;,
+                Key:    clientID,
+                Tokens: 1,
+                Resp:   resp,
+            }
+
+            allowed := &lt;-resp
+            if allowed {
+                fmt.Printf(&quot;%s: Request %d allowed\n&quot;, clientID, i+1)
+            } else {
+                fmt.Printf(&quot;%s: Request %d denied\n&quot;, clientID, i+1)
+            }
+
+            time.Sleep(200 * time.Millisecond)
+        }
+    }(client)
+}
+
+wg.Wait()
+
+// Check status
+for _, client := range clients {
+    resp := make(chan bool, 1)
+    commands &lt;- RateLimitCommand{
+        Op:   &quot;status&quot;,
+        Key:  client,
+        Resp: resp,
+    }
+    status := &lt;-resp
+    if status != nil {
+        fmt.Printf(&quot;%s status: %+v\n&quot;, client, status)
+    } else {
+        fmt.Printf(&quot;%s: No active limiter\n&quot;, client)
+    }
+}
+
+// Shutdown
+commands &lt;- RateLimitCommand{Op: &quot;quit&quot;}
+close(commands)
+</code></pre></div></td></tr></table></div>
+<p>}
+```</p>
+</div>
+<h2 id="best-practices">Best Practices</h2>
+<div class="admonition tip">
+<p class="admonition-title">Design Clear Message Protocols</p>
+<p>Define clear, type-safe message protocols for communication with stateful goroutines.</p>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Message Protocol Design</p>
+<p>```go title="message_protocol.go" linums="1" hl_lines="8-50"
+package main</p>
+<p>import (
+    "fmt"
+)</p>
+<p>// Use typed messages instead of string-based commands
+type DatabaseCommand interface {
+    Execute(db *DatabaseState) interface{}
+}</p>
+<p>type InsertCommand struct {
+    Key   string
+    Value interface{}
+}</p>
+<p>func (c InsertCommand) Execute(db *DatabaseState) interface{} {
+    db.data[c.Key] = c.Value
+    return nil
+}</p>
+<p>type GetCommand struct {
+    Key  string
+    Resp chan&lt;- interface{}
+}</p>
+<p>func (c GetCommand) Execute(db *DatabaseState) interface{} {
+    if value, exists := db.data[c.Key]; exists {
+        return value
+    }
+    return nil
+}</p>
+<p>type DeleteCommand struct {
+    Key string
+}</p>
+<p>func (c DeleteCommand) Execute(db *DatabaseState) interface{} {
+    delete(db.data, c.Key)
+    return nil
+}</p>
+<p>// DatabaseState encapsulates the database state
+type DatabaseState struct {
+    data map[string]interface{}
+}</p>
+<p>// DatabaseGoroutine manages the database state
+func DatabaseGoroutine(commands &lt;-chan DatabaseCommand) {
+    state := &amp;DatabaseState{
+        data: make(map[string]interface{}),
+    }</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code>for cmd := range commands {
+    result := cmd.Execute(state)
+
+    // Handle response if needed
+    if getCmd, ok := cmd.(GetCommand); ok {
+        getCmd.Resp &lt;- result
+    }
+}
+</code></pre></div></td></tr></table></div>
+<p>}</p>
+<p>func main() {
+    commands := make(chan DatabaseCommand, 10)</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span><code>go DatabaseGoroutine(commands)
+
+// Insert data
+commands &lt;- InsertCommand{Key: &quot;name&quot;, Value: &quot;Alice&quot;}
+commands &lt;- InsertCommand{Key: &quot;age&quot;, Value: 30}
+
+// Get data
+resp := make(chan interface{}, 1)
+commands &lt;- GetCommand{Key: &quot;name&quot;, Resp: resp}
+fmt.Printf(&quot;Name: %v\n&quot;, &lt;-resp)
+
+// Delete data
+commands &lt;- DeleteCommand{Key: &quot;age&quot;}
+
+close(commands)
+</code></pre></div></td></tr></table></div>
+<p>}
+```</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Handle Graceful Shutdown</p>
+<p>Always implement proper shutdown mechanisms to prevent goroutine leaks.</p>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Graceful Shutdown</p>
+<p>```go title="graceful_shutdown.go" linums="1" hl_lines="8-60"
+package main</p>
+<p>import (
+    "context"
+    "fmt"
+    "sync"
+    "time"
+)</p>
+<p>// ServiceCommand represents a command to the service
+type ServiceCommand struct {
+    Op    string // "process", "status", "shutdown"
+    Data  string
+    Resp  chan&lt;- string
+}</p>
+<p>// Service manages the service state
+func Service(ctx context.Context, commands &lt;-chan ServiceCommand) {
+    activeRequests := 0
+    shutdownInitiated := false</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span></pre></div></td><td class="code"><div><pre><span></span><code>for {
+    select {
+    case cmd := &lt;-commands:
+        switch cmd.Op {
+        case &quot;process&quot;:
+            if shutdownInitiated {
+                if cmd.Resp != nil {
+                    cmd.Resp &lt;- &quot;service shutting down&quot;
+                }
+                continue
+            }
+
+            activeRequests++
+            go func(data string, resp chan&lt;- string) {
+                defer func() {
+                    commands &lt;- ServiceCommand{Op: &quot;complete&quot;}
+                }()
+
+                // Simulate work
+                time.Sleep(time.Second)
+
+                if resp != nil {
+                    resp &lt;- fmt.Sprintf(&quot;processed: %s&quot;, data)
+                }
+            }(cmd.Data, cmd.Resp)
+
+        case &quot;status&quot;:
+            status := fmt.Sprintf(&quot;active requests: %d, shutdown: %v&quot;, 
+                activeRequests, shutdownInitiated)
+            if cmd.Resp != nil {
+                cmd.Resp &lt;- status
+            }
+
+        case &quot;shutdown&quot;:
+            shutdownInitiated = true
+            if cmd.Resp != nil {
+                cmd.Resp &lt;- &quot;shutdown initiated&quot;
+            }
+
+        case &quot;complete&quot;:
+            activeRequests--
+            if shutdownInitiated &amp;&amp; activeRequests == 0 {
+                return
+            }
+        }
+
+    case &lt;-ctx.Done():
+        // Context cancelled, force shutdown
+        return
+    }
+}
+</code></pre></div></td></tr></table></div>
+<p>}</p>
+<p>func main() {
+    ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+    defer cancel()</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span></pre></div></td><td class="code"><div><pre><span></span><code>commands := make(chan ServiceCommand, 10)
+
+go Service(ctx, commands)
+
+// Send some requests
+for i := 0; i &lt; 5; i++ {
+    resp := make(chan string, 1)
+    commands &lt;- ServiceCommand{
+        Op:   &quot;process&quot;,
+        Data: fmt.Sprintf(&quot;task-%d&quot;, i),
+        Resp: resp,
+    }
+    fmt.Println(&lt;-resp)
+}
+
+// Initiate shutdown
+resp := make(chan string, 1)
+commands &lt;- ServiceCommand{Op: &quot;shutdown&quot;, Resp: resp}
+fmt.Println(&lt;-resp)
+
+// Wait for graceful shutdown
+time.Sleep(2 * time.Second)
+
+// Check status
+resp = make(chan string, 1)
+commands &lt;- ServiceCommand{Op: &quot;status&quot;, Resp: resp}
+fmt.Println(&lt;-resp)
+
+close(commands)
+</code></pre></div></td></tr></table></div>
+<p>}
+```</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Use Buffered Channels Appropriately</p>
+<p>Choose buffer sizes carefully to balance throughput and memory usage.</p>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Channel Buffering</p>
+<p>```go title="channel_buffering.go" linums="1" hl_lines="8-50"
+package main</p>
+<p>import (
+    "fmt"
+    "sync"
+    "time"
+)</p>
+<p>// WorkerCommand represents a command to the worker
+type WorkerCommand struct {
+    TaskID int
+    Data   string
+    Resp   chan&lt;- string
+}</p>
+<p>// Worker processes tasks
+func Worker(commands &lt;-chan WorkerCommand) {
+    for cmd := range commands {
+        // Simulate work
+        time.Sleep(time.Millisecond * time.Duration(cmd.TaskID%5+1)*100)</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code>    result := fmt.Sprintf(&quot;processed task %d: %s&quot;, cmd.TaskID, cmd.Data)
+    if cmd.Resp != nil {
+        cmd.Resp &lt;- result
+    }
+}
+</code></pre></div></td></tr></table></div>
+<p>}</p>
+<p>func main() {
+    // Unbuffered channel - synchronous
+    unbuffered := make(chan WorkerCommand)
+    go Worker(unbuffered)</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span></pre></div></td><td class="code"><div><pre><span></span><code>start := time.Now()
+var wg sync.WaitGroup
+
+for i := 0; i &lt; 5; i++ {
+    wg.Add(1)
+    go func(id int) {
+        defer wg.Done()
+        resp := make(chan string, 1)
+        unbuffered &lt;- WorkerCommand{TaskID: id, Data: fmt.Sprintf(&quot;task-%d&quot;, id), Resp: resp}
+        &lt;-resp
+    }(i)
+}
+
+wg.Wait()
+fmt.Printf(&quot;Unbuffered took: %v\n&quot;, time.Since(start))
+
+// Buffered channel - asynchronous
+buffered := make(chan WorkerCommand, 10)
+go Worker(buffered)
+
+start = time.Now()
+wg = sync.WaitGroup{}
+
+for i := 0; i &lt; 5; i++ {
+    wg.Add(1)
+    go func(id int) {
+        defer wg.Done()
+        resp := make(chan string, 1)
+        buffered &lt;- WorkerCommand{TaskID: id, Data: fmt.Sprintf(&quot;task-%d&quot;, id), Resp: resp}
+        &lt;-resp
+    }(i)
+}
+
+wg.Wait()
+fmt.Printf(&quot;Buffered took: %v\n&quot;, time.Since(start))
+
+close(unbuffered)
+close(buffered)
+</code></pre></div></td></tr></table></div>
+<p>}
+```</p>
+</div>
+<h2 id="pitfalls-and-solutions">Pitfalls and Solutions</h2>
+<div class="admonition tip">
+<p class="admonition-title">Avoid Deadlocks</p>
+<p>Be careful with circular dependencies and synchronous communication patterns.</p>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Deadlock Prevention</p>
+<p>```go title="deadlock_prevention.go" linums="1" hl_lines="8-60"
+package main</p>
+<p>import (
+    "fmt"
+    "time"
+)</p>
+<p>// Bad: Potential deadlock with synchronous communication
+type BadActor struct {
+    inbox chan string
+    peer  *BadActor
+}</p>
+<p>func NewBadActor() *BadActor {
+    return &amp;BadActor{
+        inbox: make(chan string),
+    }
+}</p>
+<p>func (a <em>BadActor) SetPeer(peer </em>BadActor) {
+    a.peer = peer
+}</p>
+<p>func (a *BadActor) Start() {
+    go func() {
+        for msg := range a.inbox {
+            fmt.Printf("Actor received: %s\n", msg)
+            // This can cause deadlock if both actors send to each other simultaneously
+            a.peer.inbox &lt;- "response"
+        }
+    }()
+}</p>
+<p>// Good: Asynchronous communication prevents deadlock
+type GoodActor struct {
+    inbox  chan string
+    peer   *GoodActor
+    quit   chan struct{}
+}</p>
+<p>func NewGoodActor() *GoodActor {
+    return &amp;GoodActor{
+        inbox: make(chan string, 10),
+        quit:  make(chan struct{}),
+    }
+}</p>
+<p>func (a <em>GoodActor) SetPeer(peer </em>GoodActor) {
+    a.peer = peer
+}</p>
+<p>func (a *GoodActor) Start() {
+    go func() {
+        for {
+            select {
+            case msg := &lt;-a.inbox:
+                fmt.Printf("Actor received: %s\n", msg)
+                // Use buffered channel and select to prevent blocking
+                select {
+                case a.peer.inbox &lt;- "response":
+                    // Sent successfully
+                default:
+                    // Peer busy, drop response or handle differently
+                    fmt.Println("Peer busy, response dropped")
+                }
+            case &lt;-a.quit:
+                return
+            }
+        }
+    }()
+}</p>
+<p>func (a *GoodActor) Stop() {
+    close(a.quit)
+}</p>
+<p>func main() {
+    // Demonstrate bad actor (commented out to avoid deadlock)
+    /*
+    actor1 := NewBadActor()
+    actor2 := NewBadActor()
+    actor1.SetPeer(actor2)
+    actor2.SetPeer(actor1)
+    actor1.Start()
+    actor2.Start()</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span></pre></div></td><td class="code"><div><pre><span></span><code>actor1.inbox &lt;- &quot;hello&quot;
+time.Sleep(time.Second)
+*/
+
+// Demonstrate good actor
+actor1 := NewGoodActor()
+actor2 := NewGoodActor()
+actor1.SetPeer(actor2)
+actor2.SetPeer(actor1)
+actor1.Start()
+actor2.Start()
+
+actor1.inbox &lt;- &quot;hello&quot;
+time.Sleep(time.Second)
+
+actor1.Stop()
+actor2.Stop()
+</code></pre></div></td></tr></table></div>
+<p>}
+```</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Prevent Goroutine Leaks</p>
+<p>Always provide a way to terminate stateful goroutines.</p>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Goroutine Leak Prevention</p>
+<p>```go title="goroutine_leak_prevention.go" linums="1" hl_lines="8-70"
+package main</p>
+<p>import (
+    "fmt"
+    "runtime"
+    "time"
+)</p>
+<p>// Bad: Goroutine that never terminates
+func badLeakyGoroutine(ch &lt;-chan int) {
+    for {
+        // This goroutine will never exit because it doesn't check for channel closure
+        val := &lt;-ch
+        fmt.Printf("Received: %d\n", val)
+    }
+}</p>
+<p>// Good: Goroutine that can terminate
+func goodGoroutine(ch &lt;-chan int, quit &lt;-chan struct{}) {
+    for {
+        select {
+        case val := &lt;-ch:
+            fmt.Printf("Received: %d\n", val)
+        case &lt;-quit:
+            fmt.Println("Goroutine quitting")
+            return
+        }
+    }
+}</p>
+<p>// Better: Using context for cancellation
+func betterGoroutine(ctx context.Context, ch &lt;-chan int) {
+    for {
+        select {
+        case val := &lt;-ch:
+            fmt.Printf("Received: %d\n", val)
+        case &lt;-ctx.Done():
+            fmt.Printf("Goroutine quitting: %v\n", ctx.Err())
+            return
+        }
+    }
+}</p>
+<p>func main() {
+    // Check initial goroutine count
+    fmt.Printf("Initial goroutines: %d\n", runtime.NumGoroutine())</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span></pre></div></td><td class="code"><div><pre><span></span><code>// Demonstrate leaky goroutine (commented out)
+/*
+leakyCh := make(chan int)
+go badLeakyGoroutine(leakyCh)
+leakyCh &lt;- 1
+fmt.Printf(&quot;After leaky goroutine: %d\n&quot;, runtime.NumGoroutine())
+*/
+
+// Demonstrate good goroutine
+goodCh := make(chan int)
+quit := make(chan struct{})
+go goodGoroutine(goodCh, quit)
+
+goodCh &lt;- 1
+goodCh &lt;- 2
+quit &lt;- struct{}{}
+time.Sleep(time.Millisecond) // Give goroutine time to quit
+fmt.Printf(&quot;After good goroutine: %d\n&quot;, runtime.NumGoroutine())
+
+// Demonstrate better goroutine with context
+ctx, cancel := context.WithCancel(context.Background())
+betterCh := make(chan int)
+go betterGoroutine(ctx, betterCh)
+
+betterCh &lt;- 1
+betterCh &lt;- 2
+cancel()
+time.Sleep(time.Millisecond) // Give goroutine time to quit
+fmt.Printf(&quot;After better goroutine: %d\n&quot;, runtime.NumGoroutine())
+</code></pre></div></td></tr></table></div>
+<p>}
+```</p>
+</div>
+<h2 id="real-world-example-distributed-task-queue">Real-World Example: Distributed Task Queue</h2>
+<p>Let's create a comprehensive example that demonstrates stateful goroutines in a distributed task queue system:</p>
+<div class="admonition example">
+<p class="admonition-title">Distributed Task Queue</p>
+<p>```go title="task_queue.go" linums="1" hl_lines="8-200"
+package main</p>
+<p>import (
+    "context"
+    "fmt"
+    "math/rand"
+    "sync"
+    "time"
+)</p>
+<p>// Task represents a unit of work
+type Task struct {
+    ID        string
+    Type      string
+    Payload   interface{}
+    CreatedAt time.Time
+    Status    string // "pending", "running", "completed", "failed"
+    Result    interface{}
+    Error     error
+    Retries   int
+}</p>
+<p>// QueueCommand represents a command to the task queue
+type QueueCommand struct {
+    Op      string // "enqueue", "dequeue", "complete", "fail", "status", "quit"
+    Task    *Task
+    WorkerID string
+    Resp    chan&lt;- interface{}
+}</p>
+<p>// TaskQueue manages the distributed task queue
+func TaskQueue(ctx context.Context, commands &lt;-chan QueueCommand) {
+    pending := make(map[string]<em>Task)
+    running := make(map[string]</em>Task)
+    completed := make(map[string]<em>Task)
+    failed := make(map[string]</em>Task)
+    workers := make(map[string]bool)</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">  1</span>
+<span class="normal">  2</span>
+<span class="normal">  3</span>
+<span class="normal">  4</span>
+<span class="normal">  5</span>
+<span class="normal">  6</span>
+<span class="normal">  7</span>
+<span class="normal">  8</span>
+<span class="normal">  9</span>
+<span class="normal"> 10</span>
+<span class="normal"> 11</span>
+<span class="normal"> 12</span>
+<span class="normal"> 13</span>
+<span class="normal"> 14</span>
+<span class="normal"> 15</span>
+<span class="normal"> 16</span>
+<span class="normal"> 17</span>
+<span class="normal"> 18</span>
+<span class="normal"> 19</span>
+<span class="normal"> 20</span>
+<span class="normal"> 21</span>
+<span class="normal"> 22</span>
+<span class="normal"> 23</span>
+<span class="normal"> 24</span>
+<span class="normal"> 25</span>
+<span class="normal"> 26</span>
+<span class="normal"> 27</span>
+<span class="normal"> 28</span>
+<span class="normal"> 29</span>
+<span class="normal"> 30</span>
+<span class="normal"> 31</span>
+<span class="normal"> 32</span>
+<span class="normal"> 33</span>
+<span class="normal"> 34</span>
+<span class="normal"> 35</span>
+<span class="normal"> 36</span>
+<span class="normal"> 37</span>
+<span class="normal"> 38</span>
+<span class="normal"> 39</span>
+<span class="normal"> 40</span>
+<span class="normal"> 41</span>
+<span class="normal"> 42</span>
+<span class="normal"> 43</span>
+<span class="normal"> 44</span>
+<span class="normal"> 45</span>
+<span class="normal"> 46</span>
+<span class="normal"> 47</span>
+<span class="normal"> 48</span>
+<span class="normal"> 49</span>
+<span class="normal"> 50</span>
+<span class="normal"> 51</span>
+<span class="normal"> 52</span>
+<span class="normal"> 53</span>
+<span class="normal"> 54</span>
+<span class="normal"> 55</span>
+<span class="normal"> 56</span>
+<span class="normal"> 57</span>
+<span class="normal"> 58</span>
+<span class="normal"> 59</span>
+<span class="normal"> 60</span>
+<span class="normal"> 61</span>
+<span class="normal"> 62</span>
+<span class="normal"> 63</span>
+<span class="normal"> 64</span>
+<span class="normal"> 65</span>
+<span class="normal"> 66</span>
+<span class="normal"> 67</span>
+<span class="normal"> 68</span>
+<span class="normal"> 69</span>
+<span class="normal"> 70</span>
+<span class="normal"> 71</span>
+<span class="normal"> 72</span>
+<span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span></pre></div></td><td class="code"><div><pre><span></span><code>ticker := time.NewTicker(5 * time.Second)
+defer ticker.Stop()
+
+for {
+    select {
+    case cmd := &lt;-commands:
+        switch cmd.Op {
+        case &quot;enqueue&quot;:
+            task := cmd.Task
+            task.Status = &quot;pending&quot;
+            pending[task.ID] = task
+            if cmd.Resp != nil {
+                cmd.Resp &lt;- task.ID
+            }
+
+        case &quot;dequeue&quot;:
+            // Find a pending task
+            var task *Task
+            for _, t := range pending {
+                task = t
+                break
+            }
+
+            if task != nil {
+                delete(pending, task.ID)
+                task.Status = &quot;running&quot;
+                running[task.ID] = task
+                workers[cmd.WorkerID] = true
+
+                if cmd.Resp != nil {
+                    cmd.Resp &lt;- task
+                }
+            } else {
+                if cmd.Resp != nil {
+                    cmd.Resp &lt;- (*Task)(nil)
+                }
+            }
+
+        case &quot;complete&quot;:
+            if task, exists := running[cmd.Task.ID]; exists {
+                delete(running, cmd.Task.ID)
+                task.Status = &quot;completed&quot;
+                task.Result = cmd.Task.Result
+                completed[task.ID] = task
+                delete(workers, cmd.WorkerID)
+
+                if cmd.Resp != nil {
+                    cmd.Resp &lt;- nil
+                }
+            } else if cmd.Resp != nil {
+                cmd.Resp &lt;- fmt.Errorf(&quot;task not found or not running&quot;)
+            }
+
+        case &quot;fail&quot;:
+            if task, exists := running[cmd.Task.ID]; exists {
+                delete(running, cmd.Task.ID)
+                task.Retries++
+
+                if task.Retries &lt; 3 {
+                    // Retry the task
+                    task.Status = &quot;pending&quot;
+                    pending[task.ID] = task
+                } else {
+                    // Max retries reached
+                    task.Status = &quot;failed&quot;
+                    task.Error = cmd.Task.Error
+                    failed[task.ID] = task
+                }
+                delete(workers, cmd.WorkerID)
+
+                if cmd.Resp != nil {
+                    cmd.Resp &lt;- nil
+                }
+            } else if cmd.Resp != nil {
+                cmd.Resp &lt;- fmt.Errorf(&quot;task not found or not running&quot;)
+            }
+
+        case &quot;status&quot;:
+            status := struct {
+                Pending   int
+                Running   int
+                Completed int
+                Failed    int
+                Workers   int
+            }{
+                Pending:   len(pending),
+                Running:   len(running),
+                Completed: len(completed),
+                Failed:    len(failed),
+                Workers:   len(workers),
+            }
+            if cmd.Resp != nil {
+                cmd.Resp &lt;- status
+            }
+
+        case &quot;quit&quot;:
+            return
+        }
+
+    case &lt;-ticker.C:
+        // Clean up old completed tasks
+        cutoff := time.Now().Add(-1 * time.Hour)
+        for id, task := range completed {
+            if task.CreatedAt.Before(cutoff) {
+                delete(completed, id)
+            }
+        }
+
+        // Check for stuck tasks
+        for id, task := range running {
+            if time.Since(task.CreatedAt) &gt; 5*time.Minute {
+                delete(running, id)
+                task.Status = &quot;failed&quot;
+                task.Error = fmt.Errorf(&quot;task timed out&quot;)
+                failed[id] = task
+            }
+        }
+
+    case &lt;-ctx.Done():
+        // Context cancelled, shutdown gracefully
+        return
+    }
+}
+</code></pre></div></td></tr></table></div>
+<p>}</p>
+<p>// Worker represents a task worker
+type Worker struct {
+    ID       string
+    queue    chan&lt;- QueueCommand
+    quit     chan struct{}
+}</p>
+<p>func NewWorker(id string, queue chan&lt;- QueueCommand) *Worker {
+    return &amp;Worker{
+        ID:    id,
+        queue: queue,
+        quit:  make(chan struct{}),
+    }
+}</p>
+<p>func (w *Worker) Start() {
+    go func() {
+        for {
+            select {
+            case &lt;-w.quit:
+                return
+            default:
+                // Try to dequeue a task
+                resp := make(chan interface{}, 1)
+                w.queue &lt;- QueueCommand{
+                    Op:      "dequeue",
+                    WorkerID: w.ID,
+                    Resp:    resp,
+                }</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span></pre></div></td><td class="code"><div><pre><span></span><code>            task := &lt;-resp
+            if task == nil {
+                // No tasks available
+                time.Sleep(time.Second)
+                continue
+            }
+
+            // Process the task
+            t := task.(*Task)
+            fmt.Printf(&quot;Worker %s processing task %s\n&quot;, w.ID, t.ID)
+
+            // Simulate work
+            time.Sleep(time.Duration(rand.Intn(3)+1) * time.Second)
+
+            // Simulate occasional failures
+            var err error
+            if rand.Intn(10) == 0 {
+                err = fmt.Errorf(&quot;random failure&quot;)
+            }
+
+            if err != nil {
+                // Report failure
+                w.queue &lt;- QueueCommand{
+                    Op:   &quot;fail&quot;,
+                    Task: &amp;Task{
+                        ID:    t.ID,
+                        Error: err,
+                    },
+                }
+            } else {
+                // Report completion
+                w.queue &lt;- QueueCommand{
+                    Op: &quot;complete&quot;,
+                    Task: &amp;Task{
+                        ID:     t.ID,
+                        Result: fmt.Sprintf(&quot;processed by %s&quot;, w.ID),
+                    },
+                }
+            }
+        }
+    }
+}()
+</code></pre></div></td></tr></table></div>
+<p>}</p>
+<p>func (w *Worker) Stop() {
+    close(w.quit)
+}</p>
+<p>func main() {
+    ctx, cancel := context.WithCancel(context.Background())
+    defer cancel()</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span></pre></div></td><td class="code"><div><pre><span></span><code>commands := make(chan QueueCommand, 100)
+
+// Start the task queue
+go TaskQueue(ctx, commands)
+
+// Start workers
+workers := []*Worker{
+    NewWorker(&quot;worker-1&quot;, commands),
+    NewWorker(&quot;worker-2&quot;, commands),
+    NewWorker(&quot;worker-3&quot;, commands),
+}
+
+for _, worker := range workers {
+    worker.Start()
+}
+
+// Enqueue some tasks
+for i := 0; i &lt; 20; i++ {
+    task := &amp;Task{
+        ID:        fmt.Sprintf(&quot;task-%d&quot;, i),
+        Type:      &quot;test&quot;,
+        Payload:   fmt.Sprintf(&quot;payload-%d&quot;, i),
+        CreatedAt: time.Now(),
+        Status:    &quot;pending&quot;,
+    }
+
+    resp := make(chan interface{}, 1)
+    commands &lt;- QueueCommand{
+        Op:   &quot;enqueue&quot;,
+        Task: task,
+        Resp: resp,
+    }
+
+    taskID := &lt;-resp
+    fmt.Printf(&quot;Enqueued task %s\n&quot;, taskID)
+}
+
+// Monitor progress
+ticker := time.NewTicker(2 * time.Second)
+defer ticker.Stop()
+
+for i := 0; i &lt; 10; i++ {
+    select {
+    case &lt;-ticker.C:
+        resp := make(chan interface{}, 1)
+        commands &lt;- QueueCommand{
+            Op:   &quot;status&quot;,
+            Resp: resp,
+        }
+
+        status := &lt;-resp
+        fmt.Printf(&quot;Queue status: %+v\n&quot;, status)
+
+        // Check if all tasks are processed
+        s := status.(struct {
+            Pending   int
+            Running   int
+            Completed int
+            Failed    int
+            Workers   int
+        })
+
+        if s.Pending == 0 &amp;&amp; s.Running == 0 {
+            fmt.Println(&quot;All tasks processed!&quot;)
+            break
+        }
+    }
+}
+
+// Shutdown
+for _, worker := range workers {
+    worker.Stop()
+}
+
+cancel()
+time.Sleep(time.Second)
+close(commands)
+</code></pre></div></td></tr></table></div>
+<p>}
+```</p>
+</div>
+<h3 id="how-this-example-demonstrates-stateful-goroutine-concepts">How This Example Demonstrates Stateful Goroutine Concepts:</h3>
+<ol>
+<li><strong>State Encapsulation</strong>:</li>
+<li>The task queue maintains private state for pending, running, completed, and failed tasks</li>
+<li>
+<p>Workers maintain their own state and communicate exclusively through channels</p>
+</li>
+<li>
+<p><strong>Message Passing</strong>:</p>
+</li>
+<li>All operations on the queue happen through explicit commands</li>
+<li>
+<p>Workers communicate with the queue via a well-defined protocol</p>
+</li>
+<li>
+<p><strong>Actor Model</strong>:</p>
+</li>
+<li>Each worker acts as an independent actor processing tasks</li>
+<li>
+<p>The task queue itself is an actor managing the overall state</p>
+</li>
+<li>
+<p><strong>Error Handling</strong>:</p>
+</li>
+<li>Failed tasks are retried up to a maximum number of times</li>
+<li>
+<p>Timeout detection for stuck tasks</p>
+</li>
+<li>
+<p><strong>Resource Management</strong>:</p>
+</li>
+<li>Worker registration and deregistration</li>
+<li>Cleanup of old completed tasks</li>
+<li>
+<p>Graceful shutdown with context cancellation</p>
+</li>
+<li>
+<p><strong>Monitoring</strong>:</p>
+</li>
+<li>Status reporting for queue state</li>
+<li>Progress tracking through the command interface</li>
+</ol>
+<h2 id="quick-reference">Quick Reference</h2>
+<div class="admonition success">
+<p class="admonition-title">Key Takeaways</p>
+<ul>
+<li><strong>State Encapsulation</strong>: Keep state private to goroutines and communicate via channels</li>
+<li><strong>Actor Model</strong>: Treat each stateful goroutine as an independent actor with message processing</li>
+<li><strong>Message Protocols</strong>: Design clear, type-safe message protocols for communication</li>
+<li><strong>Sequential Processing</strong>: Process messages one at a time to ensure state consistency</li>
+<li><strong>Graceful Shutdown</strong>: Always implement proper shutdown mechanisms to prevent leaks</li>
+<li><strong>Error Handling</strong>: Design comprehensive error handling and recovery mechanisms</li>
+<li><strong>Performance</strong>: Use buffered channels appropriately and avoid blocking operations</li>
+<li><strong>Testing</strong>: Test stateful goroutines thoroughly, including edge cases and failure scenarios</li>
+<li><strong>Monitoring</strong>: Implement status reporting and health checks for stateful components</li>
+<li><strong>Scalability</strong>: Design stateful goroutines to be composable and distributable</li>
+</ul>
+</div>
+<div class="admonition quote">
+<p class="admonition-title">Remember</p>
+<p>"Stateful goroutines are a powerful pattern in Go that enables building complex concurrent systems with clear boundaries and message-based communication. By encapsulating state within goroutines and using channels for all interactions, you can eliminate race conditions and build more maintainable concurrent code. While they require careful design to avoid deadlocks and leaks, stateful goroutines provide an elegant solution to many concurrency problems, especially when implementing actor systems, worker pools, and distributed services."}</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://linkedin.com" target="_blank" rel="noopener" title="linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zM102.2 96a38.5 38.5 0 1 1 0 77 38.5 38.5 0 1 1 0-77m282.1 320h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.footer", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,2020 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://kutt27.github.io/golangdocs/2.%20Intermediate/12.%20Errors-and-Custom-Error/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Go Error Handling: Explicit and Idiomatic - GolangDocs</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:300,300i,400,400i,700,700i%7CSource+Code+Pro:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"PT Serif";--md-code-font:"Source Code Pro"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="light-blue" data-md-color-accent="deep-purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#go-error-handling-explicit-and-idiomatic" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="GolangDocs" class="md-header__button md-logo" aria-label="GolangDocs" data-md-component="logo">
+      
+  <img src="../../assets/layers.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            GolangDocs
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Go Error Handling: Explicit and Idiomatic
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="light-blue" data-md-color-accent="deep-purple"  aria-label="Dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="deep-purple"  aria-label="Light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="GolangDocs" class="md-nav__button md-logo" aria-label="GolangDocs" data-md-component="logo">
+      
+  <img src="../../assets/layers.png" alt="logo">
+
+    </a>
+    GolangDocs
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Basics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Basics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/1.%20Hello-World/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/2.%20Go-Compiler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Go Compiler
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/3.%20Data-Types/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Types
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/4.%20Standard%20Library/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Standard Library
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/5.%20If-and%20While/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Control Structures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/6.%20Conditionals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conditionals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/7.%20Arrays/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Arrays
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/8.%20Slices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Slices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/9.%20Maps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Maps
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/10.%20Range/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Range
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/11.%20Functions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Functions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/12.%20Control-Flow-Mechanism/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Control Flow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../1.%20Basics/13.%20Init/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Init
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#understanding-error-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Understanding Error Handling
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-basic-error-type" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Basic Error Type
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Basic Error Type">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#creating-simple-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Creating Simple Errors
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-handling-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error Handling Patterns
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Error Handling Patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-basic-error-checking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Basic Error Checking
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-handling-errors-in-loops" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Handling Errors in Loops
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-sentinel-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Sentinel Errors
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#custom-error-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom Error Types
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Custom Error Types">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-custom-error" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic Custom Error
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#error-types-with-additional-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error Types with Additional Methods
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-wrapping-and-unwrapping-go-113" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Error Wrapping and Unwrapping (Go 1.13+)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Error Wrapping and Unwrapping (Go 1.13+)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#wrapping-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wrapping Errors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#checking-wrapped-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Checking Wrapped Errors
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#best-practices-for-error-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Best Practices for Error Handling
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Best Practices for Error Handling">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-handle-errors-immediately" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Handle Errors Immediately
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-add-context-when-wrapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Add Context When Wrapping
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-use-error-types-for-programmatic-checks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Use Error Types for Programmatic Checks
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-error-handling-pitfalls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Error Handling Pitfalls
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Common Error Handling Pitfalls">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-ignoring-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Ignoring Errors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-over-wrapping-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Over-Wrapping Errors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-using-errors-for-control-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Using Errors for Control Flow
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#real-world-example-robust-http-service-error-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Real-World Example: Robust HTTP Service Error Handling
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Real-World Example: Robust HTTP Service Error Handling">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-this-example-demonstrates-error-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How This Example Demonstrates Error Handling:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#best-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Best Practices
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="go-error-handling-explicit-and-idiomatic">Go Error Handling: Explicit and Idiomatic</h1>
+<div class="admonition abstract">
+<p class="admonition-title">Overview</p>
+<p>Master Go's explicit error handling approach. Learn error creation, custom error types, error wrapping, and best practices for building robust applications with clear error management.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Key Points</p>
+<ul>
+<li>Errors are values, not exceptions</li>
+<li>Explicit error checking encourages robust code</li>
+<li>Custom error types provide rich context</li>
+<li>Error wrapping preserves error chains</li>
+<li>Sentinel errors enable error comparison</li>
+</ul>
+</div>
+<h2 id="understanding-error-handling">Understanding Error Handling</h2>
+<p>Go treats errors as ordinary values that must be explicitly checked and handled, making error cases visible in code.</p>
+<div class="admonition info">
+<p class="admonition-title">Error Handling Philosophy</p>
+<pre class="mermaid"><code>graph LR
+    A[Function Call] --&gt; B[Error Return]
+    B --&gt; C[Explicit Check]
+    C --&gt; D[Handle or Propagate]
+    D --&gt; E[Clear Error Path]
+    style A fill:#999,stroke:#333,stroke-width:2px,color:#000
+    style E fill:#999,stroke:#333,stroke-width:2px,color:#000</code></pre>
+</div>
+<h2 id="the-basic-error-type">The Basic Error Type</h2>
+<p>Go's built-in <code>error</code> type is an interface with a single method:</p>
+<div class="admonition example">
+<p class="admonition-title">Basic Error Type</p>
+<div class="language-go highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">basic_error.go</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
+<span class="normal"><a href="#__codelineno-0-2">2</a></span>
+<span class="normal"><a href="#__codelineno-0-3">3</a></span>
+<span class="normal"><a href="#__codelineno-0-4">4</a></span>
+<span class="normal"><a href="#__codelineno-0-5">5</a></span>
+<span class="normal"><a href="#__codelineno-0-6">6</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="hll"><span class="c1">// The error interface</span>
+</span></span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="hll"><span class="kd">type</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span>
+</span></span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="hll"><span class="w">    </span><span class="nx">Error</span><span class="p">()</span><span class="w"> </span><span class="kt">string</span>
+</span></span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+</div>
+<h3 id="creating-simple-errors">Creating Simple Errors</h3>
+<div class="admonition example">
+<p class="admonition-title">Error Creation</p>
+<div class="language-go highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">error_creation.go</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-1-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-1-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-1-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-1-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-1-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-1-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-1-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-1-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-1-10">10</a></span>
+<span class="normal"><a href="#__codelineno-1-11">11</a></span>
+<span class="normal"><a href="#__codelineno-1-12">12</a></span>
+<span class="normal"><a href="#__codelineno-1-13">13</a></span>
+<span class="normal"><a href="#__codelineno-1-14">14</a></span>
+<span class="normal"><a href="#__codelineno-1-15">15</a></span>
+<span class="normal"><a href="#__codelineno-1-16">16</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2"></a>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="w">    </span><span class="s">&quot;errors&quot;</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="w">    </span><span class="s">&quot;fmt&quot;</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="p">)</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7"></a>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8"></a><span class="hll"><span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span></span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9"></a><span class="hll"><span class="w">    </span><span class="c1">// Using errors.New()</span>
+</span></span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10"></a><span class="hll"><span class="w">    </span><span class="nx">err1</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">errors</span><span class="p">.</span><span class="nx">New</span><span class="p">(</span><span class="s">&quot;something went wrong&quot;</span><span class="p">)</span>
+</span></span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11"></a><span class="hll"><span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">err1</span><span class="p">)</span><span class="w"> </span><span class="c1">// &quot;something went wrong&quot;</span>
+</span></span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12"></a><span class="hll">
+</span></span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13"></a><span class="hll"><span class="w">    </span><span class="c1">// Using fmt.Errorf()</span>
+</span></span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14"></a><span class="hll"><span class="w">    </span><span class="nx">err2</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;invalid value: %d&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">42</span><span class="p">)</span>
+</span></span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15"></a><span class="hll"><span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">err2</span><span class="p">)</span><span class="w"> </span><span class="c1">// &quot;invalid value: 42&quot;</span>
+</span></span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16"></a><span class="hll"><span class="p">}</span>
+</span></span></code></pre></div></td></tr></table></div>
+</div>
+<h2 id="error-handling-patterns">Error Handling Patterns</h2>
+<h3 id="1-basic-error-checking">1. Basic Error Checking</h3>
+<p>The most common pattern is to check if an error is non-nil:</p>
+<div class="admonition example">
+<p class="admonition-title">Basic Error Checking</p>
+<div class="language-go highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">basic_checking.go</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-2-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-2-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-2-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-2-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-2-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-2-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-2-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-2-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-2-10">10</a></span>
+<span class="normal"><a href="#__codelineno-2-11">11</a></span>
+<span class="normal"><a href="#__codelineno-2-12">12</a></span>
+<span class="normal"><a href="#__codelineno-2-13">13</a></span>
+<span class="normal"><a href="#__codelineno-2-14">14</a></span>
+<span class="normal"><a href="#__codelineno-2-15">15</a></span>
+<span class="normal"><a href="#__codelineno-2-16">16</a></span>
+<span class="normal"><a href="#__codelineno-2-17">17</a></span>
+<span class="normal"><a href="#__codelineno-2-18">18</a></span>
+<span class="normal"><a href="#__codelineno-2-19">19</a></span>
+<span class="normal"><a href="#__codelineno-2-20">20</a></span>
+<span class="normal"><a href="#__codelineno-2-21">21</a></span>
+<span class="normal"><a href="#__codelineno-2-22">22</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2"></a>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="w">    </span><span class="s">&quot;errors&quot;</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="w">    </span><span class="s">&quot;fmt&quot;</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="p">)</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7"></a>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8"></a><span class="hll"><span class="kd">func</span><span class="w"> </span><span class="nx">divide</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="w"> </span><span class="nx">b</span><span class="w"> </span><span class="kt">float64</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="kt">float64</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span></span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9"></a><span class="hll"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">b</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">{</span>
+</span></span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10"></a><span class="hll"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nx">errors</span><span class="p">.</span><span class="nx">New</span><span class="p">(</span><span class="s">&quot;cannot divide by zero&quot;</span><span class="p">)</span>
+</span></span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11"></a><span class="hll"><span class="w">    </span><span class="p">}</span>
+</span></span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12"></a><span class="hll"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nx">b</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span>
+</span></span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13"></a><span class="hll"><span class="p">}</span>
+</span></span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14"></a><span class="hll">
+</span></span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15"></a><span class="hll"><span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span></span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16"></a><span class="hll"><span class="w">    </span><span class="nx">result</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">divide</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span>
+</span></span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17"></a><span class="hll"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+</span></span><span id="__span-2-18"><a id="__codelineno-2-18" name="__codelineno-2-18"></a><span class="hll"><span class="w">        </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Error:&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+</span></span><span id="__span-2-19"><a id="__codelineno-2-19" name="__codelineno-2-19"></a><span class="hll"><span class="w">        </span><span class="k">return</span>
+</span></span><span id="__span-2-20"><a id="__codelineno-2-20" name="__codelineno-2-20"></a><span class="hll"><span class="w">    </span><span class="p">}</span>
+</span></span><span id="__span-2-21"><a id="__codelineno-2-21" name="__codelineno-2-21"></a><span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Result:&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">result</span><span class="p">)</span><span class="w"> </span><span class="c1">// 5</span>
+</span><span id="__span-2-22"><a id="__codelineno-2-22" name="__codelineno-2-22"></a><span class="p">}</span>
+</span></code></pre></div></td></tr></table></div>
+</div>
+<h3 id="2-handling-errors-in-loops">2. Handling Errors in Loops</h3>
+<div class="admonition example">
+<p class="admonition-title">Error Handling in Loops</p>
+<p>```go title="loop_error_handling.go" linums="1" hl_lines="8-28"
+package main</p>
+<p>import (
+    "fmt"
+    "errors"
+)</p>
+<p>func processItems(items []string) error {
+    for _, item := range items {
+        if err := processItem(item); err != nil {
+            return fmt.Errorf("failed to process %s: %w", item, err)
+        }
+    }
+    return nil
+}</p>
+<p>func processItem(item string) error {
+    // Simulate processing
+    if item == "invalid" {
+        return errors.New("invalid item")
+    }
+    fmt.Println("Processed:", item)
+    return nil
+}</p>
+<p>func main() {
+    items := []string{"item1", "invalid", "item3"}
+    err := processItems(items)
+    if err != nil {
+        fmt.Println("Error:", err)
+    }
+}
+```</p>
+</div>
+<h3 id="3-sentinel-errors">3. Sentinel Errors</h3>
+<p>Predefined error values that can be checked with <code>==</code>:</p>
+<div class="admonition example">
+<p class="admonition-title">Sentinel Errors</p>
+<p>```go title="sentinel_errors.go" linums="1" hl_lines="6-26"
+package main</p>
+<p>import (
+    "errors"
+    "fmt"
+)</p>
+<p>var ErrNotFound = errors.New("not found")</p>
+<p>type User struct {
+    ID   int
+    Name string
+}</p>
+<p>func findUser(id int) (*User, error) {
+    // Simulate database lookup
+    if id != 1 {
+        return nil, ErrNotFound
+    }
+    return &amp;User{ID: 1, Name: "Alice"}, nil
+}</p>
+<p>func main() {
+    user, err := findUser(2)
+    if err == ErrNotFound {
+        fmt.Println("User not found")
+        return
+    }
+    if err != nil {
+        fmt.Println("Other error:", err)
+        return
+    }
+    fmt.Println("Found user:", user.Name)
+}
+```</p>
+</div>
+<h2 id="custom-error-types">Custom Error Types</h2>
+<h3 id="basic-custom-error">Basic Custom Error</h3>
+<div class="admonition example">
+<p class="admonition-title">Custom Error Type</p>
+<p>```go title="custom_error.go" linums="1" hl_lines="8-30"
+package main</p>
+<p>import (
+    "fmt"
+    "strings"
+)</p>
+<p>type ValidationError struct {
+    Field   string
+    Message string
+}</p>
+<p>func (e *ValidationError) Error() string {
+    return fmt.Sprintf("validation error on field %s: %s", e.Field, e.Message)
+}</p>
+<p>func validateEmail(email string) error {
+    if !strings.Contains(email, "@") {
+        return &amp;ValidationError{
+            Field:   "email",
+            Message: "must contain @ symbol",
+        }
+    }
+    return nil
+}</p>
+<p>func main() {
+    err := validateEmail("invalid-email")
+    if err != nil {
+        fmt.Println(err) // "validation error on field email: must contain @ symbol"</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code>    // Type assertion to access custom fields
+    if ve, ok := err.(*ValidationError); ok {
+        fmt.Printf(&quot;Field: %s, Message: %s\n&quot;, ve.Field, ve.Message)
+    }
+}
+</code></pre></div></td></tr></table></div>
+<p>}
+```</p>
+</div>
+<h3 id="error-types-with-additional-methods">Error Types with Additional Methods</h3>
+<div class="admonition example">
+<p class="admonition-title">Error with Methods</p>
+<p>```go title="error_with_methods.go" linums="1" hl_lines="8-32"
+package main</p>
+<p>import (
+    "fmt"
+    "time"
+)</p>
+<p>type TimeoutError struct {
+    Operation string
+    Timeout   time.Duration
+}</p>
+<p>func (e *TimeoutError) Error() string {
+    return fmt.Sprintf("%s timed out after %v", e.Operation, e.Timeout)
+}</p>
+<p>func (e <em>TimeoutError) Is(target error) bool {
+    _, ok := target.(</em>TimeoutError)
+    return ok
+}</p>
+<p>func (e *TimeoutError) Temporary() bool {
+    return true
+}</p>
+<p>func main() {
+    err := &amp;TimeoutError{
+        Operation: "database query",
+        Timeout:   5 * time.Second,
+    }</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span></pre></div></td><td class="code"><div><pre><span></span><code>fmt.Println(err) // &quot;database query timed out after 5s&quot;
+
+// Check if error is temporary
+if te, ok := err.(interface{ Temporary() bool }); ok &amp;&amp; te.Temporary() {
+    fmt.Println(&quot;This is a temporary error&quot;)
+}
+</code></pre></div></td></tr></table></div>
+<p>}
+```</p>
+</div>
+<h2 id="error-wrapping-and-unwrapping-go-113">Error Wrapping and Unwrapping (Go 1.13+)</h2>
+<h3 id="wrapping-errors">Wrapping Errors</h3>
+<p>Add context to errors while preserving the original error:</p>
+<div class="admonition example">
+<p class="admonition-title">Error Wrapping</p>
+<p>```go title="error_wrapping.go" linums="1" hl_lines="8-22"
+package main</p>
+<p>import (
+    "errors"
+    "fmt"
+    "os"
+)</p>
+<p>func readFile(filename string) error {
+    _, err := os.Open(filename)
+    if err != nil {
+        return fmt.Errorf("failed to read file %s: %w", filename, err)
+    }
+    return nil
+}</p>
+<p>func main() {
+    err := readFile("nonexistent.txt")
+    if err != nil {
+        fmt.Println(err) // "failed to read file nonexistent.txt: open nonexistent.txt: no such file or directory"</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span></pre></div></td><td class="code"><div><pre><span></span><code>    // Unwrap the error
+    unwrapped := errors.Unwrap(err)
+    fmt.Println(unwrapped) // &quot;open nonexistent.txt: no such file or directory&quot;
+}
+</code></pre></div></td></tr></table></div>
+<p>}
+```</p>
+</div>
+<h3 id="checking-wrapped-errors">Checking Wrapped Errors</h3>
+<p>Use <code>errors.Is()</code> and <code>errors.As()</code> to inspect wrapped errors:</p>
+<div class="admonition example">
+<p class="admonition-title">Checking Wrapped Errors</p>
+<p>```go title="checking_wrapped.go" linums="1" hl_lines="8-26"
+package main</p>
+<p>import (
+    "errors"
+    "fmt"
+    "os"
+)</p>
+<p>var ErrPermission = errors.New("permission denied")</p>
+<p>func accessFile(path string) error {
+    // Simulate permission error
+    return fmt.Errorf("access denied: %w", ErrPermission)
+}</p>
+<p>func main() {
+    err := accessFile("/protected/file")</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span></pre></div></td><td class="code"><div><pre><span></span><code>// Check if error is or wraps ErrPermission
+if errors.Is(err, ErrPermission) {
+    fmt.Println(&quot;Permission denied&quot;)
+}
+
+// Check for specific error type
+var pathError *os.PathError
+if errors.As(err, &amp;pathError) {
+    fmt.Printf(&quot;Path error: %s\n&quot;, pathError.Path)
+}
+</code></pre></div></td></tr></table></div>
+<p>}
+```</p>
+</div>
+<h2 id="best-practices-for-error-handling">Best Practices for Error Handling</h2>
+<h3 id="1-handle-errors-immediately">1. Handle Errors Immediately</h3>
+<p>Check errors as soon as they're returned:</p>
+<div class="admonition example">
+<p class="admonition-title">Immediate Handling</p>
+<p>```go title="immediate_handling.go" linums="1" hl_lines="8-18"
+package main</p>
+<p>import (
+    "fmt"
+    "log"
+)</p>
+<p>// Good
+func process() {
+    data, err := fetchData()
+    if err != nil {
+        log.Printf("Failed to fetch data: %v", err)
+        return
+    }
+    // Use data
+}</p>
+<p>func fetchData() (string, error) {
+    return "data", nil
+}
+```</p>
+</div>
+<h3 id="2-add-context-when-wrapping">2. Add Context When Wrapping</h3>
+<p>Provide meaningful context without losing the original error:</p>
+<div class="admonition example">
+<p class="admonition-title">Contextual Wrapping</p>
+<p>```go title="contextual_wrapping.go" linums="1" hl_lines="8-20"
+package main</p>
+<p>import (
+    "fmt"
+)</p>
+<p>// Good
+func processUser(id int) error {
+    user, err := database.GetUser(id)
+    if err != nil {
+        return fmt.Errorf("processUser: failed to get user %d: %w", id, err)
+    }
+    // Process user
+    return nil
+}</p>
+<p>// Mock database function
+var database = struct {
+    GetUser func(int) (interface{}, error)
+}{
+    GetUser: func(id int) (interface{}, error) {
+        return nil, fmt.Errorf("user not found")
+    },
+}
+```</p>
+</div>
+<h3 id="3-use-error-types-for-programmatic-checks">3. Use Error Types for Programmatic Checks</h3>
+<p>Custom error types enable precise error handling:</p>
+<div class="admonition example">
+<p class="admonition-title">Error Type Checks</p>
+<p>```go title="error_type_checks.go" linums="1" hl_lines="8-30"
+package main</p>
+<p>import (
+    "errors"
+    "fmt"
+)</p>
+<p>type RetryableError struct {
+    Err error
+}</p>
+<p>func (e <em>RetryableError) Error() string { return e.Err.Error() }
+func (e </em>RetryableError) Unwrap() error { return e.Err }</p>
+<p>func processWithRetry() error {
+    for i := 0; i &lt; 3; i++ {
+        err := doOperation()
+        if err == nil {
+            return nil
+        }
+        if errors.As(err, &amp;RetryableError{}) {
+            continue // Retry
+        }
+        return err // Non-retryable error
+    }
+    return fmt.Errorf("operation failed after 3 retries")
+}</p>
+<p>func doOperation() error {
+    return &amp;RetryableError{Err: fmt.Errorf("temporary failure")}
+}</p>
+<p>func main() {
+    err := processWithRetry()
+    if err != nil {
+        fmt.Println("Final error:", err)
+    }
+}
+```</p>
+</div>
+<h2 id="common-error-handling-pitfalls">Common Error Handling Pitfalls</h2>
+<h3 id="1-ignoring-errors">1. Ignoring Errors</h3>
+<p>Never ignore errors without a good reason:</p>
+<div class="admonition warning">
+<p class="admonition-title">Error Ignoring</p>
+<p>Always check errors returned by functions. Ignoring errors can lead to silent failures and unexpected behavior.</p>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Error Ignoring</p>
+<p>```go title="error_ignoring.go" linums="1" hl_lines="8-18"
+package main</p>
+<p>import (
+    "fmt"
+    "log"
+    "os"
+)</p>
+<p>// Bad
+func badExample() {
+    _, _ = os.Open("file.txt") // Error ignored
+}</p>
+<p>// Good - at least log it
+func goodExample() {
+    file, err := os.Open("file.txt")
+    if err != nil {
+        log.Printf("Failed to open file: %v", err)
+        return
+    }
+    defer file.Close()
+    fmt.Println("File opened successfully")
+}
+```</p>
+</div>
+<h3 id="2-over-wrapping-errors">2. Over-Wrapping Errors</h3>
+<p>Don't wrap errors unnecessarily:</p>
+<div class="admonition warning">
+<p class="admonition-title">Over-Wrapping</p>
+<p>Avoid wrapping errors multiple times as it can make the error chain difficult to debug.</p>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Over-Wrapping</p>
+<p>```go title="over_wrapping.go" linums="1" hl_lines="8-22"
+package main</p>
+<p>import (
+    "fmt"
+)</p>
+<p>// Bad - redundant wrapping
+func badProcess() error {
+    err := doStep1()
+    if err != nil {
+        return fmt.Errorf("process: step1 failed: %w", err)
+    }
+    err = doStep2()
+    if err != nil {
+        return fmt.Errorf("process: step2 failed: %w", err)
+    }
+    return nil
+}</p>
+<p>// Mock functions
+func doStep1() error { return fmt.Errorf("step1 error") }
+func doStep2() error { return fmt.Errorf("step2 error") }
+```</p>
+</div>
+<h3 id="3-using-errors-for-control-flow">3. Using Errors for Control Flow</h3>
+<p>Don't use errors for normal control flow:</p>
+<div class="admonition warning">
+<p class="admonition-title">Control Flow</p>
+<p>Use errors for exceptional conditions, not for normal program flow.</p>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Control Flow</p>
+<p>```go title="control_flow.go" linums="1" hl_lines="8-28"
+package main</p>
+<p>import (
+    "encoding/binary"
+    "fmt"
+    "io"
+)</p>
+<p>// Bad - using error for EOF
+func badReadItems(r io.Reader) ([]int, error) {
+    var items []int
+    for {
+        var item int
+        err := binary.Read(r, binary.BigEndian, &amp;item)
+        if err != nil {
+            if err == io.EOF {
+                return items, nil // Normal end
+            }
+            return nil, err
+        }
+        items = append(items, item)
+    }
+}</p>
+<p>// Good - handle EOF separately
+func goodReadItems(r io.Reader) ([]int, error) {
+    var items []int
+    for {
+        var item int
+        err := binary.Read(r, binary.BigEndian, &amp;item)
+        if err != nil {
+            if err == io.EOF {
+                break // Normal end
+            }
+            return nil, err
+        }
+        items = append(items, item)
+    }
+    return items, nil
+}
+```</p>
+</div>
+<h2 id="real-world-example-robust-http-service-error-handling">Real-World Example: Robust HTTP Service Error Handling</h2>
+<p>Let's build a complete HTTP service with comprehensive error handling:</p>
+<div class="admonition example">
+<p class="admonition-title">HTTP Service Error Handling</p>
+<p>```go title="http_service_errors.go" linums="1" hl_lines="8-60"
+package main</p>
+<p>import (
+    "encoding/json"
+    "errors"
+    "fmt"
+    "log"
+    "net/http"
+    "time"
+)</p>
+<p>// Custom error types
+type ValidationError struct {
+    Field   string <code>json:"field"</code>
+    Message string <code>json:"message"</code>
+}</p>
+<p>func (e *ValidationError) Error() string {
+    return fmt.Sprintf("validation error: %s - %s", e.Field, e.Message)
+}</p>
+<p>type NotFoundError struct {
+    Resource string <code>json:"resource"</code>
+    ID       string <code>json:"id"</code>
+}</p>
+<p>func (e *NotFoundError) Error() string {
+    return fmt.Sprintf("%s not found: %s", e.Resource, e.ID)
+}</p>
+<p>// API response structure
+type APIResponse struct {
+    Success bool        <code>json:"success"</code>
+    Data    interface{} <code>json:"data,omitempty"</code>
+    Error   *APIError   <code>json:"error,omitempty"</code>
+}</p>
+<p>type APIError struct {
+    Code    string      <code>json:"code"</code>
+    Message string      <code>json:"message"</code>
+    Details interface{} <code>json:"details,omitempty"</code>
+}</p>
+<p>// User model
+type User struct {
+    ID    string <code>json:"id"</code>
+    Name  string <code>json:"name"</code>
+    Email string <code>json:"email"</code>
+}</p>
+<p>// Mock database
+var users = map[string]*User{
+    "1": {ID: "1", Name: "Alice", Email: "alice@example.com"},
+    "2": {ID: "2", Name: "Bob", Email: "bob@example.com"},
+}</p>
+<p>// Service functions
+func getUser(id string) (*User, error) {
+    user, exists := users[id]
+    if !exists {
+        return nil, &amp;NotFoundError{Resource: "user", ID: id}
+    }
+    return user, nil
+}</p>
+<p>func validateUser(user *User) error {
+    if user.Name == "" {
+        return &amp;ValidationError{Field: "name", Message: "required"}
+    }
+    if user.Email == "" {
+        return &amp;ValidationError{Field: "email", Message: "required"}
+    }
+    return nil
+}</p>
+<p>// HTTP handler
+func userHandler(w http.ResponseWriter, r *http.Request) {
+    id := r.URL.Query().Get("id")
+    if id == "" {
+        respondWithError(w, http.StatusBadRequest, "missing id parameter")
+        return
+    }</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span></pre></div></td><td class="code"><div><pre><span></span><code>user, err := getUser(id)
+if err != nil {
+    var apiErr APIError
+
+    switch {
+    case errors.As(err, &amp;ValidationError{}):
+        apiErr = APIError{
+            Code:    &quot;VALIDATION_ERROR&quot;,
+            Message: err.Error(),
+        }
+        respondWithError(w, http.StatusBadRequest, apiErr)
+    case errors.As(err, &amp;NotFoundError{}):
+        apiErr = APIError{
+            Code:    &quot;NOT_FOUND&quot;,
+            Message: err.Error(),
+        }
+        respondWithError(w, http.StatusNotFound, apiErr)
+    default:
+        apiErr = APIError{
+            Code:    &quot;INTERNAL_ERROR&quot;,
+            Message: &quot;failed to get user&quot;,
+        }
+        respondWithError(w, http.StatusInternalServerError, apiErr)
+    }
+    return
+}
+
+respondWithJSON(w, http.StatusOK, APIResponse{
+    Success: true,
+    Data:    user,
+})
+</code></pre></div></td></tr></table></div>
+<p>}</p>
+<p>// Helper functions
+func respondWithError(w http.ResponseWriter, code int, err interface{}) {
+    var apiErr APIError</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span></pre></div></td><td class="code"><div><pre><span></span><code>switch e := err.(type) {
+case string:
+    apiErr = APIError{
+        Code:    &quot;UNKNOWN_ERROR&quot;,
+        Message: e,
+    }
+case APIError:
+    apiErr = e
+default:
+    apiErr = APIError{
+        Code:    &quot;UNKNOWN_ERROR&quot;,
+        Message: fmt.Sprintf(&quot;%v&quot;, err),
+    }
+}
+
+w.Header().Set(&quot;Content-Type&quot;, &quot;application/json&quot;)
+w.WriteHeader(code)
+json.NewEncoder(w).Encode(APIResponse{
+    Success: false,
+    Error:   &amp;apiErr,
+})
+</code></pre></div></td></tr></table></div>
+<p>}</p>
+<p>func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
+    w.Header().Set("Content-Type", "application/json")
+    w.WriteHeader(code)
+    json.NewEncoder(w).Encode(payload)
+}</p>
+<p>// Logging middleware
+func loggingMiddleware(next http.Handler) http.Handler {
+    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+        start := time.Now()</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span>
+<span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><code>    next.ServeHTTP(w, r)
+
+    log.Printf(
+        &quot;%s %s %v&quot;,
+        r.Method,
+        r.URL.Path,
+        time.Since(start),
+    )
+})
+</code></pre></div></td></tr></table></div>
+<p>}</p>
+<p>func main() {
+    // Setup routes
+    mux := http.NewServeMux()
+    mux.HandleFunc("/user", userHandler)</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code>// Wrap with logging middleware
+handler := loggingMiddleware(mux)
+
+// Start server
+log.Println(&quot;Server starting on port 8080...&quot;)
+if err := http.ListenAndServe(&quot;:8080&quot;, handler); err != nil {
+    log.Fatalf(&quot;Failed to start server: %v&quot;, err)
+}
+</code></pre></div></td></tr></table></div>
+<p>}
+```</p>
+</div>
+<h3 id="how-this-example-demonstrates-error-handling">How This Example Demonstrates Error Handling:</h3>
+<ol>
+<li><strong>Layered Error Handling</strong>:</li>
+<li>Service layer returns specific error types</li>
+<li>
+<p>Handler layer translates errors to HTTP responses</p>
+</li>
+<li>
+<p><strong>Custom Error Types</strong>:</p>
+</li>
+<li><code>ValidationError</code> for input validation</li>
+<li>
+<p><code>NotFoundError</code> for missing resources</p>
+</li>
+<li>
+<p><strong>Error Translation</strong>:</p>
+</li>
+<li>Internal errors are translated to user-friendly API errors</li>
+<li>
+<p>HTTP status codes match error types</p>
+</li>
+<li>
+<p><strong>Logging and Monitoring</strong>:</p>
+</li>
+<li>Middleware logs all requests</li>
+<li>Errors are logged with context</li>
+</ol>
+<h2 id="best-practices">Best Practices</h2>
+<div class="admonition tip">
+<p class="admonition-title">Error Handling Best Practices</p>
+<ul>
+<li>Check errors immediately after function calls</li>
+<li>Add context when wrapping errors</li>
+<li>Use custom error types for specific error conditions</li>
+<li>Provide clear error messages for users</li>
+<li>Log errors with sufficient context for debugging</li>
+</ul>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Best Practice Pattern</p>
+<p>```go title="best_practice.go" linums="1" hl_lines="8-22"
+package main</p>
+<p>import (
+    "fmt"
+    "log"
+)</p>
+<p>func processData(id string) error {
+    // Validate input
+    if id == "" {
+        return fmt.Errorf("invalid ID: %s", id)
+    }</p>
+<div class="language-text highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span></pre></div></td><td class="code"><div><pre><span></span><code>// Get data from database
+data, err := getDataFromDB(id)
+if err != nil {
+    return fmt.Errorf(&quot;failed to get data: %w&quot;, err)
+}
+
+// Process data
+if err := processDataItem(data); err != nil {
+    return fmt.Errorf(&quot;failed to process data: %w&quot;, err)
+}
+
+return nil
+</code></pre></div></td></tr></table></div>
+<p>}</p>
+<p>// Mock functions
+func getDataFromDB(id string) (string, error) {
+    return "data", nil
+}</p>
+<p>func processDataItem(data string) error {
+    return nil
+}</p>
+<p>func main() {
+    err := processData("123")
+    if err != nil {
+        log.Printf("Error processing data: %v", err)
+    }
+}
+```</p>
+</div>
+<h2 id="quick-reference">Quick Reference</h2>
+<div class="admonition success">
+<p class="admonition-title">Key Takeaways</p>
+<ul>
+<li><strong>Error as Values</strong>: Treat errors as return values, not exceptions</li>
+<li><strong>Immediate Checking</strong>: Check errors right after function calls</li>
+<li><strong>Custom Types</strong>: Create specific error types for different scenarios</li>
+<li><strong>Error Wrapping</strong>: Use <code>fmt.Errorf</code> with <code>%w</code> to preserve error chains</li>
+<li><strong>Error Inspection</strong>: Use <code>errors.Is</code> and <code>errors.As</code> to check wrapped errors</li>
+<li><strong>Context Addition</strong>: Add meaningful context when propagating errors</li>
+<li><strong>User-Friendly Messages</strong>: Translate technical errors for end users</li>
+</ul>
+</div>
+<div class="admonition quote">
+<p class="admonition-title">Remember</p>
+<p>"Go's explicit error handling makes error paths visible and forces developers to consider failure cases. While it may seem verbose at first, this approach leads to more robust and maintainable code. By creating meaningful error types and wrapping errors with context, you can build systems that are both resilient to failures and easy to debug."</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://linkedin.com" target="_blank" rel="noopener" title="linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zM102.2 96a38.5 38.5 0 1 1 0 77 38.5 38.5 0 1 1 0-77m282.1 320h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.footer", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
