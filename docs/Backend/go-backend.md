@@ -1,30 +1,38 @@
-# Go Backend
+# Go Backend Development
 
-> Welcome to your comprehensive journey into backend development with Golang. This is an experimental work.
+Go is an excellent choice for backend development due to its performance, static binaries, and built-in HTTP support.
 
-We'll start with the foundation, then frame the structure, add the utilities, and finally furnish it with advanced features. Each phase builds upon the last, ensuring you understand both the "how" and the "why" of each component.
+### Creating a Basic HTTP Server
 
-## Phase 1: The Foundation - Project Setup & Basic Go Server
----
-### Step 1: Project Initialization
+You don't need any frameworks to start a web server in Go. The standard library (`net/http`) is enough.
 
-1. Prepare the directory
-    ```bash
-    mkdir go-backend && cd go-backend
-    ```
-    Open the folder in your preferred ide.
+```go
+package main
 
-2. Install basic dependencies
+import (
+    "fmt"
+    "net/http"
+)
 
-3. Create the project structure
+func helloHandler(w http.ResponseWriter, r *http.Request) {
+    fmt.Fprintf(w, "Hello, you've requested: %s\n", r.URL.Path)
+}
 
-4. Set up a basic server 
+func main() {
+    // 1. Assign a handler function to a route
+    http.HandleFunc("/", helloHandler)
 
-5. Create a server entry point
+    // 2. Start the server on port 8080
+    fmt.Println("Server starting on :8080...")
+    http.ListenAndServe(":8080", nil)
+}
+```
 
+### Next Steps in Backend
 
-### Step 2: Basic Testing Setup
+Once you have the basics down, you can explore:
 
-1. Create a simple test file
-
-2. Add the test scripts to the runtime package
+1.  **JSON APIs**: Use the `encoding/json` package to parse request bodies and return JSON responses.
+2.  **Databases**: Use `database/sql` with a driver (like `pq` for Postgres or `go-sql-driver/mysql`) to store data.
+3.  **Middleware**: Functions that wrap handlers to provide logging, authentication, or compression.
+4.  **Frameworks**: If you need more structure, consider light frameworks like **Gin**, **Echo**, or **Fiber**.
