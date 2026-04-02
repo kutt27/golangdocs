@@ -96,9 +96,9 @@ nav:
 extra:
   social:
     - icon: fontawesome/brands/linkedin
-      link: https://linkedin.com
+      link: https://www.linkedin.com/in/amal-s27/
     - icon: fontawesome/brands/github
-      link: https://github.com
+      link: https://github.com/kutt27
 
 markdown_extensions:
   - attr_list
