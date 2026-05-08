@@ -1,4 +1,10 @@
+# GOLANGDOCS
+
 04th Feb, 2026 => Project is much readable now and removed lot of jargon. 
+
+Confused:
+- Whether to include additional information for blogs
+- Or just keep it simple and anyone referring could just research it fine.
 
 ```mermaid
 flowchart TD
